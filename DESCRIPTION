@@ -1,0 +1,13 @@
+Package: YEAB
+Title: Package To Analyze Data From Analysis Of Behavior Experiments
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Emmanuel", "Alcala", , "jealcala@gmail.com", role = c("aut", "cre")),
+    person("Rodrigo", "Sosa", , "rsosas@up.edu.mx", role = "aut")
+  )
+Description: This is a colletion of functions aimed to analyze data from
+    behavioral experiments from MED output
+License: CC0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
