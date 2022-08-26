@@ -1,6 +1,6 @@
 library(usethis)
 library(devtools)
-
+setwd("../") # fijar wd un directorio antes
 use_description(
   fields = list(
     Title = "Package To Analyze Data From Analysis Of Behavior Experiments",
