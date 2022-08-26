@@ -5,8 +5,20 @@ Authors@R: c(
     person("Emmanuel", "Alcala", , "jealcala@gmail.com", role = c("aut", "cre")),
     person("Rodrigo", "Sosa", , "rsosas@up.edu.mx", role = "aut")
   )
-Description: This is a colletion of functions aimed to analyze data from behavioral experiments from MED output
+Description: This is a colletion of functions aimed to analyze data from
+    behavioral experiments from MED output and others. It also have
+    functions to fit exponential or hyperbolic models from delay
+    discounting tasks, exponential mixtures to IRTs, Gaussian plus ramp
+    model for peak procedures data, etc.
 License: CC0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
+Imports: 
+    dplyr,
+    ggplot2,
+    grid,
+    gridExtra,
+    minpack.lm,
+    scales,
+    VGAM
