@@ -21,6 +21,9 @@ a numeric value that is the kl divergence
 \description{
 Computes the Kullback-Leibler divergence based on kernel density estimates
 }
+\details{
+$\int_{a}^b p(x)\log \frac{q(x)}{p(x)}$
+}
 \examples{
 set.seed(123)
 p <- rnorm(100)
