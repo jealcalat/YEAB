@@ -1,5 +1,3 @@
-library(grid)
-
 esplot <- function(x, y = NULL,
            newpage = TRUE,
            xlab = deparse(substitute(x)),
@@ -167,11 +165,11 @@ esplot <- function(x, y = NULL,
     }
   }
 
-with(faithful,
-     esplot(jitter(eruptions), jitter(waiting),
-            xlab = "Eruption time (minutes)",
-            ylab = "Time to next eruption",
-            main = "Old faithful eruptions"))
+# with(faithful,
+#      esplot(jitter(eruptions), jitter(waiting),
+#             xlab = "Eruption time (minutes)",
+#             ylab = "Time to next eruption",
+#             main = "Old faithful eruptions"))
 # 
 # 
 # with(faithful,

@@ -1,23 +1,4 @@
-## Doesn't work for res < 1
-# get_bins <- function(x, x.min, x.max, resolution){
-#   bins <- x %>% # lambda expression
-#   {
-#     t <- . # basically asign x to t to be used as a placeholder variable
-#     t <- cut(t,(x.min:x.max)*resolution) # find intervals between xmin and xmax
-#     t <- ifelse(is.na(t),0,t) # return the levels of the intervals
-#     t %>% as.integer() # convert to integers
-#   }
-#   bins # same as return(x), but more efficient
-# }
 
-# discretize time in bins of custom resolution
-# Input:
-#       x: numeric vector to be discretized (or binned)
-#       x_min: where to start (e.g., from 0)
-#       x_max: where to stop (e.g., 60)
-#       res: resolution of bins (e.g., every 2 seconds)
-# Output: 
-#       a vector of bins with intervals 'res'
 get_bins <- function(x, x_min, x_max, res) {
   # Create a sequence of intervals at wich x will be binned, taking pairs of values in order
   # eg, (0, 10, 20) will form paris of intervals of (0, 10], (10, 20] and (10, 20]
