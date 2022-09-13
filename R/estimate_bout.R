@@ -1,3 +1,11 @@
+#' Biexponential model for the estimation of whithin and between-bouts
+#'
+#' @param irt numeric, the interresponse times
+#'
+#' @return numeric vector of the biexponential model parameters
+#' @export
+#'
+#' @examples
 estimate_bout <- function(irt) {
   fit <- VGAM::vglm(irt ~ 1, VGAM::mix2exp, trace = TRUE)
   param <- VGAM::Coef(fit)

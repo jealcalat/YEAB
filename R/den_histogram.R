@@ -1,3 +1,20 @@
+#' Histogram with marginal densities in R base plot
+#'
+#' @param x_dat numeric
+#' @param side integer
+#' @param fill character
+#' @param color character
+#' @param plot_limits numeric, NULL by default
+#' @param density_limits numeric, NULL by default
+#' @param amplify_max_density numeric, 1.1 by default
+#' @param density_line logical, TRUE by default
+#' @param add logical, should a plot be added? FALSE by default
+#' @param axis logical, should axis be added? TRUE by default
+#'
+#' @return
+#' @export
+#'
+#' @examples
 den_histogram <- function(x_dat,
                           side = 1,
                           fill = "#B3B3FF",

@@ -11,22 +11,44 @@
 #   dframe: a dataframe of m rows x 2 columns, where columns corresponds
 #           to time and events IDs, in that order.
 #   ev0: event ID start (where the event we want to extract begins)
-#   ev1: event ID stop. This event won't be returned, so keep in mind that 
+#   ev1: event ID stop. This event won't be returned, so keep in mind that
 #   evname: a string for the event name, for identification purposes. For example
 #           if the event we want to extract is component 1 in a multiple-2 sche-
 #           dule, this can be eventname = "c1", so when we extract the second
 #           component we can row-combine both in a unique dataframe.
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  
-# 
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+#
 # Outputs:
 #   dftmp: data frame with j x 4 columns of time, events, cum_id and evname
 
-event_extractor <- function(dframe, ev0, ev1, evname) {
+#' Slice from a data frame based on starting and ending of a event
+#'
+#' @param dframe data frame with events ev0 and ev1 (e.g., start of trial and reinforcement delivery)
+#' @param ev0 event ID start (where the event we want to extract begins)
+#' @param ev1 event ID stop. This event won't be returned, so keep in mind that
+#' @param evname a string for the event name, for identification purposes. For example
+#'    if the event we want to extract is component 1 in a multiple-2 schedule,
+#'    this can be eventname = "c1", so when we extract the second
+#'    component we can row-combine both in a unique dataframe.
+#' @return data frame with nrows x 4 columns of time, events, cum_id and evname
+#' @export
+#' @details Works by trials
+#' @examples
+#' # How to use ----
+#'  # # If we have a component starting with 5 and ending with 2 and a dataframe "df"
+#'  # we can extract the data of component "comp52" following the next steps:
+#'  # 0 - From the output of read_med.R function, load the csv file and assing to df
+#'  # 1 - source the event_extractor.R function
+#'  # 2 - use it with the appropiate arguments as follows
+#' component52df <- event_extractor(dframe = df, # enter the data as the 1st arg
+#'                                  ev0 = 5, ev1 = 2, # anter start and stop
+#'                                  evname = "comp52") # enter the event name
 
-  evs = c(ev0, ev1)
-  
+event_extractor <- function(dframe, ev0, ev1, evname) {
+  evs <- c(ev0, ev1)
+
   # Boolean variable where there is a ev0 or ev1
-  mark.v <- ifelse(dframe[ ,2] %in% evs, 1, 0)
+  mark.v <- ifelse(dframe[, 2] %in% evs, 1, 0)
   # Make a cumulative sum of events
   dframe$cum_id <- cumsum(mark.v)
   # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -36,22 +58,21 @@ event_extractor <- function(dframe, ev0, ev1, evname) {
   # to the event we want to extract. It starts to count 1 where there is ev0,
   # and 2 when there is ev1, 3 when ev0 again. So, even numbers corresponds to
   # the end of the events of interest. We will use this information next, using
-  # the %% (module) operator, which return the remainder of a division (not the 
+  # the %% (module) operator, which return the remainder of a division (not the
   # result of the division).  4 %% 2 equals 0, while 4 / 4 = 2
-  
+
   # The operation x %% 2 == 1 evaluates if x/2 has a remainder of 1, or if is
   # an exact multiple of 2 (remainder of 0). This will make a boolean variable
   # that we'll use to slice data in the form dframe[TRUE, ]
-  
+
   # 1
   event_remover <- dframe$cum_id %% 2 == 1
   # 2
   dftmp <- dframe[event_remover, ]
-  
-  dftmp[ ,4] <- evname
+
+  dftmp[, 4] <- evname
   # return dftmp
   dftmp
-
 }
 
 # How to use ----
@@ -62,7 +83,7 @@ event_extractor <- function(dframe, ev0, ev1, evname) {
 # 1 - source the event_extractor.R function
 # 2 - use it with the appropiate arguments as follows
 # component52df <- event_extractor(dframe = df, # enter the data as the 1st arg
-#                                  ev0 = 5, ev1 = 2, # anter start and stop 
+#                                  ev0 = 5, ev1 = 2, # anter start and stop
 #                                  evname = "comp52") # enter the event name
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -72,10 +93,10 @@ event_extractor <- function(dframe, ev0, ev1, evname) {
 
 # slicingvec <- which(dframe$evento %in% evs)
 # slicingvec <- matrix(slicingvec, ncol = 2, byrow = T)
-# 
+#
 # dftmp <- apply(
 #   slicingvec, 1, function(x){
 #   dframe[x[1]:(x[2] - 1), ]
 # })
-# 
+#
 # dftmp <- do.call(rbind, dftmp)

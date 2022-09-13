@@ -14,7 +14,8 @@ License: CC0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
-Imports: 
+Imports:
+    doParallel,
     dplyr,
     ggplot2,
     grid,
@@ -23,58 +24,3 @@ Imports:
     np,
     scales,
     VGAM
-Collate: 
-    'RW_simulations_tutorial.R'
-    'addalpha.R'
-    'bootstrap_cor.R'
-    'box_dot_plot.r'
-    'bp_fi.r'
-    'calculate_gold_DOREMi.R'
-    'ceiling_multiple.r'
-    'cp_methods.r'
-    'cpt_balci_based.r'
-    'curv_indexes.R'
-    'den_histogram.R'
-    'dkl_discrete_tests.r'
-    'entropy_kde2d.R'
-    'esplot_marginal_lattice.R'
-    'estimate_bout.R'
-    'event_extractor.R'
-    'find_ghostscript.R'
-    'gauss_fit.r'
-    'get_bins.r'
-    'hello.R'
-    'hist_hpdi.R'
-    'hist_overlap.R'
-    'kld_d.r'
-    'kld_numInt.r'
-    'kld_numInt_base.r'
-    'machado_RI_schedule.r'
-    'marginal_plot.R'
-    'num_auc_int_delaydisc.R'
-    'panel_smoother.R'
-    'plot_colorByDensity.R'
-    'plus_concatenator.R'
-    'prettyHist.R'
-    'pub_theme.R'
-    'rR_corr_boot.R'
-    'read_med.r'
-    'richi_test_cp.R'
-    'rpart_cp.r'
-    'scatter_marginal.R'
-    'scatter_plot.R'
-    'scatterden.R'
-    'scatterhist.R'
-    'sort_cor_mat.R'
-    'starting_par_gaussian.r'
-    'stat_boot_dopar_byx.R'
-    'stem_hist.r'
-    'remove_shims.R'
-    'remove_defaults.R'
-    'remove_default.R'
-    'example_plots.R'
-    'check_style.R'
-    'styles_all_files.R'
-    'theme_clean_pub.r'
-    'tryonC.R'
-    'val_in_interval.R'

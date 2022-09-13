@@ -1,3 +1,34 @@
+#' Shannon entropy in two dimensions
+#'
+#' @param x numeric, random vector
+#' @param y numeric, random vector
+#' @param n_grid numeric, number of grid cells to evaluate density
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' x <- rnorm(1000, 0, 1)
+#' set.seed(12)
+#' y <- rnorm(1000, 0, 5)
+
+#' cov_matr <- cov(cbind(x, y))
+#' sigmas <- diag(cov_matr)
+#' det_sig <- prod(sigmas)
+#' # equivalentemente: det_sig <- det(cov(cbind(x,y)))
+#' # de acuerdo con https://en.wikipedia.org/wiki/Multivariate_normal_distribution#'Differential_entropy
+
+#' normal_entropy <- function(k, pi, det_sig) {
+#'   # todo lo de la izquierda es una constante; en Maei y Frankland se elimina
+#'   (k / 2) * (1 + log(2 * pi)) + (1 / 2) * log(det_sig)
+#' }
+
+#' entropia <- normal_entropy(k = 2, pi = pi, det_sig)
+#' entropia # retorna 7.415341
+#' entropy_kde2d(x, y, n_grid = 50)
+#' # retorna 7.445117
+#' # muy cercanos
 entropy_kde2d <- function(x, y, n_grid = 150) {
   # range of x and y datapoints
   xrange <- range(x)

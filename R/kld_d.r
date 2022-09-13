@@ -1,6 +1,20 @@
-# Computes the Kullback-Leibler divergence based on kernel density
-# estimates with Gaussian kernel
-
+#' Computes the Kullback-Leibler divergence based on kernel density estimates
+#'
+#' @param x numeric, the values from a sample p
+#' @param y numeric, the values from a sample q
+#' @param from_a numeric, the lower limit of the integration
+#' @param to_b numeric, the upper limit of the integration
+#'
+#' @return a numeric value that is the kl divergence
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' p <- rnorm(100)
+#' q <- rnorm(100)
+#' kld_d(p, q, -Inf, Inf) # 0.07579204
+#' q <- rnorm(100, 10, 4)
+#' kld_d(p, q, -Inf, Inf) # 7.769912
 kld_d <- function(x, y, from_a, to_b) {
   integrand <- function(x, y, t) {
     denx <- density(x, na.rm = T)
