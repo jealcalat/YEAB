@@ -8,6 +8,9 @@
 #' @return a numeric value that is the kl divergence
 #' @export
 #'
+#' @details
+#' $\int_{a}^b p(x)\log \frac{q(x)}{p(x)}$
+#'
 #' @examples
 #' set.seed(123)
 #' p <- rnorm(100)
