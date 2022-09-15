@@ -1,5 +1,26 @@
 # overlap_histogram
 
+#' Overlap two histograms
+#'
+#' @param var1
+#' @param var2
+#' @param name1
+#' @param name2
+#' @param breaks
+#' @param legend
+#' @param main0
+#' @param alpha0
+#' @param grey
+#' @param border
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' var1 <- rnorm(100)
+#' var2 <- rexp(100)
+#' hist_over(var1, var2, name1 = expression(N(mu==0, sigma==1)), name2 = expression(exp(lambda==1)), grey=T)
 hist_over <- function(var1, var2,
                       name1 = "",
                       name2 = "",
@@ -68,4 +89,3 @@ hist_over <- function(var1, var2,
     )
   }
 }
-

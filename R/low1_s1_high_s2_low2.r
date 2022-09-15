@@ -22,6 +22,41 @@
 #
 # ------------------------------------------------------------------------------ #
 
+#' Individual trial analysis of peak procedure data
+#'
+#' @param r_times numeric, the times at which a response was emitted in a trial
+#' @param trial_duration numeric, the peak trial duration
+#'
+#' @return a data.frame of start, stop, spread, middle time (mid) and the response
+#' rate at each state (r1 for low, r2 for high and r3 for the second low rate state)
+#' @export
+#'
+#' @examples
+#' data("r_times")
+#' trial_duration <- max(r_times) |> ceiling() # 180
+#' bps <- low1_s1_high_s2_low2(r_times, trial_duration)
+#' par(mar = c(4, 4.5, 1, 1))
+#' plot(
+#'   density(
+#'     r_times,
+#'     adjust = 0.8,
+#'     from = 0,
+#'     to = 180
+#'   ),
+#'   main = "",
+#'   ylab = expression(italic(p(t[R]))),
+#'   xlab = "time in peak trial"
+#' )
+#' abline(v = 60, lty = 2)
+#' bps <- low1_s1_high_s2_low2(r_times, 180)
+#' abline(v = c(bps$start, bps$stop), col = 2, lty = 2, lwd = 2)
+#' # compare it with fwhm
+#' den <- density(r_times, from = 0, to = trial_duration)
+#' fval <- fwhm(den$x, den$y)
+#' x1 <- fval$peak - fval$fwhm/2
+#' x2 <- fval$peak + fval$fwhm/2
+#' plot(den)
+#' abline(v = c(x1, fval$peak, x2), col = c('blue', 1, 'blue'))
 low1_s1_high_s2_low2 <- function(r_times, trial_duration) {
   # Number of responses
   nr <- length(r_times)

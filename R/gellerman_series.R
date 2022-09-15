@@ -9,11 +9,17 @@
 #'
 #' @param n numeric, a vector of 0 and 1 (see Details)
 #'
-#' @return
+#' @return a numeric vector of randomly distributed 0s and 1s
 #' @export
 #'
 #' @details The algorithm implements a Gellerman-like series based on
+#' Herrera, D., & Treviño, M. (2015). http://doi.org/10.1371/journal.pone.0136084
+#' The algorithm samples from a binomial distribution and imposes two restrictions
+#' 1) no more than 3 consecutive values of 0s or 1s.
+#' 2) the number of trials 0 or 1 must be the same for a given n.
 #' @examples
+#' set.seed(165)
+#' gell_like(8) # 0 0 1 1 1 0 1 0
 gell_like <- function(n) { # n debe ser un número par
 
   if (n %% 2 != 0) stop("n should be even (2, 4, ...")
