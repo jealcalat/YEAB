@@ -12,7 +12,7 @@
 #' @return
 #' @export
 #'
-#' @details
+#' @details The algorithm implements a Gellerman-like series based on
 #' @examples
 gell_like <- function(n) { # n debe ser un número par
 
