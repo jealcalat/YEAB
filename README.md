@@ -9,4 +9,4 @@ Yeab Ease the Analysis of Behavior (YEAB) is an R package that implements
 
 # Nota
 
-Este paquete se desarrolló con presupuesto de la **Convocatoria de Ciencia Básica y/o Ciencia de Frontera, Modalidad: Paradigmas y Controversias de la Ciencia 2022**, con número de proyecto 320943 “APRENDIZAJE EN UNA TAREA DE ESTIMACIÓN TEMPORAL: EL PAPEL DE LA MAXIMIZACIÓN DE LA INFORMACIÓN MUTUA”
+Este paquete se desarrolló con presupuesto de la **Convocatoria de Ciencia Básica y/o Ciencia de Frontera, Modalidad: Paradigmas y Controversias de la Ciencia 2022**, con número de proyecto 320943 “APRENDIZAJE EN UNA TAREA DE ESTIMACIÓN TEMPORAL: EL PAPEL DE LA MAXIMIZACIÓN Q
