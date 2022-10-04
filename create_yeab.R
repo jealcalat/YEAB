@@ -1,6 +1,6 @@
 library(usethis)
 library(devtools)
-setwd("../") # fijar wd un directorio antes
+# setwd("../") # fijar wd un directorio antes
 use_description(
   fields = list(
     Title = "Package To Analyze Data From Analysis Of Behavior Experiments",
@@ -25,7 +25,7 @@ use_description(
 )
 
 
-pck_import <- c("dplyr", "minpack.lm", "scales", "ggplot2", "VGAM", "grid", "gridExtra")
+pck_import <- c("dplyr", "zoo", "minpack.lm", "scales", "ggplot2", "VGAM", "grid", "gridExtra")
 
 sapply(pck_import, use_package)
 
@@ -44,3 +44,8 @@ r_times <- c(28.1, 40.7, 44.2, 44.4, 44.7, 45, 45.4, 47.9, 48.1, 48.3, 48.6, 48.
              178.2, 178.4, 178.5, 178.8, 179.4)
 
 use_data(r_times)
+
+
+# install again
+
+devtools::install_github('jealcalat/YEAB', force=TRUE)

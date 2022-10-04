@@ -1,34 +1,10 @@
-# low1_s1_high_s2_low2.r
-# Church two step breakpoint algorithm, from Church et al, 1994.
-# Author: Emmanuel Alcala
-# Date: 5 may 2019
-#
-# ------------------------------------------------------------------------------ #
-#   Description: ----
-# This is an improved version of lhl_old. It is just marginally faster, but
-# cleaner and more intuitive. It sets first all possible combinations of s1
-# and s2 (start and stop), then it computes the differences between the overall
-# rate r and the state rates r1, r2 and r3, weighted by their respective
-# durations t1, t2 and t3. Then it computes the index (i.e., an integer of the
-# position in the vector) at which the differences were maximized, with which
-# all other metrics can be solved.
-# ------------------------------------------------------------------------------ #
-# inputs: two arguments
-#        - r_times: every time at which there was a response
-#        - trial_duration: the duration of peak trial
-#
-# output: a data frame with start, stop, spread, peak time and the response
-#         rates r1, r2 and r3.
-#
-# ------------------------------------------------------------------------------ #
-
 #' Individual trial analysis of peak procedure data
 #'
 #' @param r_times numeric, the times at which a response was emitted in a trial
 #' @param trial_duration numeric, the peak trial duration
 #'
 #' @return a data.frame of start, stop, spread, middle time (mid) and the response
-#' rate at each state (r1 for low, r2 for high and r3 for the second low rate state)
+#'         rate at each state (r1 for low, r2 for high and r3 for the second low rate state)
 #' @export
 #'
 #' @examples
@@ -118,13 +94,13 @@ low1_s1_high_s2_low2 <- function(r_times, trial_duration) {
   # High rate state duration: s2 - s1
   t2 <- s1s2[2] - s1s2[1]
   # Low rate 1 is the number of responses emitted at a time t less than or equal
-  # than s1, devided by the duration of s1.
+  # than s1, divided by the duration of s1.
   r1 <- sum(r_times <= s1s2[1]) / s1s2[1]
-  # Low rate 2. As r1, is the number of responses emmited at t greter than s1,
-  # but less than or equal than s2, devided by the duration of s2
+  # Low rate 2. As r1, is the number of responses emitted at t greter than s1,
+  # but less than or equal than s2, divided by the duration of s2
   r2 <- sum(r_times > s1s2[1] & r_times <= s1s2[2]) / t2
 
-  # The responses emmited at t greater than s2, divided by the duration of t3.
+  # The responses emitted at t greater than s2, divided by the duration of t3.
   r3 <- sum(r_times > s1s2[2]) / (trial_duration - s1s2[2])
 
   # Middle time is the sum of s1 and s2 divided by 2

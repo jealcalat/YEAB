@@ -1,4 +1,3 @@
-
 #' A function to binarize a numeric vector with a given resolution
 #'
 #' @param x numeric, the vector to be binarized
@@ -10,7 +9,7 @@
 #' @export
 #'
 #' @examples
-x <- 1:20
+#' x <- 1:20
 #' get_bins(x, 0, 20, 5)
 #' # Returns
 #' # [1]  5  5  5  5  5 10 10 10 10 10 15 15 15 15 15 20 20 20 20 20
