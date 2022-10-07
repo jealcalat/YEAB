@@ -14,3 +14,13 @@ License: CC0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
+Imports: 
+    dplyr,
+    ggplot2,
+    grid,
+    gridExtra,
+    magrittr,
+    minpack.lm,
+    scales,
+    VGAM,
+    zoo
