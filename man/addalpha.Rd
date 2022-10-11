@@ -12,7 +12,7 @@ addalpha(cols, alpha)
 \item{alpha}{numeric, specifying the opacity (1) or transparency (0)}
 }
 \value{
-chr vector of colors
+character vector of colors
 }
 \description{
 Adds transparency to a list of colors

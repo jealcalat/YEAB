@@ -4,9 +4,9 @@
 #' @param cols integer or chr; if integer from 1-9 takes the value from palette(); if chr a named color from colors()
 #' @param alpha numeric, specifying the opacity (1) or transparency (0)
 #'
-#' @return chr vector of colors
+#' @return character vector of colors
 #' @export
-#'
+#' @importFrom scales show_col
 #' @examples
 #' my_red <- addalpha('red', 0.4)
 #' plot(0,0,col = addalpha('red', 0.1), pch = 16, cex=2)

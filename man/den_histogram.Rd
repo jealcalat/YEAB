@@ -5,7 +5,7 @@
 \title{Histogram with marginal densities in R base plot}
 \usage{
 den_histogram(
-  x_dat,
+  x,
   side = 1,
   fill = "#B3B3FF",
   color = "red",
@@ -18,7 +18,7 @@ den_histogram(
 )
 }
 \arguments{
-\item{x_dat}{numeric}
+\item{x}{numeric}
 
 \item{side}{integer}
 
@@ -40,4 +40,8 @@ den_histogram(
 }
 \description{
 Histogram with marginal densities in R base plot
+}
+\examples{
+x <- rnorm(100)
+den_histogram(x)
 }

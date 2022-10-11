@@ -1,6 +1,6 @@
 #' Histogram with marginal densities in R base plot
 #'
-#' @param x_dat numeric
+#' @param x numeric
 #' @param side integer
 #' @param fill character
 #' @param color character
@@ -15,7 +15,9 @@
 #' @export
 #'
 #' @examples
-den_histogram <- function(x_dat,
+#' x <- rnorm(100)
+#' den_histogram(x)
+den_histogram <- function(x,
                           side = 1,
                           fill = "#B3B3FF",
                           color = "red",
@@ -28,17 +30,17 @@ den_histogram <- function(x_dat,
   # Basado en https://osf.io/bv8fr
 
   if (class(plot_limits) == "NULL") {
-    plot_limits <- range(x_dat)
+    plot_limits <- range(x)
   }
 
-  x_dat <- x_dat[which(x_dat >= plot_limits[1] & x_dat <= plot_limits[2])]
-  h <- hist(x_dat, breaks = "fd", plot = FALSE)
+  x <- x[which(x >= plot_limits[1] & x <= plot_limits[2])]
+  h <- hist(x, breaks = "fd", plot = FALSE)
   x_base <- rep(h$breaks, each = 2)
   y_base <- c(0, rep(h$density, each = 2), 0)
   breaks_base <- h$breaks
   densities_base <- c(h$density, tail(h$density, 1))
   # kernel density
-  den <- KernSmooth::bkde(x_dat)
+  den <- KernSmooth::bkde(x)
 
   if (class(density_limits) == "NULL") {
     density_limits <- c(0, max(h$density) * amplify_max_density)

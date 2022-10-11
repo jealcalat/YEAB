@@ -31,8 +31,69 @@ normal_entropy <- function(k, pi, det_sig) {
   (k / 2) * (1 + log(2 * pi)) + (1 / 2) * log(det_sig)
 }
 entropia <- normal_entropy(k = 2, pi = pi, det_sig)
-entropia # retorna 7.415341
+entropia # retorna 4.397477
 entropy_kde2d(x, y, n_grid = 50)
-# retorna 7.445117
-# muy cercanos
+# retorna 4.376377
+# ver https://stats.stackexchange.com/questions/63447/integrating-kernel-density-estimator-in-2d
+# another implementation ----
+entropy_kde2d_v2 <- function(x, y, n_grid = 150) {
+  # range of x and y datapoints
+  xrange <- range(x)
+  yrange <- range(y)
+  # size of cell to evaluate; for x this is the x_lower and x_upper divided by
+  # the number of points (same for y); gives an area of evaluation.
+  cell_size <- (diff(xrange) / n_grid) * (diff(yrange) / n_grid)
+  kde_xy <- kde2d(
+    x, y,
+    # select bandwith
+    h = c(
+      width.SJ(x,
+        nb = n_grid,
+        lower = xrange[1],
+        upper = xrange[2],
+        method = "dpi"
+      ),
+      width.SJ(y,
+        nb = n_grid,
+        lower = yrange[1],
+        upper = yrange[2],
+        method = "dpi"
+      )
+    ),
+    lims = c(xrange, yrange),
+    n = n_grid
+  )
+  nc <- sum(kde_xy$z) * cell_size
+  z <- kde_xy$z * cell_size
+  pz <- z / nc
+  integrand <- (-1) * pz * log(pz)
+  sum(integrand)
+}
+entropy_kde2d_v2(x, y, 50)
+entropy_kde2d(x, y, n_grid = 50)
+#
+library(ks)
+set.seed(1)
+n <- 10000
+x <- rnorm(n, 0, 4)
+y <- rnorm(n, 0, 8)
+xy <- cbind(x, y)
+xmin <- min(x)
+xmax <- max(x)
+dx <- .1
+ymin <- min(y)
+ymax <- max(y)
+dy <- .1
+pts.x <- seq(xmin, xmax, dx)
+pts.y <- seq(ymin, ymax, dy)
+pts <- as.data.frame(expand.grid(x = pts.x, y = pts.y))
+f_kde <- kde(xy, gridsize = 150)
+dx <- diff(f_kde$eval.points[[1]])[1]
+dy <- diff(f_kde$eval.points[[2]])[1]
+pz_est <- f_kde$estimate
+?kde
+sum(pz_est) * (dx * dy)
+pz <- pz_est[pz_est > 0]
+intg <- (-1) * pz * log(pz)
+sum(intg) * dx * dy
 }

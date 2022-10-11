@@ -5,7 +5,7 @@
 #'
 #' @return a numeric vector with start, stop, spread and argmax (the bin at which response rate is max)
 #' @export
-#'
+#' @importFrom zoo rollapply
 #' @details Based on Balci et al 2010
 #' @examples
 #'
@@ -26,5 +26,3 @@ balci2010 = function(tasa_norm, bines) {
 
   c(start, stop, spread,binmax)
 }
-# plot(mov_av, type = 'l', ylim = c(0,1))
-# lines(tasa_norm, type = 'l', col = 'red')

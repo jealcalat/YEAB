@@ -41,9 +41,10 @@ box_dot_plot(
 
 \item{box_around}{logical, wheter to draw a box or just the axes}
 }
-\value{
-Nothing
-}
 \description{
 Custom box plot with dots of y ~ x on top of boxplot and stripchart functions
+}
+\examples{
+rxnx <- data.frame(var = rnorm(30), grupo = rep(c('A', 'B', 'C'), each = 10))
+box_dot_plot(rxnx$var, rxnx$grupo, col_pal = 'none', lty =1, boxlty = 2, box_around = FALSE)
 }

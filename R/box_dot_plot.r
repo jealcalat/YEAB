@@ -12,11 +12,12 @@
 #' @param whisklty integer or chr, linetype of the whiskers  (2 by default, dotted)
 #' @param box_around logical, wheter to draw a box or just the axes
 #'
-#' @return Nothing
+#' @return
+#' @importFrom Polychrome createPalette
 #' @export
+#' @examples
 #' rxnx <- data.frame(var = rnorm(30), grupo = rep(c('A', 'B', 'C'), each = 10))
 #' box_dot_plot(rxnx$var, rxnx$grupo, col_pal = 'none', lty =1, boxlty = 2, box_around = FALSE)
-#' @examples
 box_dot_plot <- function(variable,
                          groups,
                          xlab = "",
