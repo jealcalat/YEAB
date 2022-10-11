@@ -12,7 +12,6 @@
 #' @param whisklty integer or chr, linetype of the whiskers  (2 by default, dotted)
 #' @param box_around logical, wheter to draw a box or just the axes
 #'
-#' @return
 #' @importFrom Polychrome createPalette
 #' @export
 #' @examples

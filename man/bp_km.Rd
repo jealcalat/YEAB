@@ -4,10 +4,16 @@
 \alias{bp_km}
 \title{Break point using kmeans}
 \usage{
-bp_km(r_times, min_x, max_x, time_res)
+bp_km(r_times, min_x, max_x, bin_res)
 }
 \arguments{
-\item{time_res}{}
+\item{r_times, }{numeric, the times at which a response was emitted in a trial}
+
+\item{min_x, }{numeric, the minimal value of x}
+
+\item{max_x, }{numeric, the maximal value of x}
+
+\item{bin_res, }{numeric, the bin resolution}
 }
 \value{
 data.frame

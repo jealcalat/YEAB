@@ -11,7 +11,6 @@
 #' @param add logical, should a plot be added? FALSE by default
 #' @param axis logical, should axis be added? TRUE by default
 #'
-#' @return
 #' @export
 #'
 #' @examples

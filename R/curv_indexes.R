@@ -10,17 +10,28 @@
 #'    the area under the curve
 #' @export
 #'
+#' @importFrom sfsmisc integrate.xy
+#'
 #' @examples
-curv_index_int <- function(cr, t, h) { # h is height
+#' data('r_times')
+#' r_times <- r_times[r_times < 60]
+#' cr <- seq_along(r_times)
+#' par(las = 1)
+#' plot(r_times, cr, type = 's')
+curv_index_int <- function(cr, t) {
   # Curvature index with numerical integration
   # Get the AUC using numerical integration with cubic splines interpolation
 
   # total area of a rectangle
-  area0 <- h * max(cr) / 2
+  area0 <- max(t) * max(cr) / 2
   # integrate needs sfsmisc
+  # minimum time (first response)
   a <- min(t)
+  # maximum time (last response)
   b <- t[which.max(cr)]
+  # area under the function f(t_response)
   area1 <- integrate.xy(t, cr, a, b)
+  # difference of rect triangle and actual auc of f(t_response)
   index <- (area0 - area1) / area0
   return(index)
 }
@@ -28,21 +39,22 @@ curv_index_int <- function(cr, t, h) { # h is height
 #'
 #' @param cr numeric, cumulative response
 #' @param t numeric, time (or the x axis in a cumulative response plot)
-#' @param DT numeric, the number of subintervals
-#' @param b numeric
+#' @param n numeric, the number of subintervals
+#' @param b numeric, the base of the triangle (e.g., FI value)
 #'
 #' @return the curvature index as exposed by Fry
 #' @export
 #'
 #' @examples
-curv_index_fry <- function(cr, t, DT, b) {
+curv_index_fry <- function(cr, time_in, n, b, if_val) {
   # Curvature index using Fry method
-  # Size of subintervals
-  size <- round(b / DT)
+  # Size of subintervals; eg., if n=60 and b=60, size are 1sec bins
+  size <- round(b / n)
   # Subintervals generated evenly, from 0 to max(t)
-  intervals <- seq(0, max(t), size)
+  intervals <- seq(0, ceiling_multiple(max(time_in), if_val), size)
   # Responses at each subinterval
-  resps <- cr[t %in% intervals]
+  # resps <- cr[t %in% intervals]
+  resps <- n_between_intervals(cr, intervals, time_in)
   indexFry <- (3 * resps[4] - 2 * (resps[1] + resps[2] + resps[3])) / (4 * resps[4])
   return(indexFry)
 }
@@ -57,7 +69,7 @@ curv_index_fry <- function(cr, t, DT, b) {
 # numint = curv_index_int(cr=cumsum(df$y), t=df$x, 99)
 #
 #
-# plot(t, cr, type = 's')
+# plot(time_in, cr, type = 's', xlim = c(0, 90))
 # points(intervals[-1], resps, col = 'red', pch = 16)
 #
 # # segments(x0=intervals[-length(intervals)],

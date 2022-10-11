@@ -1,9 +1,9 @@
 #' Break point using kmeans
 #'
-#' @param r_times
-#' @param min_x
-#' @param max_x
-#' @param time_res
+#' @param r_times, numeric, the times at which a response was emitted in a trial
+#' @param min_x, numeric, the minimal value of x
+#' @param max_x, numeric, the maximal value of x
+#' @param bin_res, numeric, the bin resolution
 #'
 #' @return data.frame
 #' @export
@@ -15,14 +15,14 @@
 #' bps_km <- bp_km(r_times, 0, 180, 2)
 #' TODO: Error in dimnames(x) <- dn :
 # length of 'dimnames' [2] not equal to array extent
-bp_km <- function(r_times, min_x, max_x, time_res){
+bp_km <- function(r_times, min_x, max_x, bin_res){
 
-  x <- seq(min_x,max_x,time_res)
-  r_times <- get_bins(r_times, min_x, max_x,time_res)
+  x <- seq(min_x,max_x,bin_res)
+  r_times <- get_bins(r_times, min_x, max_x,bin_res)
   resp_sec <- r_times %>%
     {
       bins <- .
-      rate <- f_table(bins,min_x, max_x,time_res) # f_table is a custom fn
+      rate <- f_table(bins,min_x, max_x,bin_res) # f_table is a custom fn
       rate
     }
 
