@@ -4,16 +4,16 @@
 \alias{curv_index_fry}
 \title{Curvature index using the Fry derivation}
 \usage{
-curv_index_fry(cr, t, DT, b)
+curv_index_fry(cr, time_in, n, b, if_val)
 }
 \arguments{
 \item{cr}{numeric, cumulative response}
 
+\item{n}{numeric, the number of subintervals}
+
+\item{b}{numeric, the base of the triangle (e.g., FI value)}
+
 \item{t}{numeric, time (or the x axis in a cumulative response plot)}
-
-\item{DT}{numeric, the number of subintervals}
-
-\item{b}{numeric}
 }
 \value{
 the curvature index as exposed by Fry

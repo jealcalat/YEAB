@@ -4,7 +4,7 @@
 \alias{curv_index_int}
 \title{Curvature index by numerical integration}
 \usage{
-curv_index_int(cr, t, h)
+curv_index_int(cr, t)
 }
 \arguments{
 \item{cr}{numeric, cumulative response}
@@ -19,4 +19,11 @@ the area under the curve
 }
 \description{
 Curvature index by numerical integration
+}
+\examples{
+data('r_times')
+r_times <- r_times[r_times < 60]
+cr <- seq_along(r_times)
+par(las = 1)
+plot(r_times, cr, type = 's')
 }
