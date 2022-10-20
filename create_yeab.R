@@ -25,7 +25,7 @@ use_description(
 )
 
 
-pck_import <- c("dplyr", "zoo", "minpack.lm", "scales","magrittr", "ggplot2", "VGAM", "grid", "gridExtra", "cluster", "ks")
+pck_import <- c("dplyr", "zoo", "minpack.lm", "scales","magrittr", "ggplot2", "VGAM", "grid", "gridExtra", "cluster", "ks", "rmi")
 
 sapply(pck_import, use_package)
 
@@ -45,7 +45,13 @@ r_times <- c(28.1, 40.7, 44.2, 44.4, 44.7, 45, 45.4, 47.9, 48.1, 48.3, 48.6, 48.
 
 use_data(r_times)
 
+# raw FI interval data
+fileName <- "data/2018-04-30_12h28m_Subject M333.txt"
+connection <- file(fileName,open = "r")
+lines_raw <-readLines(connection)
+use_data(lines_raw)
 
 # install again
 
+devtools::document()
 devtools::install_github('jealcalat/YEAB', force=TRUE)
