@@ -12,6 +12,7 @@
 #' @details This algorithm uses the nonlinear least squares nls.lm from the minpack.lm package
 #'
 #' @examples
+#'
 gaussian_fit <- function(respuestas,t,
                          par=list(a=0.1,
                                   d=0.1,

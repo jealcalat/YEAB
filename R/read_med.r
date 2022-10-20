@@ -1,34 +1,44 @@
-# Paths to directories have the form of windows paths.
-# See at the end for an example of how to use this function efficiently
-
-## Input:
-#   a MED raw file in the form of time.event convention.
-## Output:
-#   a csv with two columns: time and events
-
 #' Process MED to csv based on standard data structure event.time
 #'
-#' @param fname chr, the name of a MED file to read; can include the path directory
-#' @param save_file logical, Save csv? TRUE or FALSE (default)
-#' @param path_save chr, Path to folder to save csv files;
-#' @param col_r chr, Variable of MED-raw to read (a event.time variable)
-#' @param out logical, output the dataframe processed?
+#' @param fname chr, the name of a MED file to read; can include the directory
+#' @param save_file logical, save csv? TRUE or FALSE (default)
+#' @param path_save chr, directory to save csv files if save_file is TRUE;
+#' @param col_r chr, variable of MED to read (a event.time variable; see Details)
+#' @param col_names chr, a vector of column names
+#' @param out logical, if true returns the data.frame of n x 2
 #'
-#' @return
+#' @return if out is true, returns a data.frame; if save_file is TRUE, writes the data.frame in csv format at path_save
 #' @export
 #'
+#' @details To use this function, the raw MED data should be in time.event convention.
+#'    For example, if a response is coded as 23, the time is in 1/100 seconds and a response
+#'    occurred at 2 minutes, the event is saved in, say, column C as 6000.23. This will be
+#'    processed as
+#'    time event
+#'    6000  23
+#'
 #' @examples
-#' ## Example of use:
+#' # read raw data from MED
+#' data("fi60_raw_from_med")
+#' # see first 10 lines
+#' head(fi60_raw_from_med, 10)
+#' # now write the data as txt or any extension
+#' writeLines(fi60_raw_from_med, "fi60_raw.txt")
+#' file_name <- "fi60_raw.txt"
+#' path_to_save <- getwd() # change to something like "data/processed/"
+#' fi60_processed <- read_med(fname = file_name, save_file = TRUE, path_save = path_to_save, col_r = 'C:', out = TRUE)
+#' head(fi60_processed)
+#' ## To use in bulk
 #' # 1) Generate a list of filenames of raw MED data
 #' # 2) Loop over the list with the function, using each element
 #' #    of the list as the fname argument.
 
-#' # Suppose all raw MED files start with 2020, and you are in the working directory (wd)
+#' # Suppose all raw MED files start with 2020, and you are in the working directory
 #' # If all the raw MED files are in the wd, we can directly write
 
-#' # filenames = list.files(pattern = "^2020")
+#' # filenames <- list.files(pattern = "^2020")
 
-#' # The above line will look in the wd for all the files starting with "2020"m
+#' # The above line will look in the wd for all the files starting with "2020"
 #' # and it will save it as a vector of strings in "filenames".
 #' # With that vector, make a for loop like the following:
 
@@ -37,11 +47,12 @@
 #' # df_working = data.frame()
 
 #' # for (f in filenames) {
-#' #   df_tmp = read_med(fname = f,
-#' #                     path_save = "", # put here your path to save the csv
-#' #                     col_r = 'C:', # if you want to process variable C
-#' #                     out = T ) # If you want to store processed data in df_tmp,
-#' # otherwise write out = F
+#' #   df_tmp <- read_med(fname = f,
+#' #                     path_save = "data/processed/", # put here your path to save the csv
+#' #                     col_r = 'C:', # if the time.event vector is saved in variable C
+#' #                     out = TRUE ) # If you want to store processed data in df_tmp,
+#' # otherwise write out = FALSE
+#' # now append at rows the new data.frame
 #' #   df_working = rbind(df_working, df_tmp)
 #' # }
 
@@ -53,7 +64,8 @@ read_med <- function(fname, # Name of the MED file to read;
                      path_save = NULL, # Path to folder to save csv files;
                      # e.g. /Dropbox/exp1/Phase_1/
                      col_r = "C:", # Variable of MED-raw to read
-                     out = T) { # store in memory the output file?
+                     col_names = c("time", "event"),
+                     out = TRUE) { # store in memory the output file?
   # this will return the data.frame in RAM
   # available to work on it immediatly.
   options(stringsAsFactors = FALSE)
@@ -73,7 +85,7 @@ read_med <- function(fname, # Name of the MED file to read;
 
   # Of the positions stored in "a", which of them is col_pos?
   idx1 <- a[a == col_pos]
-  # And which of them is the NEXT position? That is, where col_r ends!
+  # And which of them is the NEXT position? That is, where col_r ends
   # idx1 and idx2 will allow us to cut col_r ("C:" by default)
   idx2 <- a[which(a == idx1) + 1] - 2
 
@@ -112,7 +124,7 @@ read_med <- function(fname, # Name of the MED file to read;
 
   # This assign names to the columns
   if (ncol(var_tmp) > 1) {
-    colnames(var_tmp) <- c("tiempo", "evento")
+    colnames(var_tmp) <-col_names
   }
   # Remove 0s from 'tiempo'
   var_tmp <- var_tmp[var_tmp$tiempo > 0, ]
@@ -132,8 +144,6 @@ read_med <- function(fname, # Name of the MED file to read;
 
   # if our is true (T), this return (and save in memory) var_temp
   if (out) {
-    return(var_tmp)
+    var_tmp
   }
 }
-
-

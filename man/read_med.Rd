@@ -20,3 +20,28 @@ read_med(fname, save_file = FALSE, path_save = NULL, col_r = "C:", out = T)
 \description{
 Process MED to csv based on standard data structure event.time
 }
+\examples{
+data('')
+## To use in bulk
+# 1) Generate a list of filenames of raw MED data
+# 2) Loop over the list with the function, using each element
+#    of the list as the fname argument.
+# Suppose all raw MED files start with 2020, and you are in the working directory (wd)
+# If all the raw MED files are in the wd, we can directly write
+# filenames = list.files(pattern = "^2020")
+# The above line will look in the wd for all the files starting with "2020"m
+# and it will save it as a vector of strings in "filenames".
+# With that vector, make a for loop like the following:
+# If you want to work immediately with the processed data, first create an empty
+# dataframe to store the data file per file
+# df_working = data.frame()
+# for (f in filenames) {
+#   df_tmp = read_med(fname = f,
+#                     path_save = "", # put here your path to save the csv
+#                     col_r = 'C:', # if you want to process variable C
+#                     out = T ) # If you want to store processed data in df_tmp,
+# otherwise write out = F
+#   df_working = rbind(df_working, df_tmp)
+# }
+# Thats all.
+}
