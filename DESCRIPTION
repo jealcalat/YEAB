@@ -27,4 +27,5 @@ Imports:
     np,
     scales,
     sfsmisc,
-    VGAM
+    VGAM,
+    zoo
