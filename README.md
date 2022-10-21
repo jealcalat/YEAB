@@ -25,5 +25,5 @@ Este paquete se desarrolló con presupuesto de la **Convocatoria de Ciencia Bás
 
 ---
 
-For more information about how to install and use YEAB check our Wiki!
+For more information about how to install and use YEAB check our [Wiki](https://github.com/jealcalat/YEAB/wiki)!
 
