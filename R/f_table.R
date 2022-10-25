@@ -11,19 +11,18 @@
 #' @export
 #'
 #' @examples
-#' data('r_times')
+#' data("r_times")
 #' bin_res <- 2
 #' min_x <- 0
 #' max_x <- 180
 #' x <- get_bins(r_times, min_x, max_x, bin_res)
 #' xt <- f_table(x, min_x, max_x, bin_res)
 #' plot(xt$bins, xt$prop)
-f_table <- function(x, min_x, max_x, bin_res){
-
+f_table <- function(x, min_x, max_x, bin_res) {
   xf <- factor(x, levels = seq(min_x, max_x, bin_res))
   xt <- as.data.frame(table(xf))
-  xt$prop <- xt$Freq/sum(xt$Freq)
-  colnames(xt) <- c('bins', 'freq', 'prop')
+  xt$prop <- xt$Freq / sum(xt$Freq)
+  colnames(xt) <- c("bins", "freq", "prop")
   xt$bins <- as.numeric(as.character(xt$bins))
   xt
 }

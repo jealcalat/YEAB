@@ -20,7 +20,7 @@
 #' @examples
 #' var1 <- rnorm(100)
 #' var2 <- rexp(100)
-#' hist_over(var1, var2, name1 = expression(N(mu==0, sigma==1)), name2 = expression(exp(lambda==1)), grey=T)
+#' hist_over(var1, var2, name1 = expression(N(mu == 0, sigma == 1)), name2 = expression(exp(lambda == 1)), grey = T)
 hist_over <- function(var1, var2,
                       name1 = "",
                       name2 = "",
@@ -71,8 +71,8 @@ hist_over <- function(var1, var2,
   )
   axis(1, lwd = 0, lwd.tick = 0.8, tck = -0.02, cex.axis = 0.8, xaxs = "i")
   axis(2, lwd = 0, lwd.tick = 0.8, tck = -0.02, cex.axis = 0.8)
-  #axis(3, lwd = 0, lwd.tick = 0.8, tck = -0.02, lab = F)
-  #axis(4, lwd = 0, lwd.tick = 0.8, tck = -0.02, lab = F)
+  # axis(3, lwd = 0, lwd.tick = 0.8, tck = -0.02, lab = F)
+  # axis(4, lwd = 0, lwd.tick = 0.8, tck = -0.02, lab = F)
   box(lwd = 0.5)
   if (legend) {
     # legend(min0,cont_max, legend = c(

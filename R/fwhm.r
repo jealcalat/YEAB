@@ -19,17 +19,16 @@
 #' rx <- rnorm(100)
 #' den <- density(rx)
 #' fval <- fwhm(den$x, den$y)
-#' x1 <- fval$peak - fval$fwhm/2
-#' x2 <- fval$peak + fval$fwhm/2
+#' x1 <- fval$peak - fval$fwhm / 2
+#' x2 <- fval$peak + fval$fwhm / 2
 #' plot(den)
 #' abline(v = c(x1, fval$peak, x2), col = c(1, 2, 1))
-
-fwhm <- function(x,y){
-
-  xy <- data.frame(x = x,y = y)
+#'
+fwhm <- function(x, y) {
+  xy <- data.frame(x = x, y = y)
   xmax <- xy$x[which.max(den$y)][1] # thakes just one max if there were 2
-  x1 <- xy$x[xy$x < xmax][which.min(abs(xy$y[xy$x < xmax] - max(xy$y)/2))]
-  x2 <- xy$x[xy$x > xmax][which.min(abs(xy$y[xy$x > xmax] - max(xy$y)/2))]
+  x1 <- xy$x[xy$x < xmax][which.min(abs(xy$y[xy$x < xmax] - max(xy$y) / 2))]
+  x2 <- xy$x[xy$x > xmax][which.min(abs(xy$y[xy$x > xmax] - max(xy$y) / 2))]
   fwhm <- x2 - x1
-  list(fwhm = fwhm,peak = xmax)
+  list(fwhm = fwhm, peak = xmax)
 }

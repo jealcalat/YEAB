@@ -26,26 +26,26 @@
 #' writeLines(fi60_raw_from_med, "fi60_raw.txt")
 #' file_name <- "fi60_raw.txt"
 #' path_to_save <- getwd() # change to something like "data/processed/"
-#' fi60_processed <- read_med(fname = file_name, save_file = TRUE, path_save = path_to_save, col_r = 'C:', out = TRUE)
+#' fi60_processed <- read_med(fname = file_name, save_file = TRUE, path_save = path_to_save, col_r = "C:", out = TRUE)
 #' head(fi60_processed)
+#' # __________________________________________________________________________
 #' ## To use in bulk
 #' # 1) Generate a list of filenames of raw MED data
 #' # 2) Loop over the list with the function, using each element
 #' #    of the list as the fname argument.
-
+#' # __________________________________________________________________________
 #' # Suppose all raw MED files start with 2020, and you are in the working directory
-#' # If all the raw MED files are in the wd, we can directly write
-
+#' # If all the raw MED files are in the wd, we can directly get the filenames
+#' # with unspecified path
 #' # filenames <- list.files(pattern = "^2020")
-
 #' # The above line will look in the wd for all the files starting with "2020"
 #' # and it will save it as a vector of strings in "filenames".
 #' # With that vector, make a for loop like the following:
-
+#' # __________________________________________________________________________
 #' # If you want to work immediately with the processed data, first create an empty
 #' # dataframe to store the data file per file
 #' # df_working = data.frame()
-
+#' # __________________________________________________________________________
 #' # for (f in filenames) {
 #' #   df_tmp <- read_med(fname = f,
 #' #                     path_save = "data/processed/", # put here your path to save the csv
@@ -55,9 +55,8 @@
 #' # now append at rows the new data.frame
 #' #   df_working = rbind(df_working, df_tmp)
 #' # }
-
 #' # Thats all.
-
+#'
 read_med <- function(fname, # Name of the MED file to read;
                      # can include the path directory
                      save_file = FALSE, # Save csv? TRUE or FALSE (default)
@@ -124,10 +123,10 @@ read_med <- function(fname, # Name of the MED file to read;
 
   # This assign names to the columns
   if (ncol(var_tmp) > 1) {
-    colnames(var_tmp) <-col_names
+    colnames(var_tmp) <- col_names
   }
-  # Remove 0s from 'tiempo'
-  var_tmp <- var_tmp[var_tmp$tiempo > 0, ]
+  # Remove 0s from the first variable
+  var_tmp <- var_tmp[var_tmp[, 1] > 0, ]
   # This convert variables in numeric class
   for (c in 1:ncol(var_tmp)) {
     var_tmp[, c] <- as.numeric(var_tmp[, c])

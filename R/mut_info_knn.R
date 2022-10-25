@@ -25,7 +25,7 @@
 #' # simulate a sine function with noise
 #' set.seed(123)
 #' x <- seq(0, 5, 0.1)
-#' y <- 5*sin(x * pi)
+#' y <- 5 * sin(x * pi)
 #' y_with_noise <- y + rnorm(length(x), 0, 1)
 #' plot(x, y_with_noise)
 #' lines(x, y, col = 2)

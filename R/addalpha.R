@@ -8,14 +8,14 @@
 #' @export
 #' @importFrom scales show_col
 #' @examples
-#' my_red <- addalpha('red', 0.4)
-#' plot(0,0,col = addalpha('red', 0.1), pch = 16, cex=2)
+#' my_red <- addalpha("red", 0.4)
+#' plot(0, 0, col = addalpha("red", 0.1), pch = 16, cex = 2)
 #' # more than one color at once
-#' my_col_vec <- addalpha(c(1, 2, 'red', 'navy'), 0.4)
+#' my_col_vec <- addalpha(c(1, 2, "red", "navy"), 0.4)
 #' scales::show_col(my_col_vec)
 addalpha <- function(cols, alpha) {
   # convert to rgb
-  rgb(t(col2rgb(cols)/255),
-      alpha = alpha)
-
+  rgb(t(col2rgb(cols) / 255),
+    alpha = alpha
+  )
 }

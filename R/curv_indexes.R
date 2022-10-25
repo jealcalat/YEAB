@@ -1,5 +1,3 @@
-# Implements curvature index by integration and the Fry index
-
 #' Curvature index by numerical integration
 #'
 #' @param cr numeric, cumulative response
@@ -13,11 +11,21 @@
 #' @importFrom sfsmisc integrate.xy
 #'
 #' @examples
-#' data('r_times')
+#' data("r_times")
 #' r_times <- r_times[r_times < 60]
 #' cr <- seq_along(r_times)
 #' par(las = 1)
-#' plot(r_times, cr, type = 's')
+#' plot(r_times, cr, type = "s")
+#' curv_index_int(cr, r_times)
+#' segments(
+#'   x0 = min(r_times), y0 = min(cr),
+#'   x1 = max(r_times), y1 = max(cr)
+#' )
+#' segments(
+#'   x0 = min(r_times) + (max(r_times) - min(r_times)) / 2, y0 = min(cr),
+#'   x1 = max(r_times), y1 = max(cr),
+#'   col = "red"
+#' )
 curv_index_int <- function(cr, t) {
   # Curvature index with numerical integration
   # Get the AUC using numerical integration with cubic splines interpolation
@@ -37,18 +45,34 @@ curv_index_int <- function(cr, t) {
 }
 #' Curvature index using the Fry derivation
 #'
-#' @param cr numeric, cumulative response
+#' @param cr A numeric vector of cumulative response
 #' @param t numeric, time (or the x axis in a cumulative response plot)
 #' @param n numeric, the number of subintervals
 #' @param b numeric, the base of the triangle (e.g., FI value)
 #'
-#' @return the curvature index as exposed by Fry
+#' @return The curvature index as exposed by Fry
 #' @export
 #'
 #' @examples
-curv_index_fry <- function(cr, time_in, n, b, if_val) {
+#' data("r_times")
+#' r_times <- r_times[r_times < 60]
+#' cr <- seq_along(r_times)
+#' par(las = 1)
+#' plot(r_times, cr, type = "s", xlim = c(min(r_times), max(r_times)))
+#' segments(
+#'   x0 = min(r_times), y0 = min(cr),
+#'   x1 = max(r_times), y1 = max(cr)
+#' )
+#' segments(
+#'   x0 = min(r_times) + (max(r_times) - min(r_times)) / 2, y0 = min(cr),
+#'   x1 = max(r_times), y1 = max(cr),
+#'   col = "red"
+#' )
+#' curv_index_fry(cr, r_times, 4, 60, 60)
+curv_index_fry <- function(cr, time_in, b, if_val) {
   # Curvature index using Fry method
-  # Size of subintervals; eg., if n=60 and b=60, size are 1sec bins
+  # Size of subintervals; eg., if n=4 and b=60, size are 15 sec bins
+  n <- 4
   size <- round(b / n)
   # Subintervals generated evenly, from 0 to max(t)
   intervals <- seq(0, ceiling_multiple(max(time_in), if_val), size)

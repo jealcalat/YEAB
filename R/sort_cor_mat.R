@@ -12,7 +12,7 @@ sort_cor_mat <- function(cor_mat) {
   exp_g <- expand.grid(c(1, 2, 3), c(1, 2, 3))
   exp_g <- exp_g[order(exp_g$Var1), ]
   names_r_Vec <- paste(
-    exp_g[, 1], 
+    exp_g[, 1],
     exp_g[, 2],
     sep = "-"
   )

@@ -14,16 +14,17 @@
 #' @export
 #'
 #' @examples
-#' data('r_times')
+#' data("r_times")
 #' r_times <- r_times[r_times < 60]
 #' single_bp <- bp_fi(r_times, 60)
 #' par(las = 1)
 #' plot(r_times, seq_along(r_times),
-#'      xlim = c(0, max(r_times)),
-#'      main = 'Cummulative Record',
-#'      xlab = 'Time (s)',
-#'      ylab = 'Cum Resp',
-#'      col = 2, type = 's')
+#'   xlim = c(0, max(r_times)),
+#'   main = "Cummulative Record",
+#'   xlab = "Time (s)",
+#'   ylab = "Cum Resp",
+#'   col = 2, type = "s"
+#' )
 #' abline(v = single_bp$bp)
 bp_fi <- function(r_times, if_val) {
   if (max(r_times) < if_val) {

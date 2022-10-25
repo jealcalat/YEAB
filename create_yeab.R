@@ -25,7 +25,9 @@ use_description(
 )
 
 
-pck_import <- c("dplyr", "zoo", "minpack.lm", "scales","magrittr", "ggplot2", "VGAM", "grid", "gridExtra", "cluster", "ks", "rmi")
+pck_import <- c("dplyr", "zoo", "minpack.lm", "scales","magrittr",
+                "ggplot2", "VGAM", "grid", "gridExtra", "cluster",
+                "ks", "rmi")
 
 sapply(pck_import, use_package)
 

@@ -1,21 +1,20 @@
 
 hist_hpdi <- function(samples,
-                      ylab = '',
-                      xlab = '',
+                      ylab = "",
+                      xlab = "",
                       fill_hist = grey(0.5),
                       percent = 90) {
-  
   if (require(rethinking)) {
     densidad <- density(samples, adjust = 0.8, n = 1000)
-    hist(samples, 
-         col = fill_hist,
-         border = fill_hist,
-         breaks = 'fd', 
-         ylab = ylab,
-         xlab = xlab,
-         freq = FALSE, 
-         axes = FALSE,
-         ylim = c(0, max(densidad$y) *  1.2)
+    hist(samples,
+      col = fill_hist,
+      border = fill_hist,
+      breaks = "fd",
+      ylab = ylab,
+      xlab = xlab,
+      freq = FALSE,
+      axes = FALSE,
+      ylim = c(0, max(densidad$y) * 1.2)
     )
     axis(1)
     # Calcular HDPI al percent
@@ -36,13 +35,13 @@ hist_hpdi <- function(samples,
       x1 = high_dpi[2],
       y0 = max(densidad$y) * 1.02,
       y1 = max(densidad$y) * 1.02,
-      lwd = 2, 
-      col = "navyblue", 
+      lwd = 2,
+      col = "navyblue",
       code = 3,
       length = 0.1
     )
     text(
-      x = mean(high_dpi), 
+      x = mean(high_dpi),
       y = max(densidad$y) * 1.1,
       labels = "HPDI 90%"
     )
@@ -50,6 +49,3 @@ hist_hpdi <- function(samples,
     message("Please install rethinking package.")
   }
 }
-
-
-

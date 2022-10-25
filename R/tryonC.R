@@ -1,16 +1,16 @@
-tryon <- function(datos){
-  diferencia <- sum((datos[1:(length(datos)-1)]-datos[2:length(datos)])^2)
-  diferencia2 <- 2*(sum((datos-mean(datos))^2))
-  
-  c <- 1-(diferencia/diferencia2)
-  
-  sc <- sqrt((length(datos)-2)/((length(datos)-1)*(length(datos)+1)))
-  
-  z <- c/sc
-  
-  if (z<0) p <- pnorm(z) else p <- 1-pnorm(z)
-  
-  return(list(z= z, p.value = p))
+tryon <- function(datos) {
+  diferencia <- sum((datos[1:(length(datos) - 1)] - datos[2:length(datos)])^2)
+  diferencia2 <- 2 * (sum((datos - mean(datos))^2))
+
+  c <- 1 - (diferencia / diferencia2)
+
+  sc <- sqrt((length(datos) - 2) / ((length(datos) - 1) * (length(datos) + 1)))
+
+  z <- c / sc
+
+  if (z < 0) p <- pnorm(z) else p <- 1 - pnorm(z)
+
+  return(list(z = z, p.value = p))
 }
 
 
