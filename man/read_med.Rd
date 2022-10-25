@@ -4,43 +4,73 @@
 \alias{read_med}
 \title{Process MED to csv based on standard data structure event.time}
 \usage{
-read_med(fname, save_file = FALSE, path_save = NULL, col_r = "C:", out = T)
+read_med(
+  fname,
+  save_file = FALSE,
+  path_save = NULL,
+  col_r = "C:",
+  col_names = c("time", "event"),
+  out = TRUE
+)
 }
 \arguments{
-\item{fname}{chr, the name of a MED file to read; can include the path directory}
+\item{fname}{chr, the name of a MED file to read; can include the directory}
 
-\item{save_file}{logical, Save csv? TRUE or FALSE (default)}
+\item{save_file}{logical, save csv? TRUE or FALSE (default)}
 
-\item{path_save}{chr, Path to folder to save csv files;}
+\item{path_save}{chr, directory to save csv files if save_file is TRUE;}
 
-\item{col_r}{chr, Variable of MED-raw to read (a event.time variable)}
+\item{col_r}{chr, variable of MED to read (a event.time variable; see Details)}
 
-\item{out}{logical, output the dataframe processed?}
+\item{col_names}{chr, a vector of column names}
+
+\item{out}{logical, if true returns the data.frame of n x 2}
+}
+\value{
+if out is true, returns a data.frame; if save_file is TRUE, writes the data.frame in csv format at path_save
 }
 \description{
 Process MED to csv based on standard data structure event.time
 }
+\details{
+To use this function, the raw MED data should be in time.event convention.
+For example, if a response is coded as 23, the time is in 1/100 seconds and a response
+occurred at 2 minutes, the event is saved in, say, column C as 6000.23. This will be
+processed as
+time event
+6000  23
+}
 \examples{
-data('')
+# read raw data from MED
+data("fi60_raw_from_med")
+# see first 10 lines
+head(fi60_raw_from_med, 10)
+# now write the data as txt or any extension
+writeLines(fi60_raw_from_med, "fi60_raw.txt")
+file_name <- "fi60_raw.txt"
+path_to_save <- getwd() # change to something like "data/processed/"
+fi60_processed <- read_med(fname = file_name, save_file = TRUE, path_save = path_to_save, col_r = 'C:', out = TRUE)
+head(fi60_processed)
 ## To use in bulk
 # 1) Generate a list of filenames of raw MED data
 # 2) Loop over the list with the function, using each element
 #    of the list as the fname argument.
-# Suppose all raw MED files start with 2020, and you are in the working directory (wd)
+# Suppose all raw MED files start with 2020, and you are in the working directory
 # If all the raw MED files are in the wd, we can directly write
-# filenames = list.files(pattern = "^2020")
-# The above line will look in the wd for all the files starting with "2020"m
+# filenames <- list.files(pattern = "^2020")
+# The above line will look in the wd for all the files starting with "2020"
 # and it will save it as a vector of strings in "filenames".
 # With that vector, make a for loop like the following:
 # If you want to work immediately with the processed data, first create an empty
 # dataframe to store the data file per file
 # df_working = data.frame()
 # for (f in filenames) {
-#   df_tmp = read_med(fname = f,
-#                     path_save = "", # put here your path to save the csv
-#                     col_r = 'C:', # if you want to process variable C
-#                     out = T ) # If you want to store processed data in df_tmp,
-# otherwise write out = F
+#   df_tmp <- read_med(fname = f,
+#                     path_save = "data/processed/", # put here your path to save the csv
+#                     col_r = 'C:', # if the time.event vector is saved in variable C
+#                     out = TRUE ) # If you want to store processed data in df_tmp,
+# otherwise write out = FALSE
+# now append at rows the new data.frame
 #   df_working = rbind(df_working, df_tmp)
 # }
 # Thats all.
