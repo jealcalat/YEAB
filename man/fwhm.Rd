@@ -28,8 +28,9 @@ set.seed(170)
 rx <- rnorm(100)
 den <- density(rx)
 fval <- fwhm(den$x, den$y)
-x1 <- fval$peak - fval$fwhm/2
-x2 <- fval$peak + fval$fwhm/2
+x1 <- fval$peak - fval$fwhm / 2
+x2 <- fval$peak + fval$fwhm / 2
 plot(den)
 abline(v = c(x1, fval$peak, x2), col = c(1, 2, 1))
+
 }

@@ -4,7 +4,7 @@
 #' @param y numeric, random vector
 #' @param n_grid numeric, number of grid cells to evaluate density
 #' @importFrom MASS kde2d
-#' @return
+#' @return A numeric value of the entropy in 2D
 #' @export
 #'
 #' @examples

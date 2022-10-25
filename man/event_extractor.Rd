@@ -29,12 +29,15 @@ Works by trials
 }
 \examples{
 # How to use ----
- # # If we have a component starting with 5 and ending with 2 and a dataframe "df"
- # we can extract the data of component "comp52" following the next steps:
- # 0 - From the output of read_med.R function, load the csv file and assing to df
- # 1 - source the event_extractor.R function
- # 2 - use it with the appropiate arguments as follows
-component52df <- event_extractor(dframe = df, # enter the data as the 1st arg
-                                 ev0 = 5, ev1 = 2, # anter start and stop
-                                 evname = "comp52") # enter the event name
+# # If we have a component starting with 5 and ending with 2 and a dataframe "df"
+# we can extract the data of component "comp52" following the next steps:
+# 0 - From the output of read_med.R function, load the csv file and assing to df
+# 1 - source the event_extractor.R function
+# 2 - use it with the appropiate arguments as follows
+component52df <- event_extractor(
+  dframe = df, # enter the data as the 1st arg
+  ev0 = 5, ev1 = 2, # anter start and stop
+  evname = "comp52"
+) # enter the event name
+
 }

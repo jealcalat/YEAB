@@ -21,9 +21,19 @@ the area under the curve
 Curvature index by numerical integration
 }
 \examples{
-data('r_times')
+data("r_times")
 r_times <- r_times[r_times < 60]
 cr <- seq_along(r_times)
 par(las = 1)
-plot(r_times, cr, type = 's')
+plot(r_times, cr, type = "s")
+curv_index_int(cr, r_times)
+segments(
+  x0 = min(r_times), y0 = min(cr),
+  x1 = max(r_times), y1 = max(cr)
+)
+segments(
+  x0 = min(r_times) + (max(r_times) - min(r_times)) / 2, y0 = min(cr),
+  x1 = max(r_times), y1 = max(cr),
+  col = "red"
+)
 }

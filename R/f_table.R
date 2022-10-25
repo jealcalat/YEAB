@@ -7,7 +7,7 @@
 #' @param max_x, numeric, the maximal value of x
 #' @param bin_res, numeric, the bin resolution
 #'
-#' @return
+#' @return A data frame
 #' @export
 #'
 #' @examples

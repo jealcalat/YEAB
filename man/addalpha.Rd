@@ -18,9 +18,9 @@ character vector of colors
 Adds transparency to a list of colors
 }
 \examples{
-my_red <- addalpha('red', 0.4)
-plot(0,0,col = addalpha('red', 0.1), pch = 16, cex=2)
+my_red <- addalpha("red", 0.4)
+plot(0, 0, col = addalpha("red", 0.1), pch = 16, cex = 2)
 # more than one color at once
-my_col_vec <- addalpha(c(1, 2, 'red', 'navy'), 0.4)
+my_col_vec <- addalpha(c(1, 2, "red", "navy"), 0.4)
 scales::show_col(my_col_vec)
 }

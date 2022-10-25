@@ -27,5 +27,5 @@ Overlap two histograms
 \examples{
 var1 <- rnorm(100)
 var2 <- rexp(100)
-hist_over(var1, var2, name1 = expression(N(mu==0, sigma==1)), name2 = expression(exp(lambda==1)), grey=T)
+hist_over(var1, var2, name1 = expression(N(mu == 0, sigma == 1)), name2 = expression(exp(lambda == 1)), grey = T)
 }

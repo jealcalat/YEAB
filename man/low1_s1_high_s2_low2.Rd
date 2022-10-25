@@ -40,8 +40,8 @@ abline(v = c(bps$start, bps$stop), col = 2, lty = 2, lwd = 2)
 # compare it with fwhm
 den <- density(r_times, from = 0, to = trial_duration)
 fval <- fwhm(den$x, den$y)
-x1 <- fval$peak - fval$fwhm/2
-x2 <- fval$peak + fval$fwhm/2
+x1 <- fval$peak - fval$fwhm / 2
+x2 <- fval$peak + fval$fwhm / 2
 plot(den)
-abline(v = c(x1, fval$peak, x2), col = c('blue', 1, 'blue'))
+abline(v = c(x1, fval$peak, x2), col = c("blue", 1, "blue"))
 }

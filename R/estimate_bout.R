@@ -6,6 +6,7 @@
 #' @export
 #'
 #' @examples
+#'
 estimate_bout <- function(irt) {
   fit <- VGAM::vglm(irt ~ 1, VGAM::mix2exp, trace = TRUE)
   param <- VGAM::Coef(fit)

@@ -23,16 +23,16 @@ Peak individual trial analysis using moving average
 Based on Balci et al 2010
 }
 \examples{
-data('r_times')
+data("r_times")
 # binarize r_times to create response rate at 2 sec bins
 bines <- get_bins(r_times, 0, 180, 2)
 bin_res <- 6
 tasa <- f_table(bines, 0, 180, bin_res)
-tasa_norm <- tasa$prop/max(tasa$prop)
+tasa_norm <- tasa$prop / max(tasa$prop)
 bines <- tasa$bins
 balci_ind <- balci2010(tasa_norm, bines)
-par(las=1)
-plot(bines, tasa_norm, xlab = '6 sec bins', )
-lines(bines, balci_ind$mov_av, col = 'blue', lwd = 2)
-abline(v = balci_ind$params[c(1, 2, 4)], lwd = c(1,1,2), col = c(1, 1, 'red4'))
+par(las = 1)
+plot(bines, tasa_norm, xlab = "6 sec bins", )
+lines(bines, balci_ind$mov_av, col = "blue", lwd = 2)
+abline(v = balci_ind$params[c(1, 2, 4)], lwd = c(1, 1, 2), col = c(1, 1, "red4"))
 }

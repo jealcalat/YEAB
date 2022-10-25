@@ -15,13 +15,16 @@ f_table(x, min_x, max_x, bin_res)
 
 \item{bin_res, }{numeric, the bin resolution}
 }
+\value{
+A data frame
+}
 \description{
 Creates a frequency table from a vector of bins from, for example,
 get_bins(). It includes zero-frequency bins. If the bins came from the
 responding times, this creates a data.frame of response rate.
 }
 \examples{
-data('r_times')
+data("r_times")
 bin_res <- 2
 min_x <- 0
 max_x <- 180
