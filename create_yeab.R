@@ -53,6 +53,37 @@ use_data(r_times)
 # fi60_raw_from_med <-readLines(connection)
 # use_data(fi60_raw_from_med)
 
+## creación de dataset para ajuste hiperbólico
+
+fn_hyp <- function(delay, k, v0){
+  v0 / (1 + k * delay)
+}
+
+v0 <- 900
+k <- 0.5
+delay_real <- seq(0, 100, len = 2000)
+
+real_sv <- fn_hyp(delay_real, k, v0)
+delay <- seq(0, 100, len = 20)
+
+sv_with_noise <- fn_hyp(delay, k, v0) + rnorm(length(delay), 0, 40)
+# normalizar
+real_sv_norm <- real_sv/max(real_sv)
+sv_with_noise_norm <- unity_normalization(sv_with_noise)
+plot(delay_real, real_sv_norm , type = 'l', ylim = c(0,1))
+points(delay, sv_with_noise_norm)
+
+hyp_data_list <- list(sv = sv_with_noise_norm,
+                      delay = delay,
+                      real_k = k)
+
+usethis::use_data(hyp_data_list)
+
+DD_data <- data.frame (norm_sv = c(0.934, 0.746, 0.746, 0.488, 0.684, 0.441),
+                       Delay = c(1, 6, 12, 36, 60, 120))
+
+usethis::use_data(DD_data)
+
 # install again
 
 devtools::document()

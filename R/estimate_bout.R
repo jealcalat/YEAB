@@ -1,4 +1,4 @@
-#' Biexponential model for the estimation of whithin and between-bouts
+#' Biexponential model for the estimation of within and between-bouts
 #'
 #' @param irt numeric, the interresponse times
 #'

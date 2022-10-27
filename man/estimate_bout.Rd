@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_bout.R
 \name{estimate_bout}
 \alias{estimate_bout}
-\title{Biexponential model for the estimation of whithin and between-bouts}
+\title{Biexponential model for the estimation of within and between-bouts}
 \usage{
 estimate_bout(irt)
 }
@@ -13,5 +13,5 @@ estimate_bout(irt)
 numeric vector of the biexponential model parameters
 }
 \description{
-Biexponential model for the estimation of whithin and between-bouts
+Biexponential model for the estimation of within and between-bouts
 }
