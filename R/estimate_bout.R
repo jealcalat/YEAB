@@ -2,8 +2,15 @@
 #'
 #' @param irt numeric, the interresponse times
 #'
-#' @return numeric vector of the biexponential model parameters
+#' @return numeric vector of the biexponential model parameters \eqn{L=1/\theta}, the bout length,
+#' \eqn{W = 1/w}, the within bout rate, and \eqn{B = 1/b} the bout initiation rate, where
+#' \eqn{\theta, w, b} are the proportion of responses that are bouts, the mean within bout IRT, and
+#' the mean between bout IRT.
 #' @export
+#'
+#' @details Implements the finite mixtures of two exponentials
+#' \eqn{p(IRT < \tau) = \theta w e^{-w IRT} + (1-\theta)b e^{-b IRT}}
+#'
 #'
 #' @examples
 #'
