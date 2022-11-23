@@ -12,6 +12,7 @@
 #' @return
 #' @export
 #' @importFrom infotheo discretize
+#' @importFrom infotheo mutinformation
 #' @examples
 #' set.seed(123)
 #' x <- rnorm(1000)
