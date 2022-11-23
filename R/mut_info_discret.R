@@ -11,7 +11,7 @@
 #' PhD thesis of the Universite Libre de Bruxelles.
 #' @return
 #' @export
-#'
+#'#' @importFrom infotheo discretize
 #' @examples
 #' set.seed(123)
 #' x <- rnorm(1000)
