@@ -10,8 +10,15 @@ estimate_bout(irt)
 \item{irt}{numeric, the interresponse times}
 }
 \value{
-numeric vector of the biexponential model parameters
+numeric vector of the biexponential model parameters \eqn{L=1/\theta}, the bout length,
+\eqn{W = 1/w}, the within bout rate, and \eqn{B = 1/b} the bout initiation rate, where
+\eqn{\theta, w, b} are the proportion of responses that are bouts, the mean within bout IRT, and
+the mean between bout IRT.
 }
 \description{
 Biexponential model for the estimation of within and between-bouts
+}
+\details{
+Implements the finite mixtures of two exponentials
+\eqn{p(IRT < \tau) = \theta w e^{-w IRT} + (1-\theta)b e^{-b IRT}}
 }
