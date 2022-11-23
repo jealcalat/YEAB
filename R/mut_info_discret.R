@@ -11,7 +11,7 @@
 #' PhD thesis of the Universite Libre de Bruxelles.
 #' @return
 #' @export
-#'#' @importFrom infotheo discretize
+#' @importFrom infotheo discretize
 #' @examples
 #' set.seed(123)
 #' x <- rnorm(1000)
@@ -36,7 +36,7 @@
 #' cor(x, y_with_noise)
 #' # mutual information can detect nonlinear dependencies
 #' mut_info_discret(x, y_with_noise)
-mut_info_discret <- function(x, y, method = 'emp') {
+mut_info_discret <- function(x, y, method = "emp") {
   xd <- discretize(x)
   yd <- discretize(y)
   mutinformation(xd, yd, method = method)
