@@ -28,7 +28,8 @@ use_description(
 pck_import <- c(
   "dplyr", "zoo", "minpack.lm", "scales", "magrittr",
   "ggplot2", "VGAM", "grid", "gridExtra", "cluster",
-  "ks", "rmi", "infotheo", "Polychrome", "foreach", "doParallel"
+  "ks", "rmi", "infotheo", "Polychrome", "foreach", "doParallel",
+  "sfsmisc"
 )
 
 sapply(pck_import, use_package)
