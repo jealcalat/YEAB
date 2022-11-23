@@ -16,7 +16,9 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Imports: 
     cluster,
+    doParallel,
     dplyr,
+    foreach,
     ggplot2,
     grid,
     gridExtra,
@@ -24,6 +26,7 @@ Imports:
     ks,
     magrittr,
     minpack.lm,
+    Polychrome,
     rmi,
     scales,
     VGAM,
