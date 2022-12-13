@@ -20,7 +20,7 @@ read_med(
 
 \item{path_save}{chr, directory to save csv files if save_file is TRUE;}
 
-\item{col_r}{chr, variable of MED to read (a event.time variable; see Details)}
+\item{col_r}{chr, variable of MED to read (an event.time variable; see Details)}
 
 \item{col_names}{chr, a vector of column names}
 

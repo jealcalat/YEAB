@@ -2,12 +2,12 @@
 % Please edit documentation in R/low1_s1_high_s2_low2.r
 \name{low1_s1_high_s2_low2}
 \alias{low1_s1_high_s2_low2}
-\title{Individual trial analysis of peak procedure data}
+\title{Individual trial analysis for peak procedure data}
 \usage{
 low1_s1_high_s2_low2(r_times, trial_duration)
 }
 \arguments{
-\item{r_times}{numeric, the times at which a response was emitted in a trial}
+\item{r_times}{numeric, the times that a response was emitted in a trial}
 
 \item{trial_duration}{numeric, the peak trial duration}
 }
@@ -16,7 +16,7 @@ a data.frame of start, stop, spread, middle time (mid) and the response
 rate at each state (r1 for low, r2 for high and r3 for the second low rate state)
 }
 \description{
-Individual trial analysis of peak procedure data
+Individual trial analysis for peak procedure data
 }
 \examples{
 data("r_times")

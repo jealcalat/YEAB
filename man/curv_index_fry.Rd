@@ -2,7 +2,7 @@
 % Please edit documentation in R/curv_indexes.R
 \name{curv_index_fry}
 \alias{curv_index_fry}
-\title{Curvature index using the Fry derivation}
+\title{Curvature index using Fry derivation}
 \usage{
 curv_index_fry(cr, time_in, b, if_val)
 }
@@ -19,7 +19,7 @@ curv_index_fry(cr, time_in, b, if_val)
 The curvature index as exposed by Fry
 }
 \description{
-Curvature index using the Fry derivation
+Curvature index using Fry derivation
 }
 \examples{
 data("r_times")

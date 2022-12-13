@@ -16,7 +16,7 @@ bp_fi(r_times, if_val)
 A data frame of 3 columns
 bp: a numeric value which corresponds to the time at which a break point was detected
 r1: a numeric value of the response rate \emph{before} the breakpoint
-r2: a umeric value of the responser rate \emph{after} the breakpoint
+r2: a numeric value of the responser rate \emph{after} the breakpoint
 }
 \description{
 Single breakpoint algorithm, as the one used in Guilhardi & Church 2004
@@ -24,7 +24,7 @@ Works in fixed interval trials.
 }
 \details{
 This algorithm performs an extensive search of every combination (t1, t2)
-where t1 starts in the first response throw (length(r_times) - 1)
+where t1 starts in the first response through (length(r_times) - 1)
 }
 \examples{
 data("r_times")

@@ -7,7 +7,7 @@
 ceiling_multiple(x, multiple)
 }
 \arguments{
-\item{x}{numeric, the value for which we want to find a multiple}
+\item{x}{numeric, the value for which we want to finde a multiple}
 
 \item{multiple}{numeric, the multiple}
 }

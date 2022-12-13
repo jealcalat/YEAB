@@ -39,7 +39,7 @@ box_dot_plot(
 
 \item{whisklty}{integer or chr, linetype of the whiskers  (2 by default, dotted)}
 
-\item{box_around}{logical, wheter to draw a box or just the axes}
+\item{box_around}{logical, whether to draw a box or just the axes}
 }
 \description{
 Custom box plot with dots of y ~ x on top of boxplot and stripchart functions
