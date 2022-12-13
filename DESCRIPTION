@@ -29,5 +29,6 @@ Imports:
     Polychrome,
     rmi,
     scales,
+    sfsmisc,
     VGAM,
     zoo
