@@ -43,7 +43,7 @@ curv_index_int <- function(cr, t) {
   index <- (area0 - area1) / area0
   return(index)
 }
-#' Curvature index using the Fry derivation
+#' Curvature index using Fry derivation
 #'
 #' @param cr A numeric vector of cumulative response
 #' @param t numeric, time (or the x axis in a cumulative response plot)

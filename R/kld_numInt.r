@@ -1,4 +1,4 @@
-# Depends on npudens fromt he package np
+# Depends on npudens from the package np
 # This is a modification of a solution given in vignette()
 kld <- function(x, y, ...) {
   integrand <- function(t, x, y) {
@@ -6,7 +6,7 @@ kld <- function(x, y, ...) {
     # - For bw.SJ see ?bw.SJ which computes the bandwidth
     #   for the kernel... which is approx the same as the variance
     #   in the gaussian function.
-    # The argument 'edat=t' is for evaluate at 't'. Ie, the integral
+    # The argument 'edat=t' serves to evaluate at 't'. I.e., the integral
     # will integrate over 't'.
     f.x <- fitted(npudens(tdat = x, edat = t, bws = bw.SJ(x), ...)) + 0.0000001
     f.y <- fitted(npudens(tdat = y, edat = t, bws = bw.SJ(y), ...)) + 0.0000001

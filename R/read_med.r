@@ -3,7 +3,7 @@
 #' @param fname chr, the name of a MED file to read; can include the directory
 #' @param save_file logical, save csv? TRUE or FALSE (default)
 #' @param path_save chr, directory to save csv files if save_file is TRUE;
-#' @param col_r chr, variable of MED to read (a event.time variable; see Details)
+#' @param col_r chr, variable of MED to read (an event.time variable; see Details)
 #' @param col_names chr, a vector of column names
 #' @param out logical, if true returns the data.frame of n x 2
 #'
@@ -64,7 +64,7 @@ read_med <- function(fname, # Name of the MED file to read;
                      # e.g. /Dropbox/exp1/Phase_1/
                      col_r = "C:", # Variable of MED-raw to read
                      col_names = c("time", "event"),
-                     out = TRUE) { # store in memory the output file?
+                     out = TRUE) { # store the output file in memory?
   # this will return the data.frame in RAM
   # available to work on it immediatly.
   options(stringsAsFactors = FALSE)
@@ -74,12 +74,12 @@ read_med <- function(fname, # Name of the MED file to read;
   )
 
   # Create a numeric vector of the positions where dfx have "0:",
-  # wich in MED is the start of an array. This will tell us where are
-  # the variables, including our col_r variable ('C:' by default)
+  # wich in MED is the start of an array. This will tell us where
+  # the variables are, including our col_r variable ('C:' by default)
   a <- which((dfx$V1 == "0:"))
 
   # Look where is col_r (where is "C:" by default), and add 1 to that
-  # position, because is where MED start to count the array ("0:")
+  # position, because it is where MED start to count the array ("0:")
   col_pos <- which(dfx$V1 == col_r) + 1
 
   # Of the positions stored in "a", which of them is col_pos?
@@ -116,18 +116,18 @@ read_med <- function(fname, # Name of the MED file to read;
   varY <- data.frame(val = varY$values)
   # Drop all 0s (there's nothing interesting there)
   varY <- varY[varY$val > 0, ]
-  # This split the time.event vector in two
+  # This splits the time.event vector in two
   var_tmp <- do.call(rbind, strsplit(as.character(varY), "\\."))
   # And this creates a dataframe with two columns (time and event)
   var_tmp <- as.data.frame(var_tmp)
 
-  # This assign names to the columns
+  # This assigns names to the columns
   if (ncol(var_tmp) > 1) {
     colnames(var_tmp) <- col_names
   }
-  # Remove 0s from the first variable
+  # Removes 0s from the first variable
   var_tmp <- var_tmp[var_tmp[, 1] > 0, ]
-  # This convert variables in numeric class
+  # This converts variables to numeric class
   for (c in 1:ncol(var_tmp)) {
     var_tmp[, c] <- as.numeric(var_tmp[, c])
   }
@@ -141,7 +141,7 @@ read_med <- function(fname, # Name of the MED file to read;
     )
   }
 
-  # if our is true (T), this return (and save in memory) var_temp
+  # if our is true (T), this returns (and save in memory) var_temp
   if (out) {
     var_tmp
   }

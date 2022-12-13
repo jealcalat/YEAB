@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_bout.R
 \name{estimate_bout}
 \alias{estimate_bout}
-\title{Biexponential model for the estimation of within and between-bouts}
+\title{Biexponential model for the estimation of within and between bouts}
 \usage{
 estimate_bout(irt)
 }
@@ -11,12 +11,12 @@ estimate_bout(irt)
 }
 \value{
 numeric vector of the biexponential model parameters \eqn{L=1/\theta}, the bout length,
-\eqn{W = 1/w}, the within bout rate, and \eqn{B = 1/b} the bout initiation rate, where
-\eqn{\theta, w, b} are the proportion of responses that are bouts, the mean within bout IRT, and
-the mean between bout IRT.
+\eqn{W = 1/w}, the within-bout rate, and \eqn{B = 1/b} the bout initiation rate, where
+\eqn{\theta, w, b} are the proportion of responses that are bouts, the mean within-bout IRT, and
+the mean between-bout  IRT.
 }
 \description{
-Biexponential model for the estimation of within and between-bouts
+Biexponential model for the estimation of within and between bouts
 }
 \details{
 Implements the finite mixtures of two exponentials

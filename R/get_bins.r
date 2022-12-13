@@ -19,8 +19,8 @@
 #' # Returns
 #' # 1] 5.5 3.5 4.5 7.0 1.0 2.5 3.0 3.0 6.5 4.5 7.0 6.0 1.5 6.0 4.0 4.5 1.0 3.0 4.0 8.5
 get_bins <- function(x, x_min, x_max, res) {
-  # Create a sequence of intervals at wich x will be binned, taking pairs of values in order
-  # eg, (0, 10, 20) will form paris of intervals of (0, 10], (10, 20] and (10, 20]
+  # Create a sequence of intervals from whose value x will be binned, taking pairs of values in order
+  # eg, (0, 10, 20) will form pairs of intervals of (0, 10], (10, 20] and (10, 20]
   seq_intervals <- seq(x_min, x_max, res)
   # Find intervals takes x and makes intervals according to the sequence above.
   # If x = 1, 4, 9, 10, 12 and seq_intervals = 0, 10, 20 (bins of 10)

@@ -1,6 +1,6 @@
 # stat_boot_dopar_byx.R
 # Using foreach and dopar, the function groups by x (e.g., bins or session)
-# and computes a 'stat', specified by argument FUN (by default the mean), and
+# and computes a 'stat', specified by argument FUN (the mean, by default), and
 # the 95 % CI using boostrapping (resamples in R).
 #
 # It returns the mean (default 'y'), the lower (lCI) and upper (uCI) confidence

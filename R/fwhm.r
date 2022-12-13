@@ -1,6 +1,6 @@
 # fwhm.R
 # Full width half maximum and maximum at full width.
-# The arguments x and y comes from the output
+# The arguments x and y come from the output
 # of the density() function, i.e, x = density()$x, y = density()$y
 
 #' Full Width at Half Maximum
@@ -11,7 +11,7 @@
 #' @return a list with the fwhm and the x at which the max ocurred
 #' @export
 #' @details The function allows to compute the spread of a symmetric function
-#' even when is not normally distributed. First finds the x at which y is max,
+#' even when it is not normally distributed. It first finds the x at which y is max,
 #' then
 #' x1 and x2 can be recovered using x1=peak-fwhm/2, x2=peak+fwhm/2
 #' @examples

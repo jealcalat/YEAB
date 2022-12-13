@@ -10,7 +10,7 @@
 #' @param lty integer or chr, linetype of the median (1 by default)
 #' @param boxlty integer or chr, linetype of the box  (1 by default)
 #' @param whisklty integer or chr, linetype of the whiskers  (2 by default, dotted)
-#' @param box_around logical, wheter to draw a box or just the axes
+#' @param box_around logical, whether to draw a box or just the axes
 #'
 #' @importFrom Polychrome createPalette
 #' @export

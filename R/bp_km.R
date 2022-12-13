@@ -27,13 +27,13 @@ bp_km <- function(r_times, min_x, max_x, bin_res){
     }
 
   resp_sec <- data.frame(x = x, y = resp_sec)
-  resp_sec_scaled <- apply(resp_sec, 2, scale) # clustering works better scaled
+  resp_sec_scaled <- apply(resp_sec, 2, scale) # clustering works better when scaled
   colnames(resp_sec_scaled) <- c("x","y")
   set.seed(123)
 
   gap <- clusGap(resp_sec_scaled,pam,K.max = 4, B = 100) # gap statistic
   # to compute the optimal number of clusters btw 1 and 4
-  # I restricted to 4 because of the nature of the data
+  # I restricted it to 4 because of the nature of the data
   k <- maxSE(gap$Tab[, "gap"], gap$Tab[, "SE.sim"], method="Tibs2001SEmax")
   km <- pam(resp_sec_scaled, k)
 

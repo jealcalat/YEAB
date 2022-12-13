@@ -7,9 +7,9 @@
 #' @return A data frame of 3 columns
 #'   bp: a numeric value which corresponds to the time at which a break point was detected
 #'   r1: a numeric value of the response rate _before_ the breakpoint
-#'   r2: a umeric value of the responser rate _after_ the breakpoint
+#'   r2: a numeric value of the responser rate _after_ the breakpoint
 #' @details This algorithm performs an extensive search of every combination (t1, t2)
-#'   where t1 starts in the first response throw (length(r_times) - 1)
+#'   where t1 starts in the first response through (length(r_times) - 1)
 #'
 #' @export
 #'

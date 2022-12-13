@@ -21,7 +21,7 @@
 # Outputs:
 #   dftmp: data frame with j x 4 columns of time, events, cum_id and evname
 
-#' Slice from a data frame based on starting and ending of a event
+#' Slice from a data frame based on starting and ending of an event
 #'
 #' @param dframe data frame with events ev0 and ev1 (e.g., start of trial and reinforcement delivery)
 #' @param ev0 event ID start (where the event we want to extract begins)
@@ -37,19 +37,19 @@
 #' # How to use ----
 #' # # If we have a component starting with 5 and ending with 2 and a dataframe "df"
 #' # we can extract the data of component "comp52" following the next steps:
-#' # 0 - From the output of read_med.R function, load the csv file and assing to df
+#' # 0 - From the output of read_med.R function, load the csv file and assign to df
 #' # 1 - source the event_extractor.R function
 #' # 2 - use it with the appropiate arguments as follows
 #' component52df <- event_extractor(
 #'   dframe = df, # enter the data as the 1st arg
-#'   ev0 = 5, ev1 = 2, # anter start and stop
+#'   ev0 = 5, ev1 = 2, # enter start and stop
 #'   evname = "comp52"
-#' ) # enter the event name
+#' ) # enter the event's name
 #'
 event_extractor <- function(dframe, ev0, ev1, evname) {
   evs <- c(ev0, ev1)
 
-  # Boolean variable where there is a ev0 or ev1
+  # Boolean variable where there is either a ev0 or ev1
   mark.v <- ifelse(dframe[, 2] %in% evs, 1, 0)
   # Make a cumulative sum of events
   dframe$cum_id <- cumsum(mark.v)
@@ -60,8 +60,8 @@ event_extractor <- function(dframe, ev0, ev1, evname) {
   # to the event we want to extract. It starts to count 1 where there is ev0,
   # and 2 when there is ev1, 3 when ev0 again. So, even numbers corresponds to
   # the end of the events of interest. We will use this information next, using
-  # the %% (module) operator, which return the remainder of a division (not the
-  # result of the division).  4 %% 2 equals 0, while 4 / 4 = 2
+  # the %% (module) operator, which returns the remainder of a division (not the
+  # result of the division).  4 %% 2 equals 0, while 4 / 2 = 2
 
   # The operation x %% 2 == 1 evaluates if x/2 has a remainder of 1, or if is
   # an exact multiple of 2 (remainder of 0). This will make a boolean variable
@@ -81,16 +81,16 @@ event_extractor <- function(dframe, ev0, ev1, evname) {
 # If we have a component starting with 5 and ending with 2 and a dataframe "df"
 # we can extract the data of component "comp52" following the next steps:
 
-# 0 - From the output of read_med.R function, load the csv file and assing to df
+# 0 - From the output of read_med.R function, load the csv file and assign to df
 # 1 - source the event_extractor.R function
 # 2 - use it with the appropiate arguments as follows
 # component52df <- event_extractor(dframe = df, # enter the data as the 1st arg
-#                                  ev0 = 5, ev1 = 2, # anter start and stop
-#                                  evname = "comp52") # enter the event name
+#                                  ev0 = 5, ev1 = 2, # enter start and stop
+#                                  evname = "comp52") # enter the event's name
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 # alternative slicing ----
-# The below code can replace # 1 and # 2 above, but I don't see any reason beyond
+# The code below can replace # 1 and # 2 above, but I don't see any reason beyond
 # making the code more readable.
 
 # slicingvec <- which(dframe$evento %in% evs)

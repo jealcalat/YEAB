@@ -1,5 +1,5 @@
 scatter_marginal <- function(x, y, color, fill, ...) {
-  # guardar config original
+  # save original configuration
   old_op <- par()
   layout(
     matrix(c(2, 0, 1, 3),
