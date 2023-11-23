@@ -6,6 +6,7 @@
 #' @param col_r chr, variable of MED to read (an event.time variable; see Details)
 #' @param col_names chr, a vector of column names
 #' @param out logical, if true returns the data.frame of n x 2
+#' @param time_dot_event logical, if true, assumes that array to process has a time.event format
 #'
 #' @return if out is true, returns a data.frame; if save_file is TRUE, writes the data.frame in csv format at path_save
 #' @export
@@ -64,13 +65,15 @@ read_med <- function(fname, # Name of the MED file to read;
                      # e.g. /Dropbox/exp1/Phase_1/
                      col_r = "C:", # Variable of MED-raw to read
                      col_names = c("time", "event"),
-                     out = TRUE) { # store the output file in memory?
+                     out = TRUE,
+                     num_col = 6, # corresponds to DISKCOLUMNS of MED
+                     time_dot_event = TRUE) { # store the output file in memory?
   # this will return the data.frame in RAM
   # available to work on it immediatly.
   options(stringsAsFactors = FALSE)
   dfx <- read.table(fname,
-    skip = 3, na.strings = "NA", fill = T,
-    col.names = paste0("V", seq_len(6))
+    skip = 3, na.strings = "NA", fill = TRUE,
+    col.names = paste0("V", seq_len(num_col))
   )
 
   # Create a numeric vector of the positions where dfx have "0:",
@@ -83,15 +86,19 @@ read_med <- function(fname, # Name of the MED file to read;
   col_pos <- which(dfx$V1 == col_r) + 1
 
   # Of the positions stored in "a", which of them is col_pos?
-  idx1 <- a[a == col_pos]
+  idx1 <- col_pos # a[a == col_pos]
   # And which of them is the NEXT position? That is, where col_r ends
-  # idx1 and idx2 will allow us to cut col_r ("C:" by default)
-  idx2 <- a[which(a == idx1) + 1] - 2
 
   # If col_r ("C:" by default) is the LAST variable, idx2 will be empty,
   # if that's the case, we'll take the last row of dfx
-  if (length(idx2) == 0) {
-    idx2 <- nrow(dfx)
+  idx2 <- min(c(a[which(a == idx1) + 1] - 2, nrow(dfx)))
+
+  # if (length(idx2) == 0) {
+  #   idx2 <- nrow(dfx)
+  # }
+  # Handle case when col_r is not found
+  if (length(col_pos) == 0 || length(idx2) == 0) {
+    stop("Specified column not found in the data")
   }
 
   # Now, we slice dfx in positions idx1 to idx2
@@ -99,46 +106,35 @@ read_med <- function(fname, # Name of the MED file to read;
 
   varY[1] <- NULL # Because 1st column are just row names
 
-  # Check vector class and change to numeric
-  for (j in 1:ncol(varY)) {
-    if (is.factor(varY[[j]])) {
-      varY[, j] <- as.numeric(as.character(varY[[j]]))
-    }
-    if (is.character(varY[[j]])) {
-      varY[, j] <- as.numeric(varY[[j]])
-    }
-  }
   # Stack matrix in two vectors
   varY <- na.omit(stack(varY))
   # Erase second vector
   varY[2] <- NULL
-  # Sort by time the time.event vector
-  varY <- data.frame(val = varY$values)
+
   # Drop all 0s (there's nothing interesting there)
-  varY <- varY[varY$val > 0, ]
-  # This splits the time.event vector in two
-  var_tmp <- do.call(rbind, strsplit(as.character(varY), "\\."))
-  # And this creates a dataframe with two columns (time and event)
-  var_tmp <- as.data.frame(var_tmp)
-
-  # This assigns names to the columns
-  if (ncol(var_tmp) > 1) {
-    colnames(var_tmp) <- col_names
+  varY <- varY$values
+  if (time_dot_event) {
+    # This splits the time.event vector in two
+    var_tmp <- do.call(rbind, strsplit(as.character(varY), "\\."))
+    # And this creates a dataframe with two columns (time and event)
+    var_tmp <- as.data.frame(var_tmp)
+    # This assigns names to the columns
+    if (ncol(var_tmp) > 1) {
+      colnames(var_tmp) <- col_names
+    }
+    # Removes 0s from the first variable
+    var_tmp <- var_tmp[var_tmp[, 1] > 0, ]
+    # This converts variables to numeric class
+    var_tmp[] <- lapply(var_tmp, as.numeric)
+  } else {
+    var_tmp <- data.frame(values = as.numeric(varY))
+    # colnames(var_tmp) <- col_r
   }
-  # Removes 0s from the first variable
-  var_tmp <- var_tmp[var_tmp[, 1] > 0, ]
-  # This converts variables to numeric class
-  for (c in 1:ncol(var_tmp)) {
-    var_tmp[, c] <- as.numeric(var_tmp[, c])
-  }
 
-  # filesave will be the name of our csv file
+  # Write to CSV if required
   if (save_file) {
-    filesave <- sprintf("%sd%s.csv", path_save, fname)
-    write.csv(var_tmp,
-      file = filesave,
-      row.names = FALSE
-    )
+    filesave <- sprintf("%s/%s.csv", path_save, sub("\\..*$", "", basename(fname)))
+    write.csv(var_tmp, file = filesave, row.names = FALSE)
   }
 
   # if our is true (T), this returns (and save in memory) var_temp
