@@ -21,14 +21,20 @@
 # on which . is the working directory that we can set with
 # setwd('path/to/working/directory')
 # raw_med contains the raw data files
-# csv contains the processed data files
+# csv contains (or will contain) the processed data files
 
 path_raw_med <- "raw_med"
 path_csv <- "csv"
 # list.files() returns a character vector of the names of files
 list_fnames <- list.files(path = path_raw_med,
   pattern = "(.*).txt", full.names = TRUE)
-# if want to read only one array and save it, which has time.event format
+
+# --- Process data in batch mode ---
+
+# Read just one array and save it ---
+# this assumes that the data is in time.event format, so the only array to
+# process, C: here, will return a data.frame with two columns: time and event.
+
 for (fname in list_fnames) {
   # read the raw data
   raw_data <- read_med(fname = fname,
@@ -49,6 +55,9 @@ for (fname in list_fnames) {
     # but X might be different
     time_dot_event = TRUE)
 }
+
+
+# read several arrays, append by rows, and save it -----
 
 # if want to read all arrays and save them, there are two options to do so;
 # and both involve firs processing the data without saving it, and then
@@ -82,9 +91,16 @@ for (fname in list_fnames) {
       # if the time.event vector is saved in variable C,
       # but X might be different
       time_dot_event = FALSE)
+
     # append the raw data to the data.frame
     raw_data$array <- arr
+        # order the data.frame by time
+    raw_data <- raw_data[order(raw_data$values), ]
     df_by_rows <- rbind(df_by_rows, raw_data)
   }
-  # sprintf("%s/%s.csv", path_save, sub("\\..*$", "", basename(fname)))
+  # create the name of the csv file
+  new_file_name <- sprintf("%s/%s.csv",
+    path_csv,
+    sub("\\..*$", "", basename(fname)))
+  write.csv(df_by_rows, new_file_name, row.names = FALSE)
 }
