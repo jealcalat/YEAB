@@ -1,4 +1,4 @@
-#' @titl Area under the curve (AUC)
+#' @title Area under the curve (AUC)
 #' 
 #' @description Calculate the area under the curve (AUC) using the trapezoid
 #' method.
