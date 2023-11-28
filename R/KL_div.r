@@ -15,10 +15,10 @@
 #' set.seed(123)
 #' p <- rnorm(100)
 #' q <- rnorm(100)
-#' kld_d(p, q, -Inf, Inf) # 0.07579204
+#' KL_div(p, q, -Inf, Inf) # 0.07579204
 #' q <- rnorm(100, 10, 4)
-#' kld_d(p, q, -Inf, Inf) # 7.769912
-kld_d <- function(x, y, from_a, to_b) {
+#' KL_div(p, q, -Inf, Inf) # 7.769912
+KL_div <- function(x, y, from_a, to_b) {
   integrand <- function(x, y, t) {
     denx <- density(x, na.rm = T)
     deny <- density(y, na.rm = T)
@@ -30,4 +30,3 @@ kld_d <- function(x, y, from_a, to_b) {
   }
   integrate(integrand, from_a, to_b, x = x, y = y, stop.on.error = FALSE)$value
 }
-

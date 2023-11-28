@@ -24,9 +24,9 @@ dkl <- function(x, y, from_a, to_b, bw_adjust = 1) {
 set.seed(123)
 p <- rnorm(100)
 q <- rnorm(100)
-kld_d(p, q, -Inf, Inf) # 0.07579204
+KL_div(p, q, -Inf, Inf) # 0.07579204
 q <- rnorm(100, 10, 4)
-kld_d(p, q, -Inf, Inf) # 7.769912
+KL_div(p, q, -Inf, Inf) # 7.769912
 
 dkl(p, q, min(c(p,q)),max(c(p,q)), 1) # 0.07579204
 
@@ -63,9 +63,9 @@ p <- rnorm(100)
 q <- rnorm(100)
 
 kld_mc_spline(p, q, N = 1e6) 
-kld_d(p, q, min(p,q), max(p,q)) # 0.07579204
+KL_div(p, q, min(p,q), max(p,q)) # 0.07579204
 
 q <- rnorm(100, 10, 4)
 
 kld_mc_spline(p, q) 
-kld_d(p, q, min(p,q), max(p,q)) # 0.07579204
+KL_div(p, q, min(p,q), max(p,q)) # 0.07579204

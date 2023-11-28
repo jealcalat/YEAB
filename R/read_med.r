@@ -1,23 +1,31 @@
 #' Process MED to csv based on standard data structure event.time
 #'
 #' @param fname chr, the name of a MED file to read; can include the directory
-#' @param save_file logical, save csv? TRUE or FALSE (default)
+#' @param save_file logical, save csv on the disk? TRUE or FALSE (default)
 #' @param path_save chr, directory to save csv files if save_file is TRUE;
-#' @param col_r chr, variable of MED to read (an event.time variable; see Details)
+#' @param col_r chr, MED array to read (may be an event.time variable; see Details)
 #' @param col_names chr, a vector of column names
 #' @param out logical, if true returns the data.frame of n x 2
 #' @param time_dot_event logical, if true, assumes that array to process has a time.event format
+#' @param num_col int, corresponds to DISKCOLUMNS of MED
+#' @param ... other arguments passed to \code{\link{read.table}}
 #'
 #' @return if out is true, returns a data.frame; if save_file is TRUE, writes the data.frame in csv format at path_save
 #' @export
 #'
-#' @details To use this function, the raw MED data should be in time.event convention.
+#' @details The default behavior of this function has time_dot_event = TRUE, 
+#' which means that the raw MED can be should be in time.event convention.
 #'    For example, if a response is coded as 23, the time is in 1/100 seconds and a response
 #'    occurred at 2 minutes, the event is saved in, say, column C as 6000.23. This will be
 #'    processed as
 #'    time event
 #'    6000  23
 #'
+#' However, if time_dot_event = FALSE, the output will be a data.frame with one column
+#'   values. For example
+#'  values
+#'   6000.23
+#' 
 #' @examples
 #' # read raw data from MED
 #' data("fi60_raw_from_med")
@@ -27,7 +35,9 @@
 #' writeLines(fi60_raw_from_med, "fi60_raw.txt")
 #' file_name <- "fi60_raw.txt"
 #' path_to_save <- getwd() # change to something like "data/processed/"
-#' fi60_processed <- read_med(fname = file_name, save_file = TRUE, path_save = path_to_save, col_r = "C:", out = TRUE)
+#' fi60_processed <- read_med(fname = file_name, save_file = TRUE,
+#'   path_save = path_to_save, col_r = "C:", out = TRUE,
+#'   col_names = c("time", "event"), num_col = 6, time_dot_event = TRUE)
 #' head(fi60_processed)
 #' # __________________________________________________________________________
 #' ## To use in bulk
@@ -67,13 +77,15 @@ read_med <- function(fname, # Name of the MED file to read;
                      col_names = c("time", "event"),
                      out = TRUE,
                      num_col = 6, # corresponds to DISKCOLUMNS of MED
-                     time_dot_event = TRUE) { # store the output file in memory?
+                     time_dot_event = TRUE,
+                     ...) { # store the output file in memory?
   # this will return the data.frame in RAM
   # available to work on it immediatly.
   options(stringsAsFactors = FALSE)
   dfx <- read.table(fname,
     skip = 3, na.strings = "NA", fill = TRUE,
-    col.names = paste0("V", seq_len(num_col))
+    col.names = paste0("V", seq_len(num_col)),
+    ...
   )
 
   # Create a numeric vector of the positions where dfx have "0:",
@@ -126,6 +138,8 @@ read_med <- function(fname, # Name of the MED file to read;
     var_tmp <- var_tmp[var_tmp[, 1] > 0, ]
     # This converts variables to numeric class
     var_tmp[] <- lapply(var_tmp, as.numeric)
+    # sort by time
+    var_tmp <- var_tmp[order(var_tmp[, 1]), ]
   } else {
     var_tmp <- data.frame(values = as.numeric(varY))
     # colnames(var_tmp) <- col_r

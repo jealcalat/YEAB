@@ -5,18 +5,24 @@
 \title{Single breakpoint algorithm, as the one used in Guilhardi & Church 2004
 Works in fixed interval trials.}
 \usage{
-bp_fi(r_times, if_val)
+bp_fi(r_times, trial_duration)
 }
 \arguments{
 \item{r_times}{numeric, the times at which a response was emitted in a trial}
 
-\item{if_val}{numeric, the duration of the IF interval}
+\item{trial_duration}{numeric, the duration of the IF interval}
+
+\item{optim_method}{character, the optimization method to use}
+
+\item{params}{numeric, initial values for the parameter \code{bp}}
 }
 \value{
 A data frame of 3 columns
-bp: a numeric value which corresponds to the time at which a break point was detected
-r1: a numeric value of the response rate \emph{before} the breakpoint
-r2: a numeric value of the responser rate \emph{after} the breakpoint
+\code{bp} a numeric value which corresponds to the time at which a break point was detected
+\code{r1} a numeric value of the response rate \emph{before} the breakpoint
+\code{r2} a numeric value of the responser rate \emph{after} the breakpoint
+\code{d1} a numeric value of the duration of the first state
+\code{d2} a numeric value of the duration of the second state
 }
 \description{
 Single breakpoint algorithm, as the one used in Guilhardi & Church 2004
@@ -39,4 +45,7 @@ plot(r_times, seq_along(r_times),
   col = 2, type = "s"
 )
 abline(v = single_bp$bp)
+
+bp_from_opt <- bp_opt(r_times, 60)
+abline(v = bp_from_opt$bp, col = 3)
 }

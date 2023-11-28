@@ -32,7 +32,7 @@ sample_from_density <- function(x, n) {
 # res <- foreach(1:10000, .combine = c,
 #                .packages=c("infotheo", "YEAB"))  %dopar% {
 #    x2 <- sample_from_density(x, 100)
-#    kld_d(x, x2, min(c(x, x2)), max(c(x, x2)))
+#    KL_div(x, x2, min(c(x, x2)), max(c(x, x2)))
 #                }
 #
 # hist(res)

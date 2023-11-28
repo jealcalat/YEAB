@@ -10,21 +10,30 @@ read_med(
   path_save = NULL,
   col_r = "C:",
   col_names = c("time", "event"),
-  out = TRUE
+  out = TRUE,
+  num_col = 6,
+  time_dot_event = TRUE,
+  ...
 )
 }
 \arguments{
 \item{fname}{chr, the name of a MED file to read; can include the directory}
 
-\item{save_file}{logical, save csv? TRUE or FALSE (default)}
+\item{save_file}{logical, save csv on the disk? TRUE or FALSE (default)}
 
 \item{path_save}{chr, directory to save csv files if save_file is TRUE;}
 
-\item{col_r}{chr, variable of MED to read (an event.time variable; see Details)}
+\item{col_r}{chr, MED array to read (may be an event.time variable; see Details)}
 
 \item{col_names}{chr, a vector of column names}
 
 \item{out}{logical, if true returns the data.frame of n x 2}
+
+\item{num_col}{int, corresponds to DISKCOLUMNS of MED}
+
+\item{time_dot_event}{logical, if true, assumes that array to process has a time.event format}
+
+\item{...}{other arguments passed to \code{\link{read.table}}}
 }
 \value{
 if out is true, returns a data.frame; if save_file is TRUE, writes the data.frame in csv format at path_save
@@ -33,12 +42,18 @@ if out is true, returns a data.frame; if save_file is TRUE, writes the data.fram
 Process MED to csv based on standard data structure event.time
 }
 \details{
-To use this function, the raw MED data should be in time.event convention.
+The default behavior of this function has time_dot_event = TRUE,
+which means that the raw MED can be should be in time.event convention.
 For example, if a response is coded as 23, the time is in 1/100 seconds and a response
 occurred at 2 minutes, the event is saved in, say, column C as 6000.23. This will be
 processed as
 time event
 6000  23
+
+However, if time_dot_event = FALSE, the output will be a data.frame with one column
+values. For example
+values
+6000.23
 }
 \examples{
 # read raw data from MED
@@ -49,7 +64,9 @@ head(fi60_raw_from_med, 10)
 writeLines(fi60_raw_from_med, "fi60_raw.txt")
 file_name <- "fi60_raw.txt"
 path_to_save <- getwd() # change to something like "data/processed/"
-fi60_processed <- read_med(fname = file_name, save_file = TRUE, path_save = path_to_save, col_r = "C:", out = TRUE)
+fi60_processed <- read_med(fname = file_name, save_file = TRUE,
+  path_save = path_to_save, col_r = "C:", out = TRUE,
+  col_names = c("time", "event"), num_col = 6, time_dot_event = TRUE)
 head(fi60_processed)
 # __________________________________________________________________________
 ## To use in bulk

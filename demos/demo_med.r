@@ -1,3 +1,5 @@
+# Load YEAB ----
+library(YEAB)
 # Here we show how to process the raw data in batch mode. We assume all
 # data to identify subjects, sessions, experiment, and condition are in the
 # file name. For example:
@@ -99,8 +101,9 @@ for (fname in list_fnames) {
     df_by_rows <- rbind(df_by_rows, raw_data)
   }
   # create the name of the csv file
-  new_file_name <- sprintf("%s/%s.csv",
+  new_file_name <- sprintf("%s/%s_array.csv",
     path_csv,
     sub("\\..*$", "", basename(fname)))
   write.csv(df_by_rows, new_file_name, row.names = FALSE)
 }
+

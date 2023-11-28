@@ -5,7 +5,7 @@
 \title{Histogram with marginal densities in R base plot}
 \usage{
 den_histogram(
-  x,
+  x_dat,
   side = 1,
   fill = "#B3B3FF",
   color = "red",
@@ -18,8 +18,6 @@ den_histogram(
 )
 }
 \arguments{
-\item{x}{numeric}
-
 \item{side}{integer}
 
 \item{fill}{character}
@@ -37,6 +35,8 @@ den_histogram(
 \item{add}{logical, should a plot be added? FALSE by default}
 
 \item{axis}{logical, should axis be added? TRUE by default}
+
+\item{x}{numeric}
 }
 \description{
 Histogram with marginal densities in R base plot
