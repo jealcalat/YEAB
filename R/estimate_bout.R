@@ -1,7 +1,6 @@
-#' Biexponential model for the estimation of within and between bouts
+#' @title Biexponential model for the estimation of within and between bouts
 #'
 #' @param irt numeric, the inter-response times
-#' @param delta numeric, the refractory period
 #'
 #' @return the simple biexponential returns numeric vector of the biexponential 
 #' model parameters \eqn{L=1/\theta}, the bout length,
@@ -27,7 +26,7 @@
 #' rexp(100, l2)
 #' )
 #' biexponential(irt)
-#' biexponential_refractory(irt, 0.1)
+#' berm(irt, 0.1)
 biexponential <- function(irt) {
   fit <- VGAM::vglm(irt ~ 1, VGAM::mix2exp, trace = TRUE)
   param <- VGAM::Coef(fit)
@@ -38,6 +37,20 @@ biexponential <- function(irt) {
   )
   return(params)
 }
+
+#' @title Biexponential refractory model, BERM
+#' 
+#' @description Implements the biexponential refractory model, or berm
+#' \eqn{p(IRT < \tau) = (1-q)e^{-a(IRT-\delta)} + qe^{-b(IRT-\delta)}}
+#' where \eqn{a, b} are the mean within and between bout IRTs and \eqn{q} is the proportion of responses
+#' that are bouts, and \eqn{\delta} is the refractory period.
+#' 
+#' @param irt numeric, the inter-response times
+#' @param delta numeric, the refractory period
+#' 
+#' @return a data frame with the parameters \eqn{a, b, q} where
+#' \eqn{a, b} are the mean within and between bout IRTs and \eqn{q} is the proportion of responses
+#' that are bouts, and \eqn{\delta} is the refractory period.
 
 berm <- function(irt, delta) {
   # Custom log-likelihood function for the biexponential refractory model

@@ -10,7 +10,7 @@
 #' @examples
 #' data("r_times")
 #' trial_duration <- max(r_times) |> ceiling() # 180
-#' bps <- low1_s1_high_s2_low2(r_times, trial_duration)
+#' bps <- exhaustive_lhl(r_times, trial_duration)
 #' par(mar = c(4, 4.5, 1, 1))
 #' plot(
 #'   density(
@@ -24,7 +24,7 @@
 #'   xlab = "time in peak trial"
 #' )
 #' abline(v = 60, lty = 2)
-#' bps <- low1_s1_high_s2_low2(r_times, 180)
+#' bps <- exhaustive_lhl(r_times, 180)
 #' abline(v = c(bps$start, bps$stop), col = 2, lty = 2, lwd = 2)
 #' # compare it with fwhm
 #' den <- density(r_times, from = 0, to = trial_duration)
@@ -33,7 +33,7 @@
 #' x2 <- fval$peak + fval$fwhm / 2
 #' plot(den)
 #' abline(v = c(x1, fval$peak, x2), col = c("blue", 1, "blue"))
-low1_s1_high_s2_low2 <- function(r_times, trial_duration) {
+exhaustive_lhl <- function(r_times, trial_duration) {
   # Number of responses
   nr <- length(r_times)
   # overall response rate

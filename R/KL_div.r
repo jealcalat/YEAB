@@ -1,5 +1,7 @@
-#' Computes the Kullback-Leibler divergence based on kernel density estimates
+#' @title Computes the Kullback-Leibler divergence based on kernel density estimates
 #'
+#' @description Computes the Kullback-Leibler divergence based on kernel density estimates
+#' of two samples.
 #' @param x numeric, the values from a sample p
 #' @param y numeric, the values from a sample q
 #' @param from_a numeric, the lower limit of the integration
@@ -9,7 +11,8 @@
 #' @export
 #'
 #' @details
-#' $\int_{a}^b p(x)\log \frac{q(x)}{p(x)}$
+#' The Kullback-Leibler divergence is defined as
+#' \deqn{D_{KL}(P||Q) = \int_{-\infty}^{\infty} p(x) \log \frac{p(x)}{q(x)} dx}
 #'
 #' @examples
 #' set.seed(123)

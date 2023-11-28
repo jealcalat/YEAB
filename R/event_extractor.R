@@ -21,7 +21,11 @@
 # Outputs:
 #   dftmp: data frame with j x 4 columns of time, events, cum_id and evname
 
-#' Slice from a data frame based on starting and ending of an event
+#' @title Event extractor
+#' 
+#' @description  A function to slice data based on start and stop events. This function
+#'   should be used after read_med.r, which outputs a csv of 2 columns: time and
+#'   events (in that order). Its use is exemplified at the end of the function.
 #'
 #' @param dframe data frame with events ev0 and ev1 (e.g., start of trial and reinforcement delivery)
 #' @param ev0 event ID start (where the event we want to extract begins)
@@ -34,8 +38,7 @@
 #' @export
 #' @details Works by trials
 #' @examples
-#' # How to use ----
-#' # # If we have a component starting with 5 and ending with 2 and a dataframe "df"
+#' If we have a component starting with 5 and ending with 2 and a dataframe "df"
 #' # we can extract the data of component "comp52" following the next steps:
 #' # 0 - From the output of read_med.R function, load the csv file and assign to df
 #' # 1 - source the event_extractor.R function

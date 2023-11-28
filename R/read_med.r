@@ -1,4 +1,4 @@
-#' Process MED to csv based on standard data structure event.time
+#' @title Process MED to csv based on standard data structure event.time
 #'
 #' @param fname chr, the name of a MED file to read; can include the directory
 #' @param save_file logical, save csv on the disk? TRUE or FALSE (default)

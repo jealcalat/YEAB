@@ -1,5 +1,7 @@
-#' Area under the curve (AUC)
+#' @titl Area under the curve (AUC)
 #' 
+#' @description Calculate the area under the curve (AUC) using the trapezoid
+#' method.
 #' @param x A numeric vector of x values
 #' @param y A numeric vector of y values
 #' @return A numeric value of the area under the curve

@@ -1,4 +1,4 @@
-# Convert colors to RGBA
+#' @title Convert colors to RGBA
 #' Adds transparency to a list of colors
 #'
 #' @param cols integer or chr; if integer from 1-9 takes the value from palette(); if chr a named color from colors()
