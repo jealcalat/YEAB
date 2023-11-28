@@ -5,7 +5,7 @@
 #' @param x A numeric vector of x values
 #' @param y A numeric vector of y values
 #' @return A numeric value of the area under the curve
-#' 
+#' @export
 #' @examples
 #' x_values <- c(0, 1, 2, 3, 4) # Delay times
 #' y_values <- c(1, 0.8, 0.6, 0.4, 0.2) # Discounted values

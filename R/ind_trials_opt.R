@@ -45,6 +45,7 @@ ind_trials_obj_fun <- function(params, r_times, trial_duration) {
 #' - `stop`: The stop time of the peak
 #' - `spread`: The spread of the peak (stop - start)
 #' - `middle`: The middle of the peak (mean of start and stop)
+#' @export
 #' @examples
 #' response_times <- c(28.1, 40.7, 44.2, 44.4, 44.7, 45, 45.4, 47.9, 48.1, 48.3,
 #'   48.6, 48.8, 49.8, 50.2, 50.7, 51.2, 51.4, 51.7, 51.9, 52.7, 53, 53.5, 53.7,

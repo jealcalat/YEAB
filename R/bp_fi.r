@@ -69,7 +69,7 @@ exhaustive_sbp <- function(r_times, trial_duration) {
 #' @param trial_duration A numeric value of the trial duration
 #' @return A numeric value representing the sum of areas between the response
 #' rate and the target rate.
-#'
+#' @export
 
 objective_bp <- function(param, r_times, trial_duration) {
   nr <- length(r_times)
@@ -102,7 +102,8 @@ objective_bp <- function(param, r_times, trial_duration) {
 #' - `r2`: The response rate after the breakpoint
 #' - `d1`: The duration of the first state
 #' - `d2`: The duration of the second state
-#'
+#' @export
+#' 
 #' @examples
 #' data("r_times")
 #' r_times <- r_times[r_times < 60]

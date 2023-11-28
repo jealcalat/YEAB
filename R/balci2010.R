@@ -1,4 +1,4 @@
-#' Peak individual trial analysis using moving average
+#' @title Peak individual trial analysis using moving average
 #'
 #' @param tasa_norm, numeric
 #' @param bines, numeric

@@ -51,6 +51,9 @@ biexponential <- function(irt) {
 #' @return a data frame with the parameters \eqn{a, b, q} where
 #' \eqn{a, b} are the mean within and between bout IRTs and \eqn{q} is the proportion of responses
 #' that are bouts, and \eqn{\delta} is the refractory period.
+#' 
+#' @export
+#' 
 
 berm <- function(irt, delta) {
   # Custom log-likelihood function for the biexponential refractory model
