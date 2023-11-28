@@ -2,7 +2,7 @@
 % Please edit documentation in R/event_extractor.R
 \name{event_extractor}
 \alias{event_extractor}
-\title{Slice from a data frame based on starting and ending of an event}
+\title{Event extractor}
 \usage{
 event_extractor(dframe, ev0, ev1, evname)
 }
@@ -22,14 +22,15 @@ component we can row-combine both in a unique dataframe.}
 data frame with nrows x 4 columns of time, events, cum_id and evname
 }
 \description{
-Slice from a data frame based on starting and ending of an event
+A function to slice data based on start and stop events. This function
+should be used after read_med.r, which outputs a csv of 2 columns: time and
+events (in that order). Its use is exemplified at the end of the function.
 }
 \details{
 Works by trials
 }
 \examples{
-# How to use ----
-# # If we have a component starting with 5 and ending with 2 and a dataframe "df"
+If we have a component starting with 5 and ending with 2 and a dataframe "df"
 # we can extract the data of component "comp52" following the next steps:
 # 0 - From the output of read_med.R function, load the csv file and assign to df
 # 1 - source the event_extractor.R function

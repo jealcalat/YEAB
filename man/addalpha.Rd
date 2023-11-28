@@ -2,7 +2,8 @@
 % Please edit documentation in R/addalpha.R
 \name{addalpha}
 \alias{addalpha}
-\title{Adds transparency to a list of colors}
+\title{Convert colors to RGBA
+Adds transparency to a list of colors}
 \usage{
 addalpha(cols, alpha)
 }
@@ -15,6 +16,7 @@ addalpha(cols, alpha)
 character vector of colors
 }
 \description{
+Convert colors to RGBA
 Adds transparency to a list of colors
 }
 \examples{

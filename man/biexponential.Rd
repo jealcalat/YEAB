@@ -8,8 +8,6 @@ biexponential(irt)
 }
 \arguments{
 \item{irt}{numeric, the inter-response times}
-
-\item{delta}{numeric, the refractory period}
 }
 \value{
 the simple biexponential returns numeric vector of the biexponential
@@ -39,5 +37,5 @@ irt <- c(
 rexp(100, l2)
 )
 biexponential(irt)
-biexponential_refractory(irt, 0.1)
+berm(irt, 0.1)
 }
