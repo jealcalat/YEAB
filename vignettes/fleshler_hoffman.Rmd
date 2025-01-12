@@ -1,0 +1,60 @@
+---
+title: "fleshler_hoffman()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{fleshler_hoffman()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+## Introduction 
+
+The task of designing reinforcement schedules often face the challenge of generating intervals that mimic the variability observed in naturalistic environments while ensuring experimental control and reliability. The @fleshler1962 progression offers a theoretical framework to address this challenge, providing a method for the systematic calculation of variable intervals for behavioral experiments.
+
+At its core, the Fleshler and Hoffman progression leverages principles from the Poisson process, a stochastic model widely used to describe the occurrence of rare events over time. By employing the inverse of the Poisson process, characterized by the function 
+$−log(1−p)^{-1}$, where $p$ denotes the probability of reinforcement per unit of time, the progression facilitates the calculation of intervals approximating an exponential distribution. This approach ensures that the expected value of the intervals aligns with the desired variable-interval parameter.
+
+The formula for calculating such distribution can be described as follow:
+
+$$t_n = \left[-\log_e(1 - p)\right]^{-1} \left[1 + \log_e(N) + (N - n) \log_e(N - n) - (N - n + 1) \log_e(N - n + 1)\right]$$
+Where $t_n$, is the $n^{th}$ term of the progression; $N$ is the total number of terms; and $p$ is the fixed probability of the event within a unit interval.
+
+Here we introduce the `fleshler_hoffman()` function which calculate a distribution with $N$ intervals such that the mean is equal to the $VI$ value with an exponential increase for each subsequent element. The function takes the following parameters:
+
+- `N` the number of intervals to obtain.
+- `VI` the Variable Interval value (the expected value or mean of the intervals).
+
+## Example
+
+Let's create a distribution of 12 elements with a VI of 30s:
+
+```{r}
+# Calculate intervals for N = 10, and IV = 30
+N <- 12
+VI <- 30
+
+intervals <- round(fleshler_hoffman(N, VI), 3)
+print(intervals)
+```
+
+Now let's plot the intervals and the exponential distribution corresponding to the
+same mean (VI):
+
+```{r echo = FALSE}
+plot(x = intervals, y = 1:length(intervals))
+hist(intervals, freq = F)
+curve(dexp(x, rate = 1 / VI), add = TRUE, col = "red")
+legend("topright", legend = c("F&H", "Exponential"), lty = 1, col = c("black", "red"))
+```
+
+## References

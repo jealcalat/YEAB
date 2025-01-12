@@ -4,14 +4,14 @@
 \alias{curv_index_fry}
 \title{Curvature index using Fry derivation}
 \usage{
-curv_index_fry(cr, time_in, b, if_val)
+curv_index_fry(cr, time_in, fi_val, n = 4)
 }
 \arguments{
 \item{cr}{A numeric vector of cumulative response}
 
-\item{b}{numeric, the base of the triangle (e.g., FI value)}
+\item{time_in}{numeric, time (or the x axis in a cumulative response plot)}
 
-\item{t}{numeric, time (or the x axis in a cumulative response plot)}
+\item{fi_val}{the FI value}
 
 \item{n}{numeric, the number of subintervals}
 }
@@ -25,7 +25,7 @@ Curvature index using Fry derivation
 data("r_times")
 r_times <- r_times[r_times < 60]
 cr <- seq_along(r_times)
-par(las = 1)
+
 plot(r_times, cr, type = "s", xlim = c(min(r_times), max(r_times)))
 segments(
   x0 = min(r_times), y0 = min(cr),
@@ -36,5 +36,5 @@ segments(
   x1 = max(r_times), y1 = max(cr),
   col = "red"
 )
-curv_index_fry(cr, r_times, 4, 60, 60)
+curv_index_fry(cr, r_times, 60, 4)
 }

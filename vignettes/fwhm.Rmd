@@ -1,0 +1,52 @@
+---
+title: "fwhm()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{fwhm()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+## Introduction
+
+In the realm of experimental behavior analysis, most often in timing related research, the Full Width at Half Maximum (FWHM) analysis serves as a metric for quantifying the width of response peaks, particularly in Gaussian-like distributions observed across experimental conditions. FWHM provides a tangible measure to assess the precision, variability, and sensitivity of timing behavior.
+
+Within timing experiments, where datasets often exhibit Gaussian-like distributions with linear components, FWHM analysis becomes a very useful analysis tool. By quantifying peak width, researchers can discern nuanced differences between conditions, assert precision and accuracy, validate theoretical models, and enhance the interpretability of timing data.
+
+The FWHM computes the width of the range of data points in the X axis in which the Y axis values are at least half of the peak value or maximum height. The `fwhm` function  takes two parameters:
+
+- `x` a numeric vector of values from a density distribution.
+- `y` a numeric vector of probabilities or raw data points.
+
+Returning the *Full Width at Half Maximum* value and the point in the $X$ axis at which the max value occurred, as well as $x1$ and $x2$ corresponding to the first intersection with the FWHM to the left and right of the peak.
+
+## Example
+
+Lets load a data set from a Peak Procedure session and extract the FWHM and peak values:
+```{r}
+data("gauss_example_2", package = "YEAB") # In this case the IF value is 30s.
+peak_data <- gauss_example_2
+den <- density(peak_data$Response_Average)
+
+fwhm_values <- fwhm(den$x, den$y)
+
+fwhm_values
+```
+
+```{r, echo = FALSE}
+# x1 <- fwhm_values$peak - fwhm_values$fwhm / 2
+# x2 <- fwhm_values$peak + fwhm_values$fwhm / 2
+plot(den,
+  main = "Full Width at Half Maximum",
+  xlab = " "
+)
+abline(v = c(fwhm_values$x1, fwhm_values$peak, fwhm_values$x2), col = c(1, 2, 1))
+abline(h = max(den$y) / 2, col = 1)
+```

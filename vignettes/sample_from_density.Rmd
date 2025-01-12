@@ -1,0 +1,59 @@
+---
+title: "sample_from_density()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{sample_from_density()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+Behavioral data often exhibit complex patterns that may not adhere to well-known parametric distributions. Traditional statistical methods reliant on such distributions may therefore prove inadequate in capturing the nuanced behaviors observed in real-world scenarios.
+
+Approximating a density distribution from a data sample using Kernel Density Estimation allows researchers to estimate the underlying patterns that could emerge from a specific experiment, thus, the ability to generate synthetic data samples that closely mimic the distribution of observed behavioral data serves as a valuable tool in behavioral analysis. Such samples allow researchers to explore various hypotheses, validate statistical models, and assess the efficacy of experimental interventions in a controlled setting.
+
+Here we introduce the `sample_from_density()` function which generates a given `n` amount of data points from a density distribution calculated using KDE (Kernel Density Estimation) from a given data set.
+
+The function takes two parameters:
+
+- `x` A numeric vector of data points from an distribution.
+- `n` the number of samples to return.
+
+## Example
+
+Let's generate a random sample from a normal distribution:
+
+```{r}
+set.seed(142)
+normal_sample <- rnorm(100)
+```
+
+Now let's create a sample of 100 data points from the distribution estimated with the `sample_from_density()` function:
+
+```{r}
+sampled_dist <- sample_from_density(normal_sample, 100)
+```
+
+Finally let's compare both distributions:
+```{r, echo = FALSE}
+plot(ks::kde(normal_sample),
+  xlab = "", main = "original vs sample_from_density()",
+  col = "blue",
+  ylim = c(0, 0.5)
+)
+kde_sample <- ks::kde(sampled_dist)
+plot(kde_sample, col = "red", add = TRUE)
+legend("topleft",
+  c("sample_from_density", "original"),
+  lty = c(1, 1), col = c("red", "blue")
+)
+```

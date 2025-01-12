@@ -12,8 +12,6 @@ ind_trials_obj_fun(params, r_times, trial_duration)
 \item{r_times}{Vector of response times}
 
 \item{trial_duration}{Duration of the trial}
-
-\item{optim_method}{Optimization method. See \code{optim} for details.}
 }
 \value{
 a numeric value representing the sum of areas between the response

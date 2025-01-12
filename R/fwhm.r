@@ -25,10 +25,21 @@
 #' abline(v = c(x1, fval$peak, x2), col = c(1, 2, 1))
 #'
 fwhm <- function(x, y) {
+  # Check for empty input
+  if(length(x) == 0 || length(y) == 0) {
+    stop("Input vectors 'x' and 'y' cannot be empty")
+  }
+  
+  # Check if there is more than one unique value in y
+  if(length(unique(y)) == 1) {
+    stop("FWHM cannot be calculated for a distribution with no variation in y")
+  }
   xy <- data.frame(x = x, y = y)
-  xmax <- xy$x[which.max(den$y)][1] # thakes just one max if there were 2
-  x1 <- xy$x[xy$x < xmax][which.min(abs(xy$y[xy$x < xmax] - max(xy$y) / 2))]
-  x2 <- xy$x[xy$x > xmax][which.min(abs(xy$y[xy$x > xmax] - max(xy$y) / 2))]
+  xmax <- xy$x[which.max(y)][1]
+  below_hm_left <- xy$x[xy$x < xmax][which(xy$y[xy$x < xmax] <= max(xy$y) / 2)]
+  x1 <- xy$x[which(xy$x == below_hm_left[length(below_hm_left)]) + 1]
+  below_hm_right <- xy$x[xy$x > xmax][which(xy$y[xy$x > xmax] <= max(xy$y) / 2)]
+  x2 <- xy$x[which(xy$x == below_hm_right[1]) - 1]
   fwhm <- x2 - x1
-  list(fwhm = fwhm, peak = xmax)
+  list(fwhm = fwhm, peak = xmax, x1 = x1, x2 = x2)
 }

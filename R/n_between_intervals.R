@@ -1,12 +1,37 @@
-#' Count between intervals
+#' Find maximum value within intervals
 #'
-#' @param x
-#' @param intervals
-#' @return
+#' This function searches for the maximum value within a distribution
+#' (represented by vector x) that falls within a series of intervals
+#' specified by the vector intervals.
+#'
+#' @param x A numeric vector representing the distribution from which
+#' to find the maximum value within intervals.
+#' @param intervals A numeric vector specifying the intervals within
+#' which to search for the maximum value.
+#' @param time_in A numeric vector representing the corresponding time points
+#' for the values in the vector x, which is used to determine whether
+#' the values fall within the specified intervals.
+#' @return A numeric vector containing the maximum value within each
+#' interval specified by 'intervals'. If no values fall within an interval,
+#' returns 0 for that interval.
 #' @export
 #' @importFrom dplyr lag
 #' @importFrom dplyr between
 #' @examples
+#' # Create a vector of data with a logarithmically increasing distribution
+#' log_data <- round(exp(seq(log(1), log(100), length.out = 100)))
+#'
+#' # Define intervals to cover the range 1-100
+#' intervals <- seq(1, 100, by = 20)
+#'
+#' # Create a corresponding time vector
+#' time_in <- seq(1, 100, length.out = 100)
+#'
+#' # Find maximum value within intervals
+#' n_between_intervals(log_data, intervals, time_in)
+
+
+
 n_between_intervals <- function(x, intervals, time_in) {
   # matrix of intervals min, max
   mat_x <- matrix(c(lag(intervals, 1), intervals), ncol = 2)

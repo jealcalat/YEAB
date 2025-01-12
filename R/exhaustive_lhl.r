@@ -11,7 +11,6 @@
 #' data("r_times")
 #' trial_duration <- max(r_times) |> ceiling() # 180
 #' bps <- exhaustive_lhl(r_times, trial_duration)
-#' par(mar = c(4, 4.5, 1, 1))
 #' plot(
 #'   density(
 #'     r_times,
@@ -60,7 +59,7 @@ exhaustive_lhl <- function(r_times, trial_duration) {
   for (j in 1:nrow(grid)) { # loop trough all combinations of s1 & s2
 
     # Note: beware that t1 is equal to s1, but t2 is not equal to s2; while
-    # t2 is tue duration of a state (an interval since start of r2), s2 is the
+    # t2 is the duration of a state (an interval since start of r2), s2 is the
     # time since the beggining of the trial. To obtain t2 we must take
     # the difference between s2 and s1, and for t3, the difference between
     # trial duration and s3.

@@ -2,23 +2,90 @@
 % Please edit documentation in R/estimate_bout.R
 \name{berm}
 \alias{berm}
-\title{Biexponential refractory model, BERM}
+\alias{berm_log_likelihood}
+\alias{map_onto}
+\alias{param_conver}
+\alias{optimize_berm}
+\title{Biexponential Refractory Model (BERM)}
 \usage{
 berm(irt, delta)
+
+berm_log_likelihood(params, irt)
+
+map_onto(d, d_hat)
+
+param_conver(params, min_irt, parnames = c("w", "l0", "l1", "d"))
+
+optimize_berm(irt)
 }
 \arguments{
-\item{irt}{numeric, the inter-response times}
+\item{irt}{A numeric vector of inter-response times.}
 
-\item{delta}{numeric, the refractory period}
+\item{delta}{A numeric value for the refractory period.}
+
+\item{params}{A numeric vector of raw, unconstrained parameters.}
+
+\item{d}{Minimum inter-response time.}
+
+\item{d_hat}{Transformed parameter to be mapped onto \code{d}.}
+
+\item{min_irt}{Minimum inter-response time for mapping \code{d}.}
+
+\item{parnames}{Optional vector of parameter names for labeling.}
 }
 \value{
-a data frame with the parameters \eqn{a, b, q} where
-\eqn{a, b} are the mean within and between bout IRTs and \eqn{q} is the proportion of responses
-that are bouts, and \eqn{\delta} is the refractory period.
+A data frame with estimated parameters \eqn{w} (within-bout rate), \eqn{b} (between-bout rate), \eqn{p}
+(proportion of responses in bouts), and \eqn{\delta} (adjusted refractory period).
+
+Negative log-likelihood value used for parameter estimation.
+
+Adjusted refractory period used in likelihood estimation.
+
+A named numeric vector of transformed parameters with constraints applied.
+
+A named vector of optimized parameters for the BERM model.
 }
 \description{
-Implements the biexponential refractory model, or berm
-\eqn{p(IRT < \tau) = (1-q)e^{-a(IRT-\delta)} + qe^{-b(IRT-\delta)}}
-where \eqn{a, b} are the mean within and between bout IRTs and \eqn{q} is the proportion of responses
-that are bouts, and \eqn{\delta} is the refractory period.
+Implements the biexponential refractory model (BERM) using maximum likelihood estimation
+to fit parameters for inter-response times (IRTs) within and between bouts.
+
+The model is defined as:
+\deqn{p(IRT = \tau | \tau \ge \delta) = p w e^{-w (\tau - \delta)} + (1 - p) b e^{-b (\tau - \delta)}}
+where \eqn{w} and \eqn{b} are the rates for within and between bouts, \eqn{p} is the proportion of responses in bouts,
+and \eqn{\delta} is the refractory period.
+
+Calculates the negative log-likelihood for the BERM model.
+
+Maps an unconstrained \code{d_hat} onto the observed minimum inter-response time (\code{d}), ensuring
+that it aligns with model constraints.
+
+Converts raw parameters into their constrained forms to enforce model constraints on
+parameters such as \code{w}, \code{l0}, \code{l1}, and \code{d}.
+
+Optimizes the log-likelihood function to estimate BERM model parameters based on
+observed inter-response times.
+}
+\details{
+This function computes the negative log-likelihood based on biexponential functions
+for the BERM model, adjusting parameters using \code{param_conver} to meet constraints.
+}
+\examples{
+set.seed(43)
+l1 <- 1 / 0.5
+l2 <- 1 / 0.1
+p <- 0.4
+n <- 200
+delta <- 0.03
+irt <- c(rexp(round(n * p), l1), rexp(round(n * (1 - p)), l2)) + delta
+optimize_berm(irt)
+
+set.seed(43)
+l1 <- 1 / 0.5
+l2 <- 1 / 0.1
+p <- 0.4
+n <- 200
+delta <- 0.03
+irt <- c(rexp(round(n * p), l1), rexp(round(n * (1 - p)), l2)) + delta
+optimize_berm(irt)
+
 }

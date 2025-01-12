@@ -4,10 +4,10 @@
 \alias{event_extractor}
 \title{Event extractor}
 \usage{
-event_extractor(dframe, ev0, ev1, evname)
+event_extractor(data_df, ev0, ev1, evname)
 }
 \arguments{
-\item{dframe}{data frame with events ev0 and ev1 (e.g., start of trial and reinforcement delivery)}
+\item{data_df}{data frame with events ev0 and ev1 (e.g., start of trial and reinforcement delivery)}
 
 \item{ev0}{event ID start (where the event we want to extract begins)}
 
@@ -30,15 +30,36 @@ events (in that order). Its use is exemplified at the end of the function.
 Works by trials
 }
 \examples{
-If we have a component starting with 5 and ending with 2 and a dataframe "df"
-# we can extract the data of component "comp52" following the next steps:
-# 0 - From the output of read_med.R function, load the csv file and assign to df
+# If we have a component starting with 5 and ending with 3, 
+# say a Fixed Interval 15s and a dataframe of events from the read_med() function,
+# we can extract the data of component "FI15" following the next steps:
+# 0 - From the output of read_med.R function, load the extracted data and assign it to df
 # 1 - source the event_extractor.R function
 # 2 - use it with the appropiate arguments as follows
-component52df <- event_extractor(
-  dframe = df, # enter the data as the 1st arg
-  ev0 = 5, ev1 = 2, # enter start and stop
-  evname = "comp52"
-) # enter the event's name
+
+# read raw data from MED
+data("fi60_raw_from_med")
+# see first 10 lines
+head(fi60_raw_from_med, 10)
+# create a temporary file to avoid non-staged installation warning
+temp_file <- tempfile(fileext = ".txt")
+# write the data to the temporary file
+writeLines(fi60_raw_from_med, temp_file)
+# Process the file using read_med
+example_processed <- read_med(
+  fname = temp_file, save_file = FALSE,
+  col_r = "C:", out = TRUE,
+  col_names = c("time", "event"), num_col = 6, time_dot_event = TRUE
+)
+
+# Extract specific events (FI15 in this case)
+extracted_FI15 <- event_extractor(
+  data_df = example_processed,
+  ev0 = 5, ev1 = 3,
+  evname = "FI15"
+)
+
+# Display the first rows of the extracted data
+head(extracted_FI15, 30)
 
 }

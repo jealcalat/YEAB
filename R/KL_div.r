@@ -22,6 +22,11 @@
 #' q <- rnorm(100, 10, 4)
 #' KL_div(p, q, -Inf, Inf) # 7.769912
 KL_div <- function(x, y, from_a, to_b) {
+  # Error message for empty input vectors
+  if (length(x) < 2 || length(y) < 2) {
+    stop("Both input vectors 'x' and 'y' must have at least 2 points.")
+  }
+
   integrand <- function(x, y, t) {
     denx <- density(x, na.rm = T)
     deny <- density(y, na.rm = T)

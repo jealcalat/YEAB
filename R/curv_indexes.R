@@ -1,8 +1,7 @@
 #' Curvature index by numerical integration
 #'
 #' @param cr numeric, cumulative response
-#' @param t numeric, time (or the x axis in a cumulative response plot)
-#' @param h numeric, the height of a rect angule which corresponds to the max cum rate
+#' @param time_in numeric, time (or the x axis in a cumulative response plot)
 #'
 #' @return a numeric value that is the proportion of a rect triangle area minus
 #'    the area under the curve
@@ -14,7 +13,7 @@
 #' data("r_times")
 #' r_times <- r_times[r_times < 60]
 #' cr <- seq_along(r_times)
-#' par(las = 1)
+#'
 #' plot(r_times, cr, type = "s")
 #' curv_index_int(cr, r_times)
 #' segments(
@@ -26,19 +25,22 @@
 #'   x1 = max(r_times), y1 = max(cr),
 #'   col = "red"
 #' )
-curv_index_int <- function(cr, t) {
+curv_index_int <- function(cr, time_in) {
+  if (length(cr) == 0 || length(time_in) == 0) {
+    stop("Inputs 'cr' and 'time_in' cannot be empty")
+  }
   # Curvature index with numerical integration
   # Get the AUC using numerical integration with cubic splines interpolation
 
-  # total area of a rectangle
-  area0 <- max(t) * max(cr) / 2
+  # total area of a right triangle
+  area0 <- max(time_in) * max(cr) / 2
   # integrate needs sfsmisc
   # minimum time (first response)
-  a <- min(t)
+  a <- min(time_in)
   # maximum time (last response)
-  b <- t[which.max(cr)]
+  b <- time_in[which.max(cr)]
   # area under the function f(t_response)
-  area1 <- integrate.xy(t, cr, a, b)
+  area1 <- integrate.xy(time_in, cr, a, b)
   # difference of rect triangle and actual auc of f(t_response)
   index <- (area0 - area1) / area0
   return(index)
@@ -46,9 +48,9 @@ curv_index_int <- function(cr, t) {
 #' Curvature index using Fry derivation
 #'
 #' @param cr A numeric vector of cumulative response
-#' @param t numeric, time (or the x axis in a cumulative response plot)
+#' @param fi_val the FI value
+#' @param time_in numeric, time (or the x axis in a cumulative response plot)
 #' @param n numeric, the number of subintervals
-#' @param b numeric, the base of the triangle (e.g., FI value)
 #'
 #' @return The curvature index as exposed by Fry
 #' @export
@@ -57,7 +59,7 @@ curv_index_int <- function(cr, t) {
 #' data("r_times")
 #' r_times <- r_times[r_times < 60]
 #' cr <- seq_along(r_times)
-#' par(las = 1)
+#'
 #' plot(r_times, cr, type = "s", xlim = c(min(r_times), max(r_times)))
 #' segments(
 #'   x0 = min(r_times), y0 = min(cr),
@@ -68,18 +70,20 @@ curv_index_int <- function(cr, t) {
 #'   x1 = max(r_times), y1 = max(cr),
 #'   col = "red"
 #' )
-#' curv_index_fry(cr, r_times, 4, 60, 60)
-curv_index_fry <- function(cr, time_in, b, if_val) {
+#' curv_index_fry(cr, r_times, 60, 4)
+curv_index_fry <- function(cr, time_in, fi_val, n = 4) {
+  if (length(cr) == 0 || length(time_in) == 0) {
+    stop("Inputs 'cr' and 'time_in' cannot be empty")
+  }
   # Curvature index using Fry method
   # Size of subintervals; eg., if n=4 and b=60, size are 15 sec bins
-  n <- 4
-  size <- round(b / n)
+  size <- round(fi_val / n) # Aquí b se tendría que cambiar por fi_val
   # Subintervals generated evenly, from 0 to max(t)
-  intervals <- seq(0, ceiling_multiple(max(time_in), if_val), size)
+  intervals <- seq(0, ceiling_multiple(max(time_in), fi_val), size)
   # Responses at each subinterval
   # resps <- cr[t %in% intervals]
-  resps <- n_between_intervals(cr, intervals, time_in)
-  indexFry <- (3 * resps[4] - 2 * (resps[1] + resps[2] + resps[3])) / (4 * resps[4])
+  resps <- n_between_intervals(cr, intervals, time_in) # nolint
+  indexFry <- ((n - 1) * resps[n] - 2 * sum(resps[1:(n - 1)])) / (n * resps[n])
   return(indexFry)
 }
 

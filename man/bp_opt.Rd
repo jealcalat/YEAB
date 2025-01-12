@@ -4,12 +4,14 @@
 \alias{bp_opt}
 \title{Find the best fit for individual trials using \code{optim}}
 \usage{
-bp_opt(r_times, trial_duration)
+bp_opt(r_times, trial_duration, optim_method = "Brent")
 }
 \arguments{
 \item{r_times}{Vector of response times}
 
 \item{trial_duration}{Duration of the trial}
+
+\item{optim_method}{character, the optimization method to use}
 }
 \value{
 A data frame with the following columns:

@@ -1,0 +1,93 @@
+---
+title: "gaussian_fit()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{gaussian_fit()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+Peak procedure trials are a common method used in experimental behavior analysis to study timing behavior. In these trials, subjects are typically trained to respond after a specific interval, usually measured in seconds. The timing of these responses is then analyzed to understand the underlying mechanisms of temporal processing.
+
+One common approach to analyzing peak procedure data is by fitting a Gaussian plus linear function to the observed responses, as demonstrated by [Buhusi, C. V., Perera, D., & Meck, W. H. (2005)](https://pubmed.ncbi.nlm.nih.gov/15656724/). This function captures the characteristic shape of response distributions observed in peak procedure trials.
+
+Here we introduce the `gaussian_fit()` function, which utilizes the nonlinear least squares method (Levenberg–Marquardt) implemented in the `minpack.lm` package to adjust a Gaussian + linear function to experimental timing data. The function returns a list of estimated parameters that best fit the curve to the experimental data.
+
+Such parameters correspond to the following model:
+$$ Rate(t)=ae^\frac{-(t-t_0)^2}{2b^2}+c(t-t_0)+d$$
+Where $Rate(t)$ is the response rate at time $t$; $t_0$ represents the peak response time of the function, $b$ is the amplitude of the Gaussian distribution, and the sum of peak parameters $a$ and $d$ pertains to the response rate.
+
+The `gaussian_fit()` function takes the following parameters:
+
+- `responses` numeric vector for the response rate at each time bin.
+- `time` numeric vector for the time bins.
+- `par` a list of initial parameters for the Gaussian + linear function which will be used to start searching for the optimized values (this is optional, the default values are *a* = 0.1, *d* = 0.1, *t0* = 18, *b* = 10, *c* = 1).
+- `max.iter` the maximum number of iterations for the adjusting process.
+
+## Example
+
+First let's load an example data set from an experimental session and assign it to the response and time parameters:
+
+```{r}
+data("gauss_example")
+t_example <- gauss_example$Bin
+res_example <- gauss_example$Response_Average
+```
+
+Now let's call the `gaussian_fit()` function to obtain the list of optimized parameters to fit the model:
+
+```{r}
+par_est <- gaussian_fit(responses = res_example, time = t_example, max.iter = 1000)
+
+print(par_est, digits = 3)
+```
+
+*Note that we omitted the *`par` *parameter.* 
+
+Now let's create the time and response data points for the fitted curve:
+
+```{r}
+g_plus_lin <- function(par, tiempo) {
+  par$a * exp(-0.5 * ((tiempo - par$t0) / par$b)**2) + par$c * (tiempo - par$t0) + par$d
+} # The gaussian + linear model.
+
+time_points <- seq(0, 90, 0.1) # In this example we used a FI30 program so the trail lenght is 90s.
+y_fit <- g_plus_lin(par_est |> as.list(), time_points) # This function creates the data points using the estimated parameters applied to a Gaussian + linear function.
+```
+
+Finally let's plot the results:
+
+```{r echo = FALSE}
+plot(time_points,
+  y_fit,
+  type = "l",
+  col = "black",
+  lwd = 2,
+  ylim = c(0, max(y_fit, res_example)),
+  xlab = "Time in trial",
+  ylab = "R(t)",
+)
+
+points(t_example, res_example, pch = 21, bg = "red", cex = .8)
+
+legend(
+  "topright",
+  legend = c("nls.lm fit", "data"),
+  lty = c(1, 0),
+  pch = c(NA, 21),
+  pt.bg = c(NA, "red"),
+  col = c("black", 1),
+  pt.cex = 1,
+  cex = .8
+)
+```

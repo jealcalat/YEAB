@@ -1,0 +1,47 @@
+---
+title: "unit_normalization()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{unit_normalization()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+When analyzing numeric data, either discrete or continuous variables, it is often necessary or at least practical to normalize the values in order to get a more comprehensible scale to analyze the data in, this is, transforming the values to a $0 ≤ x ≤ 1$ scale, where $0$ is the lowest value and $1$ the highest in the distribution. 
+
+We included two functions to normalize and rescale numeric vectors, `unit_normalization()` and `ab_range_normalization()`, respectively. The former takes a numeric vector `x` as input and outputs a normalized version of the same distribution. 
+
+## Example
+
+```{r}
+x <- 5:45
+x_scaled <- unit_normalization(x)
+x_scaled
+```
+
+Similarly the `ab_range_normalization()` function can be used to rescale a numeric vector `x` to an arbitrary range between `a` and `b`. E.g.:
+
+```{r}
+x <- 5:45
+a <- 1
+b <- 100
+x_scaled <- ab_range_normalization(x, a, b)
+x_scaled
+```
+
+```{r}
+x <- rnorm(1000)
+hist(x, main = "Original Distribution")
+x_scaled <- unit_normalization(x)
+hist(x_scaled, main = "Normalized Distribution")
+```

@@ -4,16 +4,17 @@
 \name{YEAB-package}
 \alias{YEAB}
 \alias{YEAB-package}
-\title{YEAB: Package To Analyze Data From Analysis Of Behavior Experiments}
+\title{YEAB: Analyze Data from Analysis of Behavior Experiments}
 \description{
-This is a colletion of functions aimed to analyze data from behavioral experiments from MED output and others. It also have functions to fit exponential or hyperbolic models from delay discounting tasks, exponential mixtures to IRTs, Gaussian plus ramp model for peak procedures data, etc.
+Analyze data from behavioral experiments conducted using MED-PC software developed by Med Associates Inc. Includes functions to fit exponential and hyperbolic models for delay discounting tasks, exponential mixtures for inter-response times, and Gaussian plus ramp models for peak procedure data, among others. For more details, refer to Alcalá et al. (2023) \doi{10.31234/osf.io/8aq2j}.
 }
 \author{
-\strong{Maintainer}: Emmanuel Alcala \email{jealcala@gmail.com}
+\strong{Maintainer}: Emmanuel Alcala \email{jealcalat@gmail.com}
 
 Authors:
 \itemize{
   \item Rodrigo Sosa \email{rsosas@up.edu.mx}
+  \item Victor Reyes \email{zickvic@hotmail.com}
 }
 
 }

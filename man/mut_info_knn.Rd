@@ -25,6 +25,7 @@ Mutual information for continuous variables using kNN
 Uses the knn_mi implementation from the rmi package. The methods available are KSG1 and KSG2.
 }
 \examples{
+\dontshow{if (requireNamespace("rmi", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 set.seed(123)
 x <- rnorm(1000)
@@ -49,4 +50,5 @@ abline(lm(y ~ x))
 cor(x, y_with_noise)
 # mutual information can detect nonlinear dependencies
 mut_info_knn(x, y_with_noise, method = "KSG1", k = 2)
+\dontshow{\}) # examplesIf}
 }

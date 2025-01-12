@@ -1,0 +1,80 @@
+---
+title: "entropy_kde2d()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{entropy_kde2d()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+The `entropy_kde2d()` function estimates the Shannon entropy for a two-dimensional dataset using kernel density estimation (KDE). This function provides a non-parametric measure of entropy, useful for analyzing the uncertainty or randomness in bivariate distributions, such as spatial data of animal trajectories [e.g, @maei2009].
+
+The parameters for `entropy_kde2d()` are as follows:
+
+- `x`: A numeric vector representing the random variable in the first dimension.
+
+- `y`: A numeric vector representing the random variable in the second dimension.
+
+- `n_grid`: A numeric value specifying the number of grid cells used to evaluate the density; defaults to 150. Higher values result in finer density grids but increase computational complexity.
+
+The function outputs a single numeric value representing the entropy of the given data.
+
+## Example
+
+```{r}
+set.seed(123)
+# Generate a 2D normal distribution with a correlation of 0.6
+n <- 1000
+mean <- c(0, 0)
+sd_x <- 1
+sd_y <- 5
+correlation <- 0.6
+sigma <- matrix(
+  c(
+    sd_x^2,
+    correlation * sd_x * sd_y,
+    correlation * sd_x * sd_y,
+    sd_y^2
+  ),
+  ncol = 2
+)
+library(MASS)
+simulated_data <- mvrnorm(n, mu = mean, Sigma = sigma)
+x <- simulated_data[, 1]
+y <- simulated_data[, 2]
+# Plot the data
+plot(simulated_data)
+# Compute entropy using normal entropy formula
+cov_matr <- cov(cbind(x, y))
+sigmas <- diag(cov_matr)
+det_sig <- prod(sigmas)
+```
+
+`normal_entropy` is a function that computes the entropy of a bivariate normal distribution given the number of dimensions `k`, the value of $\pi$, and the determinant of the covariance matrix `det_sig`. This is used, for example, in @maei2009 to compute the entropy of mice trajectories in a Morris water maze.
+
+```{r}
+normal_entropy <- function(k, pi, det_sig) {
+  (k / 2) * (1 + log(2 * pi)) + (1 / 2) * log(det_sig)
+}
+
+entropia <- normal_entropy(k = 2, pi = pi, det_sig)
+print(entropia) # Expected value close to 4.3997
+
+# Compute entropy using entropy_kde2d
+result <- entropy_kde2d(x, y, n_grid = 50)
+print(result) # Expected value close to 4.2177
+```
+
+## References

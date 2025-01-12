@@ -1,0 +1,101 @@
+---
+title: "curv_indexes()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{curv_indexes} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+In fixed interval schedules (FI), subjects receive reinforcement only for the first response that occurs after a specific amount of time has elapsed (the fixed interval). Responses happening before the interval ends are recorded but have no consequence. Fixed-interval schedules are known to produce characteristic response patterns. These patterns typically involve an initial pause at the beginning of each interval, followed by a period of increasing responding that reaches a high and steady rate until reinforcement is delivered. 
+
+Curvature analysis provides a quantitative measure to characterize how responding deviates from an ideal increasingly steady rate. This information is valuable for understanding how different factors, such as drugs or manipulations of the reinforcement schedule itself, can influence response patterning. The curvature index can reveal deviations from a steady responding rate and help identify how different factors influence response patterning.
+
+Here we introduce two functions for calculating the curvature index, one based on numerical integration and another using [Fry's derivation](https://doi.org/10.1901%2Fjeab.1960.3-193). The first, named `curv_index_int` takes the following parameters:
+
+- `cr` a numeric vector representing the cumulative response data.
+- `t` a numeric vector representing time points corresponding to the x-axis in a cumulative response distribution.
+
+The second, named `curv_index_fry` takes the following parameters:
+
+- `cr` a numeric vector of cumulative response.
+- `time_in` a numeric vector of the response times.
+- `if_val` a numeric value for the base of the triangle (e.g., FI value or the last time value).
+- `n` the number of sub-intervals to divide the area under the curve by (4 by default).
+
+Both functions return a numeric value for the curvature index.
+
+## Example
+
+First let's load an example data set from an experimental trial and create the data points for the cumulative response vector:
+
+```{r}
+data("r_times")
+r_times <- r_times[r_times < 60] # This example is a Peak Procedure trial, so we keep only the responses up to the FI value of 60s.
+
+head(r_times, n = 30)
+
+cr <- seq_along(r_times) # The Cumulative Response from 1 to n data points.
+
+cr
+```
+Now let's calculate the curvature index using both methods for comparison purposes:
+
+```{r}
+int_index <- curv_index_int(cr, r_times)
+fry_index <- curv_index_fry(cr, r_times, 60)
+```
+*Note that for the* `curv_index_fry` *function we omitted the `n` parameter, using the default subdivision value of 4.*
+```{r, echo = FALSE}
+paste("Numerical integration index: ", int_index)
+paste("Fry's integration index: ", fry_index)
+```
+
+```{r , echo = FALSE}
+trunc_int <- trunc(int_index * 10^4) / 10^4
+trunc_fry <- trunc(fry_index * 10^4) / 10^4
+
+plot(r_times, cr,
+  type = "l", col = "blue",
+  panel.first = grid(),
+  xlab = "Time (s)",
+  ylab = "Cummulative Response"
+)
+segments(
+  x0 = min(r_times), y0 = 0,
+  x1 = max(r_times), y1 = max(cr)
+)
+segments(
+  x0 = max(r_times), y0 = 0,
+  x1 = max(r_times), y1 = max(cr)
+)
+segments(
+  x0 = min(r_times), y0 = 0,
+  x1 = max(r_times), y1 = 0
+)
+segments(
+  x0 = min(r_times) + (max(r_times) - min(r_times)) / 2, y0 = min(cr),
+  x1 = max(r_times), y1 = max(cr),
+  col = "red"
+)
+legend(
+  "topleft",
+  legend = c(
+    paste("int_index: ", trunc_int),
+    paste("fry_index: ", trunc_fry)
+  ),
+)
+```
+
+
+

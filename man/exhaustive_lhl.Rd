@@ -22,7 +22,6 @@ Individual trial analysis for peak procedure data
 data("r_times")
 trial_duration <- max(r_times) |> ceiling() # 180
 bps <- exhaustive_lhl(r_times, trial_duration)
-par(mar = c(4, 4.5, 1, 1))
 plot(
   density(
     r_times,

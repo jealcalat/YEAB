@@ -5,21 +5,21 @@
 \title{Gaussian + ramp fit with LM algorithm}
 \usage{
 gaussian_fit(
-  respuestas,
-  tiempo,
+  responses,
+  time_vec,
   par = list(a = 0.1, d = 0.1, t0 = 18, b = 10, c = 1),
   max.iter = 500
 )
 }
 \arguments{
-\item{respuestas}{numeric, vector of response or response rate}
+\item{responses}{numeric, vector of response or response rate}
+
+\item{time_vec}{numeric, time bins}
 
 \item{par}{a list of parameters for the gaussian + linear;
 see Buhusi, C. V., Perera, D., & Meck, W. H. (2005) for an explanation}
 
 \item{max.iter}{numeric, max number of iterations}
-
-\item{t}{numeric, time bins}
 }
 \value{
 a numeric vector of coefficients, the same as the par argument
@@ -34,8 +34,8 @@ This algorithm uses the nonlinear least squares nls.lm (Levenberg–Marquardt) f
 }
 \examples{
 # Function to create synthetic data
-g_plus_lin <- function(par, tiempo) {
-  par$a * exp(-0.5 * ((tiempo - par$t0) / par$b)**2) + par$c * (tiempo - par$t0) + par$d
+g_plus_lin <- function(par, time) {
+  par$a * exp(-0.5 * ((time - par$t0) / par$b)**2) + par$c * (time - par$t0) + par$d
 }
 # real params
 pars <- list(a = 20, t0 = 20, b = 10, c = 0.2, d = 1)
@@ -48,7 +48,7 @@ y_curva <- g_plus_lin(par = pars, ti)
 # r(t) sampled with noise
 y_data <- g_plus_lin(par = pars, ti_data) + rnorm(length(ti_data), 0, sd = 2)
 # param estimation
-par_est <- gaussian_fit(respuestas = y_data, t = ti_data, par = pars, max.iter = 10500)
+par_est <- gaussian_fit(responses = y_data, t = ti_data, par = pars, max.iter = 10500)
 par_est
 # fitted curve
 y_hat <- g_plus_lin(par_est |> as.list(), ti)

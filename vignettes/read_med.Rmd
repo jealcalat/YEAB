@@ -1,0 +1,93 @@
+---
+title: "read_med()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{read_med()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+Time can be measured at different scales, like tenths of seconds, which in MED is 0.1”. Suppose we have an event counter E, and we are adding up F every tenth of a second. If we want to store an event (say, a magazine entry), arbitrarily number-coded as 12, and the time since the beginning of the session is one minute, the `time.event` format will look like `C(E) = F + .12` which will be recorded as 600.12 in C in the position E (the index of the C array). Returning time of occurrence (in milliseconds) and the event is as easy as separating 600.12 into two atomic vectors. YEAB implements read_med(), whose default input format is `time.event` recorded in a single array.  
+
+
+*Diagram of MED raw data processing with the time.event format*  
+
+
+<img src="img/read_med_example.png" alt="MED raw data diagram" width="450" height="300" style="display: block; margin: auto;">
+
+
+The `read_med()` function provide several arguments to personalize its functionality. Below you can see the arguments and their default values:  
+
+<img src="img/read_med_arguments.png" alt="Arguments" style="display: block; margin: auto;width: 80%; height: auto;">
+
+*It is important to note that the "num_col" value should be the * n *number of DISKCOLUMS + 1, which includes the index column as well.*
+
+## Example
+
+
+The code below will provide an example on how to use the `read_med()` function to process raw data from MED-PC in the `time.event` format.
+
+First we assign the name of the raw MED file to a variable and the path in which the processed `.csv` file will be saved like this:
+
+```{r tidy = FALSE, message = FALSE, warning = FALSE}
+data("fi60_raw_from_med")
+temp_file <- tempfile(fileext = ".txt")
+writeLines(fi60_raw_from_med, temp_file)
+path_to_save <- getwd()
+```
+
+Next we call the `read_med()` function to process the file (in this case we skipped the file saving part for example purposes but if save_file is set to TRUE the file will be saved in the assigned directory):
+
+```{r tidy = FALSE}
+example_processed <- read_med(
+  fname = temp_file, save_file = FALSE,
+  path_save = path_to_save, col_r = "C:", out = TRUE,
+  col_names = c("time", "event"), num_col = 6, time_dot_event = TRUE
+)
+```
+
+Now let's see the first 10 lines of the processed data frame:
+
+```{r tidy = FALSE}
+head(example_processed, 10)
+```
+
+
+If you want to use the function with a bulk of raw MED files you need to
+
+- Generate a list of file names of raw MED data
+- Loop over the list with the function, using each element of the list as the fname argument.
+
+---
+Suppose all raw MED files start with 2020, and you are in the working directory  If all the raw MED files are in the wd, we can directly get the filenames with unspecified path `filenames <- list.files(pattern = "^2020")` 
+The above line will look in the wd for all the files starting with "2020" and it will save it as a vector of strings in "filenames". With that vector, make a for loop to iterate over every filename.
+
+If you want to work immediately with the processed data, first create an empty
+dataframe to store the data file per file:
+
+`df_working = data.frame()`
+
+Then run the for loop in the following way:
+
+```
+for (f in filenames) {
+  df_tmp <- read_med(
+    fname = f,
+    path_save = "data/processed/", # put here your path to save the csv
+    col_r = "C:", # if the time.event vector is saved in variable C
+    out = TRUE
+  ) # If you want to store processed data in df_tmp, otherwise write out = FALSE
+  # now just append the rows to the new data frame
+  df_working = rbind(df_working, df_tmp)
+}
+```

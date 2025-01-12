@@ -31,12 +31,13 @@
 #' data("fi60_raw_from_med")
 #' # see first 10 lines
 #' head(fi60_raw_from_med, 10)
-#' # now write the data as txt or any extension
-#' writeLines(fi60_raw_from_med, "fi60_raw.txt")
-#' file_name <- "fi60_raw.txt"
-#' path_to_save <- getwd() # change to something like "data/processed/"
-#' fi60_processed <- read_med(fname = file_name, save_file = TRUE,
-#'   path_save = path_to_save, col_r = "C:", out = TRUE,
+#' # create a temporary file to avoid non-staged installation warning
+#' temp_file <- tempfile(fileext = ".txt")
+#' # write the data to the temporary file
+#' writeLines(fi60_raw_from_med, temp_file)
+#' # Use the temporary file for processing
+#' fi60_processed <- read_med(fname = temp_file, save_file = FALSE,
+#'   col_r = "C:", out = TRUE,
 #'   col_names = c("time", "event"), num_col = 6, time_dot_event = TRUE)
 #' head(fi60_processed)
 #' # __________________________________________________________________________
@@ -125,6 +126,7 @@ read_med <- function(fname, # Name of the MED file to read;
 
   # Drop all 0s (there's nothing interesting there)
   varY <- varY$values
+  varY = as.numeric(varY)
   if (time_dot_event) {
     # This splits the time.event vector in two
     var_tmp <- do.call(rbind, strsplit(as.character(varY), "\\."))
@@ -140,6 +142,7 @@ read_med <- function(fname, # Name of the MED file to read;
     var_tmp[] <- lapply(var_tmp, as.numeric)
     # sort by time
     var_tmp <- var_tmp[order(var_tmp[, 1]), ]
+    row.names(var_tmp) <- NULL
   } else {
     var_tmp <- data.frame(values = as.numeric(varY))
     # colnames(var_tmp) <- col_r

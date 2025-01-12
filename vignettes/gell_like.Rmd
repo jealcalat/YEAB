@@ -1,0 +1,46 @@
+---
+title: "gell_like()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{gell_like()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r echo = FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+In two-alternative discrimination tasks, researchers typically randomize the placement of the rewarded stimulus to prevent systematic responses to irrelevant stimuli, ensuring that learning curves reflect chance performance.
+
+One method to accomplish this is by employing random numbers generated from a discrete binomial distribution to construct a 'full random training schedule' (FRS). However, the use of FRS may inadvertently result in sporadic but extended sequences of biased training, known as 'input biases,' which can lead to the emergence of biased responses ('output biases').
+
+As an alternative approach, a 'Gellerman-like training schedule' (GLS) can be implemented. GLS mitigates most input biases by restricting the occurrence of rewards in the same location for more than three consecutive trials. The history of past rewards associated with choosing a specific discriminative stimulus influences the likelihood of selecting that stimulus in subsequent trials.
+
+This function implements a Gellerman-like series based on @herrera2015. The algorithm samples from a binomial distribution and imposes two restrictions: 
+
+- No more than 3 consecutive values of 0s or 1s.
+- The number of trials 0 or 1 must be the same for a given n.
+
+## Example
+
+```{r}
+set.seed(420)
+
+example_series <- gell_like(16)
+
+example_series
+```
+
+**Note**: it is important to consider that *n* **has to** be an even number so that there are the same amount of trials for each alternative.
+
+## References

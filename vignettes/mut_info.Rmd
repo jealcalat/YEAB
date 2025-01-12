@@ -1,0 +1,74 @@
+---
+title: "mut_info()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{mut_info()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+if (!requireNamespace("rmi", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE) # Disable evaluation of all chunks
+  message("The 'rmi' package is not installed. Sections requiring 'rmi' will be skipped.")
+}
+```
+
+## Introduction
+
+Behavioral analysis is a field of study in which the necessity often arise to understand the way in which different variables relate to each other and the meaning behind such relationships. One useful and powerful tool used to address this questions is the concept of mutual information, rooted in information theory.
+
+Information theory provides an ideal framework for quantifying the amount of information related between variables. In this scenario, mutual information allows to measure the degree of dependency between two variables by assessing how much knowing one variable reduces uncertainty about the other. This metric is particularly valuable in the realm of behavioral analysis as it allows researchers to discern connections and dependencies between experimental variables and the behaviors observed.
+
+Here we introduce two functions to calculate Mutual Information using a wide variety of methods. The general definition for calculating Mutual Information is as follows:
+
+$$I(X;Y) = \sum_{i=1}^{n} \sum_{j=1}^{m}P(x_i,y_j)log \frac{P(x_i,y_j)}{P(x_i)P(y_j)} $$
+Where $X$ and $Y$ are discrete random variables and $P(x_i)$ and $P(y_j)$ are the probabilities of every possible state of $X$ and $Y$ respectively.
+
+The `mut_info_discrete()` function calculates Mutual Information of continuous variables using discretization through the `discretize()` function from the `infotheo` package. The function takes the following parameters:
+
+- `x` a numeric vector representing random variable $X$.
+- `y` a numeric vector of equal or different size as `x` representing random variable $Y$.
+- `method` the method to calculate Mutual Information. The default is `emp` for empirical estimation. Other options are`shrink` for the shrinkage estimator, `mm` for the Miller-Madow estimator, and `sg` for the Schurmann-Grassberger estimator.
+
+With `mut_info_knn()` we can calculate Mutual Information of continuous variables using the K-Nearest Neighbors method. The function takes the following parameters:
+
+- `x` a numeric vector representing random variable $X$.
+- `y` a numeric vector of equal or different size as `x` representing random variable $Y`.
+- `method` one of `KSG1` or `KSG2` for the KSG estimator. The default is `KSG1`.
+- `k` the number of nearest neighbors to consider. The default is 5.
+
+## Example
+```{r mutual-information-example, eval=requireNamespace("rmi", quietly = TRUE)}
+set.seed(123)
+x <- rnorm(1000)
+y <- rnorm(1000)
+plot(x, y, main = "Independent Variables")
+
+# Compute mutual information using kNN
+mi_knn_independent <- mut_info_knn(x, y, method = "KSG1", k = 5)
+cat("Mutual Information (KNN) for independent variables:", mi_knn_independent, "\n")
+
+# Dependent variables example
+y <- 100 * x + rnorm(length(x), 0, 12)
+plot(x, y, main = "Dependent Variables")
+
+mi_knn_dependent <- mut_info_knn(x, y, method = "KSG2", k = 3)
+cat("Mutual Information (KNN) for dependent variables:", mi_knn_dependent, "\n")
+
+# Sine function example
+x <- seq(0, 5, 0.1)
+y <- 5 * sin(x * pi)
+y_with_noise <- y + rnorm(length(x), 0, 0.5)
+plot(x, y_with_noise, main = "Sine Function with Noise")
+lines(x, y, col = 2)
+
+# Compute mutual information
+mi_knn_sine <- mut_info_knn(x, y_with_noise, method = "KSG2", k = 3)
+cat("Mutual Information (KNN) for sine function with noise:", mi_knn_sine, "\n")
+```

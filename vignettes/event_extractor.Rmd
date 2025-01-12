@@ -1,0 +1,103 @@
+---
+title: "event_extractor()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{event_extractor()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+The proprietary data output format from the MED-PC software suite for experimental chambers is often coded in a `time.event` manner, in which users assign arbitrary numeric codes for each type of event, such that when analyzing the data there are specific events marking the start and end of each individual trail.
+
+Here we present a function to slice MED-PC data based on start and end events. This function should be used after `read_med()`, which outputs a data frame or/and `.csv` (depending on how it's used) with 2 columns: time and events (in that order). The function returns a data frame with *n* x 4 columns: 
+
+- `time`: the time of the event.
+- `events`: the event numeric ID.
+- `cum_id`: the index of each extracted trail (note that these will be in a *i·2+1* sequence due how the internal processing is done).
+- `evname`: the assigned identifier for the extracted trails.
+
+The `event_extractor()` function include the following parameters:
+
+- `data_df`: a data frame of *n* rows x 2 columns, where columns corresponds to time and events IDs, in that order.
+- `ev0`: start event ID (where the trials we want to extract begins).
+- `ev1`: end event ID (where the trials we want to extract ends).
+- `evname`: a string for the event name, for identification purposes.
+
+## Example
+
+First let's load a raw MED-PC file from an experimental session and assign it to a data frame:
+
+```{r tidy = FALSE, message = FALSE, warning = FALSE}
+data("fi60_raw_from_med")
+temp_file <- tempfile(fileext = ".txt")
+writeLines(fi60_raw_from_med, temp_file)
+
+example_processed <- read_med(
+  fname = temp_file, save_file = FALSE,
+  path_save = path_to_save, col_r = "C:", out = TRUE,
+  col_names = c("time", "event"), num_col = 6, time_dot_event = TRUE
+)
+
+head(example_processed, 10)
+```
+
+In this specific example session we have four types of trials: 
+
+- FI15 with start code *5* and end code *3*
+- FI30 with start code *55* and end code *33*
+- Peak 15s with start code *4* and end code *41*
+- Peak 30s with start code *44* and end code *42*
+
+If we wanted to extract the FI15 trials, we would do it like this:
+
+```{r}
+extracted_FI15 <- event_extractor(
+  data_df = example_processed,
+  ev0 = 5, ev1 = 3,
+  evname = "IF15"
+)
+
+head(extracted_FI15, 30)
+```
+
+Now let's assume we want to extract all four types of trails and store them in separated data frames. We can do that using a `for` cycle like this:
+
+```{r}
+extracted_trials_df <- list() # A list to store the resulting data frames.
+
+param_list <- list( # A list of parameters for each trial type.
+  list(ev0 = 5, ev1 = 3, evname = "IF15"),
+  list(ev0 = 55, ev1 = 33, evname = "IF30")
+)
+
+for (parameters in param_list) {
+  trial_df <- event_extractor(
+    data_df = example_processed,
+    ev0 = parameters$ev0,
+    ev1 = parameters$ev1,
+    evname = parameters$evname
+  )
+  extracted_trials_df[[length(extracted_trials_df) + 1]] <- trial_df # Store the extracted data frame in the data frames list.
+}
+```
+
+Here's a preview of how each data frame would look like:
+
+```{r echo = FALSE}
+for (i in seq_along(extracted_trials_df)) {
+  cat("Data frame", i, ":\n")
+  print(head(extracted_trials_df[[i]], 5))
+}
+```
+
+After this process you can analyze each trial data separately in whichever way you need.

@@ -10,7 +10,7 @@
 #' @importFrom rmi knn_mi
 #'
 #' @details Uses the knn_mi implementation from the rmi package. The methods available are KSG1 and KSG2.
-#' @examples
+#' @examplesIf requireNamespace("rmi", quietly = TRUE)
 #'
 #' set.seed(123)
 #' x <- rnorm(1000)
@@ -36,7 +36,8 @@
 #' # mutual information can detect nonlinear dependencies
 #' mut_info_knn(x, y_with_noise, method = "KSG1", k = 2)
 mut_info_knn <- function(x, y, method, k = 5) {
-  knn_mi(cbind(x, y), c(1, 1),
-    options = list(method = method, k = k)
-  )
+  if (!requireNamespace("rmi", quietly = TRUE)) {
+    stop("The 'rmi' package is required for this function but is not installed. Please install it to proceed.")
+  }
+  rmi::knn_mi(cbind(x, y), c(1, 1), options = list(method = method, k = k))
 }

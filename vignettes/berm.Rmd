@@ -1,0 +1,178 @@
+---
+title: "`biexponential()` & `berm()`"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{berm()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+The BERM [Bi-exponential Refractory Model, see @brackney2017] serves as a powerful tool for analyzing and understanding the organization of operant behavior in experimental treatments. Extensive empirical evidence has shown that operant behavior, even during reinforcement, is not unitary but instead organized into bouts of responses separated by relatively long pauses [e.g., @brackney2017; @shull2011]. Consequently, operant performance is determined by the rate at which bouts are initiated, the response rate within bouts, and the length of bouts. Using overall response rate as a unitary measure conflates these dissociable behavioral components. Conversely, a microscopic behavioral analysis breaks down performance into its behavioral components by decomposing overall response rate into several elementary measures.
+
+Moreover, empirical evidence suggests that the distribution of interresponse times (IRTs) is a mixture of two exponential distributions. This aligns with the notion that responses are organized into bouts: one exponential distribution describes long IRTs separating bouts, while the other describes short IRTs separating responses within bouts. Adding a refractory period between responses (the time it takes to action the operant), the bi-exponential distribution may be expressed as follows:
+
+$$p(IRT = \tau | \tau \ge \delta) = p w e^{-w (\tau - \delta)} + (1-p)b e^{-b (\tau - \delta)},\ w > b$$
+
+Where $p$ is the proportion of IRTs within bouts and $1 − p$ is the complementary proportion of IRTs between bouts, $b$ is the bout-initiation rate, $w$ is the within-bout response rate, and $\delta$ is the refractory period. The necessity of $\delta$ is justified both theoretically, because each response takes a finite amount of time to complete, and empirically.
+
+```{r }
+set.seed(43)
+l1 <- 1 / 10
+l2 <- 1 / 40
+p <- 0.4
+n <- 200
+delta <- 0.03
+irt <- c(
+  rexp(round(n * p), l1),
+  rexp(round(n * (1 - p)), l2)
+) + delta
+plot(irt)
+```
+
+```{r}
+biexponential(irt)
+```
+
+```{r}
+berm(irt, 0.03)
+```
+
+To compare the biexponential and BERM models, we can plot the survival functions of the original data and the simulated data from the models. The survival function represents the probability that an inter-response time (IRT) is greater than a given value. The BERM model includes a refractory period $\delta$ between responses, which can be specified as an additional parameter. The following code demonstrates how to plot the survival functions for the original data and the simulated data from the biexponential and BERM models, using the empirical cumulative distribution function (ECDF) and kernel density estimation (KDE) to estimate the survival function.
+
+```{r}
+library(ks)
+library(splines)
+
+# Function to compute the survival function using KDE with a smoothed tail
+compute_survival_kde <- function(log_data, n_points = 100, log_transform = TRUE) {
+  # Apply log transformation if specified
+  if (log_transform) log_data <- log(log_data + 1e-5) # Small constant to avoid log(0)
+
+  # Compute KDE
+  kde <- kde(log_data)
+  x <- seq(min(log_data), max(log_data), length.out = n_points)
+  pdf <- predict(kde, x = x) # PDF from KDE
+  cdf <- cumsum(pdf) / sum(pdf) # Approximate CDF
+  survival <- 1 - cdf # Survival function
+
+  # Apply spline smoothing to the tail of the survival function
+  smooth_survival <- smooth.spline(x, survival, spar = 0.7) # Adjust spar as needed
+  data.frame(x = exp(x) - 1e-5, survival = predict(smooth_survival, x)$y) # Transform back if log-transformed
+}
+
+# Function to simulate and compute survival function with smoothing
+simulate_survival <- function(params, model_type, delta = NULL, n = 100) {
+  if (model_type == "biexponential") {
+    q <- params["w"]
+    l0 <- params["l0"]
+    l1 <- params["l1"]
+    n1 <- round(n * q)
+    n2 <- n - n1
+    irt_sim <- c(rexp(n1, rate = 1 / l0), rexp(n2, rate = 1 / l1))
+  } else if (model_type == "berm") {
+    q <- params["w"]
+    l0 <- params["l0"]
+    l1 <- params["l1"]
+    delta <- params["d"]
+    n1 <- round(n * q)
+    n2 <- n - n1
+    irt_sim <- c(rexp(n1, rate = 1 / l0) + delta, rexp(n2, rate = 1 / l1) + delta)
+  } else {
+    stop("Invalid model type. Choose 'biexponential' or 'berm'.")
+  }
+  # Compute KDE-based survival function for the simulated IRTs
+  kde <- kde(irt_sim)
+  x <- seq(min(irt_sim), max(irt_sim), length.out = n)
+  pdf <- predict(kde, x = x)
+  cdf <- cumsum(pdf) / sum(pdf)
+  survival <- 1 - cdf
+
+  # Smooth the tail of the survival function using spline
+  smooth_survival <- smooth.spline(x, survival, spar = 0.7)
+  data.frame(x = x, survival = predict(smooth_survival, x)$y)
+}
+
+# Function to plot survival functions for original data and simulations
+plot_survival_comparison <- function(
+    log_data,
+    berm_params,
+    biexponential_params,
+    n_points = 200,
+    num_sims = 100) {
+  # Compute survival function for the original data
+  survival_orig <- compute_survival_kde(log_data, n_points = n_points)
+
+  # Plot original data survival function in blue
+  plot(survival_orig$x,
+    survival_orig$survival,
+    type = "l", col = "blue", lwd = 2,
+    xlab = "Inter-Response Time",
+    ylab = "p(IRT > x)",
+    main = "Survival Function Comparison",
+    log = "y",
+    ylim = c(0.0001, 1)
+  )
+
+  # Simulate and plot survival functions for the biexponential model (in yellow)
+  for (i in 1:num_sims) {
+    survival_biexp <- simulate_survival(
+      biexponential_params,
+      "biexponential",
+      n = length(log_data)
+    )
+    lines(survival_biexp$x, survival_biexp$survival,
+      col = rgb(251, 107, 95, 60, maxColorValue = 255),
+      lwd = 0.5
+    ) # Semi-transparent yellow
+  }
+
+  # Simulate and plot survival functions for the BERM model (in green)
+  for (i in 1:num_sims) {
+    survival_berm <- simulate_survival(berm_params, "berm", n = length(log_data))
+    lines(survival_berm$x,
+      survival_berm$survival,
+      col = rgb(59, 132, 23, alpha = 52, maxColorValue = 255), lwd = 0.5
+    ) # Semi-transparent green
+  }
+  leg_green <- rgb(59, 132, 23, alpha = 255, maxColorValue = 255)
+  leg_red <- rgb(251, 107, 95, alpha = 255, maxColorValue = 255)
+  legend("topright",
+    legend = c("Original Data", "Biexponential Model", "BERM Model"),
+    col = c("blue", leg_red, leg_green), lty = 1, lwd = 2
+  )
+}
+
+# Example usage with generated data and parameters
+set.seed(43)
+# Original data generation
+l1 <- 1 / 20
+l2 <- 1 / 2
+p <- 0.07
+n <- 400
+delta <- 0.03
+irt <- c(rexp(round(n * p), l1), rexp(round(n * (1 - p)), l2)) + delta
+
+# Parameters (replace with optimized values from your model fitting process)
+biexponential_params <- as.numeric(biexponential(irt))
+names(biexponential_params) <- c("w", "l0", "l1")
+
+berm_params <- as.numeric(berm(irt, delta))
+names(berm_params) <- c("w", "l0", "l1", "d")
+
+# Plot comparison of survival functions
+plot_survival_comparison(irt, berm_params, biexponential_params, num_sims = 100, n_points = 300)
+```
+
+## References

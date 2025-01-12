@@ -1,11 +1,7 @@
-#' @title Single breakpoint algorithm, the exhaustive version as the one used in
-#' Guilhardi & Church 2004
-#'
+#' @title Single breakpoint algorithm, the exhaustive version as the one used in Guilhardi & Church 2004
 #'
 #' @param r_times numeric, the times at which a response was emitted in a trial
 #' @param trial_duration numeric, the duration of the IF interval
-#' @param optim_method character, the optimization method to use
-#' @param params numeric, initial values for the parameter `bp`
 #'
 #' @return A data frame of 3 columns
 #' `bp` a numeric value which corresponds to the time at which a break point was detected
@@ -23,7 +19,7 @@
 #' data("r_times")
 #' r_times <- r_times[r_times < 60]
 #' single_bp <- exhaustive_sbp(r_times, 60)
-#' par(las = 1)
+#'
 #' plot(r_times, seq_along(r_times),
 #'   xlim = c(0, max(r_times)),
 #'   main = "Cummulative Record",
@@ -52,6 +48,8 @@ exhaustive_sbp <- function(r_times, trial_duration) {
 
   argmax_A <- which.max(A)
   bp <- r_times[argmax_A]
+  t1 <- bp
+  t2 <- trial_duration - t1
   r1 <- sum(r_times <= bp) / bp
   r2 <- sum(r_times > bp) / (trial_duration - bp)
 
@@ -95,6 +93,7 @@ objective_bp <- function(param, r_times, trial_duration) {
 #'
 #' @param r_times Vector of response times
 #' @param trial_duration Duration of the trial
+#' @param optim_method character, the optimization method to use
 #'
 #' @return A data frame with the following columns:
 #' - `bp`: The breakpoint
@@ -103,7 +102,7 @@ objective_bp <- function(param, r_times, trial_duration) {
 #' - `d1`: The duration of the first state
 #' - `d2`: The duration of the second state
 #' @export
-#' 
+#'
 #' @examples
 #' data("r_times")
 #' r_times <- r_times[r_times < 60]
@@ -116,7 +115,7 @@ objective_bp <- function(param, r_times, trial_duration) {
 #'   col = 2, type = "s"
 #' )
 #' abline(v = bp_from_opt$bp)
-bp_opt <- function(r_times, trial_duration) {
+bp_opt <- function(r_times, trial_duration, optim_method = "Brent") {
   trial_duration <- max(max(r_times), trial_duration)
 
   # Initial guess for the breakpoint
@@ -125,13 +124,15 @@ bp_opt <- function(r_times, trial_duration) {
   lower_bound <- min(r_times)
   upper_bound <- max(r_times)
   # Optimization
-  result <- optim(par = initial_guess,
+  result <- optim(
+    par = initial_guess,
     fn = objective_bp,
     r_times = r_times,
     trial_duration = trial_duration,
     lower = lower_bound,
     upper = upper_bound,
-    method = "Brent")
+    method = optim_method
+  )
 
   # Extract the optimized breakpoint
   bp <- result$par

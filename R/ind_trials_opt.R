@@ -1,11 +1,10 @@
 #' @title Objective function for finding the best fit for individual trials
-#' 
+#'
 #' @description This function is used by `optim` to find the best fit for
 #' individual trials by minimizing the sum of areas between the response rate
 #' and the target rate. Do not call this function directly.
 #' @param r_times Vector of response times
 #' @param trial_duration Duration of the trial
-#' @param optim_method Optimization method. See `optim` for details.
 #' @param params A vector of parameters to be optimized.
 #' @return a numeric value representing the sum of areas between the response
 #' rate and the target rate.
@@ -34,7 +33,7 @@ ind_trials_obj_fun <- function(params, r_times, trial_duration) {
 }
 
 #' @title Find the best fit for individual trials using `optim`
-#' 
+#'
 #' @description Find the best fit for individual trials by minimizing the
 #'  sum of areas between the response rate and the target rate.
 #' @param r_times Vector of response times

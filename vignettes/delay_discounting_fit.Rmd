@@ -1,0 +1,153 @@
+---
+title: "delay_discounting_fit()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{delay_discounting_fit()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+bibliography: references.bib
+csl: apa.csl
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = FALSE)
+```
+
+```{r echo = FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+Delay discounting refers to the decline in value of a reward based on the time to its delivery. The steepness of delay discounting tends to be consistent within individuals, for which this attribute counts as a behavioral trait [@odum2011].
+
+Delay discounting data are typically obtained from protocols involving choices between an immediate smaller reward and a delayed larger reward (i.e., intertemporal choice tasks). By dynamically varying the delay or magnitude of some of these alternatives, one can obtain indifference points where the subjective value of both alternatives is assumed to be equivalent.
+
+The function describing the decay of indifference points along the values of the delay for one of the alternatives can be analyzed with many different parametric models. Nonetheless, the most used by far are the exponential and the hyperbolic models. The normalized exponential and hyperbolic models, respectively, are expressed as: 
+
+- $V(d)=exp(-k*d)$
+- $V(d)=\frac{1}{(1+k*d)}$
+
+*Where $V(d)$ is the subjective value as a function of delay $d$, and $k$ the discount parameter for both models.*
+
+However, the data can be similarly described by the different models, which render the problem of model-selection almost impossible to solve only by means of statistical adequacy. This is why some authors have proposed a model-agnostic index for the delay discounting function, the area under the curve [@myerson2001].
+
+Here we introduce three separate functions for applying both the hyperbolic and exponential fit methods, as well as the AUC method to delay discounting data.
+
+The `hyperbolic_fit()` and `exp_fit()` functions take the following parameters:
+
+- `value` a numeric vector of the subjective values (indifference points).
+- `delay` a numeric vector of the delays used.
+- `initial_guess` a numeric value providing an initial start for $k$.
+- `max_iter` a positive integer for the maximum number of iterations for the adjusting process (this is optional, the default value is 100000).
+- `scale_offset` A constant to be added if the residuals are close to 0, this is to avoid division by 0, which is know to cause problems of convergence (0 by default).
+
+The `trapezoid_auc()` function take the following parameters:
+
+- `x` a numeric vector of delay values.
+- `y` a numeric vector of subjective values (indifference points).
+
+*NOTE: Values are not normalized, so if you need normalized results, use *`unit_normalization() `*on your data*
+
+## Example
+
+First let's load an example data set from an experimental session:
+```{r}
+data("DD_data")
+norm_sv <- DD_data$norm_sv
+delays <- DD_data$Delay
+
+DD_data
+```
+
+Now let's fit lineal, hyperbolic and exponential models for comparison purposes and calculate the Akaike criterion for each one:
+
+```{r}
+# first, fit a linear model
+lineal_m <- lm(norm_sv ~ delays)
+# hyperbolic model
+hyp_m <- hyperbolic_fit(norm_sv, delays, 0.1)
+# exponential model
+exp_m <- exp_fit(norm_sv, delays, 0.1)
+AIC(lineal_m, hyp_m, exp_m)
+```
+*Notice we omitted the * `max_iter` *value, therefore using the default one.*
+
+Now we extract the $k$ value from each model:
+
+```{r}
+k_hyp <- coef(hyp_m)
+k_exp <- coef(exp_m)
+k_lin <- coef(lineal_m)
+```
+
+```{r echo = FALSE}
+paste("K_hyp: ", k_hyp)
+paste("K_exp: ", k_exp)
+paste("K_lin: ", k_lin)
+```
+
+Additionally, we can calculate the AUC using the `trapezoid_auc()` function like this:
+
+```{r}
+delay_norm <- delays / max(delays) # It is important to normalize the delay values first in order to get a coherent AUC.
+AUC_value <- trapezoid_auc(delay_norm, norm_sv)
+```
+
+
+Finally let's plot the resulting fitted curves:
+
+```{r, echo = FALSE}
+y_data <- seq(0, max(delays), len = 200) # For plotting the curves.
+
+plot(
+  delays,
+  norm_sv,
+  ylim = c(0, 1),
+  pch = 21,
+  ylab = "Subjective Values",
+  xlab = "Delay",
+  bg = "orange",
+  col = "black"
+)
+lines(
+  y_data,
+  eq_hyp(k = k_hyp, y_data),
+  col = "green4",
+  lwd = 2
+)
+lines(
+  y_data,
+  exp(-k_exp * y_data),
+  col = "steelblue",
+  lwd = 2
+)
+abline(lineal_m, lty = 2, lwd = 2)
+
+legend(
+  "topright",
+  legend = c("data", "exp fit", "hyp fit", "linear fit", paste("AUC=", AUC_value)),
+  pch = c(21, NA, NA, NA, NA),
+  lty = c(NA, 1, 1, 2, NA),
+  pt.bg = c("orange", NA, NA, NA, NA),
+  col = c(1, "steelblue", "green4", 1),
+)
+```
+
+**Note:** to create the data points for the hyperbolic fit curve we used the `eq_hyp()` function included in the package which simulate hyperbolic delay discounting data given a specific $k$ value and a delay vector. The function takes two parameters: `k` and `delay`.  The function is used like this:
+
+```{r}
+y_data <- seq(0, max(delays), len = 200)
+x_data <- eq_hyp(k = k_hyp, y_data)
+```
+
+For the exponential fit curve, we just applied the model with the resulting `k_exp` value to the `y_data` vector like this:
+
+```{r}
+x_data <- exp(-k_exp * y_data)
+```
+
+## References

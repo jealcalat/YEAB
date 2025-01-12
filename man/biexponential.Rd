@@ -2,40 +2,31 @@
 % Please edit documentation in R/estimate_bout.R
 \name{biexponential}
 \alias{biexponential}
-\title{Biexponential model for the estimation of within and between bouts}
+\title{Biexponential Model}
 \usage{
 biexponential(irt)
 }
 \arguments{
-\item{irt}{numeric, the inter-response times}
+\item{irt}{A numeric vector representing inter-response times.}
 }
 \value{
-the simple biexponential returns numeric vector of the biexponential
-model parameters \eqn{L=1/\theta}, the bout length,
-\eqn{W = 1/w}, the within bout rate, and \eqn{B = 1/b} the bout initiation rate, where
-\eqn{\theta, w, b} are the proportion of responses that are bouts, the mean within bout IRT, and
-the mean between-bout IRT.
-The biexponential refractory model returns a data frame with the parameters \eqn{a, b, q} where
-\eqn{a, b} are the mean within and between bout IRTs and \eqn{q} is the proportion of responses
-that are bouts, and \eqn{\delta} is the refractory period.
+A data frame with estimated parameters \eqn{w} (proportion of responses in bouts), \eqn{l0} (within-bout mean IRT),
+and \eqn{l1} (between-bout mean IRT).
 }
 \description{
-Biexponential model for the estimation of within and between bouts
-}
-\details{
-Implements the finite mixtures of two exponentials
-\eqn{p(IRT < \tau) = \theta w e^{-w IRT} + (1-\theta)b e^{-b IRT}}
+Implements a simpler biexponential model without the refractory period parameter, \eqn{\delta}.
 
-and the biexponential refractory model, or berm, which is a special case of the biexponential model
+The simpler model is defined as:
+\deqn{p(IRT = \tau) = p w e^{-w \tau} + (1 - p) b e^{-b \tau}}
+where \eqn{w} and \eqn{b} represent the within- and between-bout response rates, and \eqn{p} is the proportion of responses in bouts.
 }
 \examples{
-l1 <- 1/0.5
-l2 <- 1/0.1
-theta <- 0.5
-irt <- c(
- rexp(100, l1),
-rexp(100, l2)
-)
+set.seed(43)
+l1 <- 1 / 0.5
+l2 <- 1 / 0.1
+p <- 0.4
+n <- 200
+irt <- c(rexp(round(n * p), l1), rexp(round(n * (1 - p)), l2))
 biexponential(irt)
-berm(irt, 0.1)
+
 }

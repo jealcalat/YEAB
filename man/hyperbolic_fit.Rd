@@ -26,10 +26,10 @@ Hyperbolic fit with nls
 }
 \examples{
 # Simulated data with k = 0.5
-data("hyp_data_list")
-delay <- hyp_data_list$delay
-sv <- hyp_data_list$sv
-real_k <- hyp_data_list$real_k
+data("hyp_data")
+delay <- hyp_data$delay
+sv <- hyp_data$sv
+real_k <- hyp_data$real_k
 model_hyp <- hyperbolic_fit(sv, delay, initial_guess = 0.01)
 summary(model_hyp)
 k_est <- coef(model_hyp)
@@ -40,7 +40,7 @@ delay_real <- seq(0, max(delay), len = 100)
 real_sv <- eq_hyp(real_k, delay_real)
 # simulate estimated fitting line
 est_sv <- eq_hyp(k_est, delay_real)
-par(las = 1)
+
 plot(
   delay, sv,
   pch = 21,
@@ -64,8 +64,8 @@ lines(
   lwd = 2
 )
 legend(
-  'topright',
-  legend = c('data', 'real', 'fit'),
+  "topright",
+  legend = c("data", "real", "fit"),
   text.col = "white",
   pch = c(21, NA, NA),
   col = c(1, NA, NA),
@@ -73,16 +73,16 @@ legend(
   bty = "n"
 )
 legend(
-  'topright',
-  legend = c('data', 'real', 'fit'),
+  "topright",
+  legend = c("data", "real", "fit"),
   pch = c(NA, NA, NA),
   lty = c(NA, 1, 1),
-  col = c(NA, 'blue', 'red'),
+  col = c(NA, "blue", "red"),
   bty = "n"
 )
 
 # Now an example with real data
-data('DD_data')
+data("DD_data")
 # first, fit a linear model
 lineal_m <- lm(norm_sv ~ Delay, data = DD_data)
 # hyperbolic model
@@ -108,40 +108,40 @@ plot(
 lines(
   delay_vec,
   eq_hyp(k = k_hyp, delay_vec),
-  col = 'green4',
+  col = "green4",
   lwd = 2
 )
 lines(
   delay_vec,
   exp(-k_exp * delay_vec),
-  col = 'steelblue',
+  col = "steelblue",
   lwd = 2
 )
 abline(lineal_m, lty = 2, lwd = 2)
 
 legend(
- 'topright',
- legend = c('data', 'exp fit', 'hyp fit', 'linear fit'),
- text.col = "white",
- pch = c(21, NA, NA, NA),
- col = c(1, NA, NA, NA),
- pt.bg = c('orange', NA, NA, NA),
- bty = "n"
+  "topright",
+  legend = c("data", "exp fit", "hyp fit", "linear fit"),
+  text.col = "white",
+  pch = c(21, NA, NA, NA),
+  col = c(1, NA, NA, NA),
+  pt.bg = c("orange", NA, NA, NA),
+  bty = "n"
 )
 legend(
- 'topright',
- legend = c('data', 'exp fit', 'hyp fit', 'linear fit'),
- pch = c(NA, NA, NA, NA),
- lty = c(NA, 1, 1, 2),
- col = c(NA, 'steelblue', 'green4', 1),
- bty = "n"
+  "topright",
+  legend = c("data", "exp fit", "hyp fit", "linear fit"),
+  pch = c(NA, NA, NA, NA),
+  lty = c(NA, 1, 1, 2),
+  col = c(NA, "steelblue", "green4", 1),
+  bty = "n"
 )
 # plot AIC values
 aic_val <- AIC(lineal_m, hyp_m, exp_m) |> round(2)
-leg <- sprintf(paste(rownames(aic_val), "= \%s", sep = ' '), aic_val$AIC)
+leg <- sprintf(paste(rownames(aic_val), "= \%s", sep = " "), aic_val$AIC)
 legend(
-  'bottomleft',
-  title = 'AIC\n(the smaller, the better)',
+  "bottomleft",
+  title = "AIC\n(the smaller, the better)",
   legend = leg,
   bty = "n"
 )

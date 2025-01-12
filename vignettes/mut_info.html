@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>mut_info()</title>
+
+<script src="mut_info_files/header-attrs-2.29/header-attrs.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="/opt/homebrew/lib/R/4.4/site-library/rmarkdown/rmarkdown/templates/html_vignette/resources/vignette.css" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">mut_info()</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Behavioral analysis is a field of study in which the necessity often
+arise to understand the way in which different variables relate to each
+other and the meaning behind such relationships. One useful and powerful
+tool used to address this questions is the concept of mutual
+information, rooted in information theory.</p>
+<p>Information theory provides an ideal framework for quantifying the
+amount of information related between variables. In this scenario,
+mutual information allows to measure the degree of dependency between
+two variables by assessing how much knowing one variable reduces
+uncertainty about the other. This metric is particularly valuable in the
+realm of behavioral analysis as it allows researchers to discern
+connections and dependencies between experimental variables and the
+behaviors observed.</p>
+<p>Here we introduce two functions to calculate Mutual Information using
+a wide variety of methods. The general definition for calculating Mutual
+Information is as follows:</p>
+<p><span class="math display">\[I(X;Y) = \sum_{i=1}^{n}
+\sum_{j=1}^{m}P(x_i,y_j)log \frac{P(x_i,y_j)}{P(x_i)P(y_j)} \]</span>
+Where <span class="math inline">\(X\)</span> and <span
+class="math inline">\(Y\)</span> are discrete random variables and <span
+class="math inline">\(P(x_i)\)</span> and <span
+class="math inline">\(P(y_j)\)</span> are the probabilities of every
+possible state of <span class="math inline">\(X\)</span> and <span
+class="math inline">\(Y\)</span> respectively.</p>
+<p>The <code>mut_info_discrete()</code> function calculates Mutual
+Information of continuous variables using discretization through the
+<code>discretize()</code> function from the <code>infotheo</code>
+package. The function takes the following parameters:</p>
+<ul>
+<li><code>x</code> a numeric vector representing random variable <span
+class="math inline">\(X\)</span>.</li>
+<li><code>y</code> a numeric vector of equal or different size as
+<code>x</code> representing random variable <span
+class="math inline">\(Y\)</span>.</li>
+<li><code>method</code> the method to calculate Mutual Information. The
+default is <code>emp</code> for empirical estimation. Other options
+are<code>shrink</code> for the shrinkage estimator, <code>mm</code> for
+the Miller-Madow estimator, and <code>sg</code> for the
+Schurmann-Grassberger estimator.</li>
+</ul>
+<p>With <code>mut_info_knn()</code> we can calculate Mutual Information
+of continuous variables using the K-Nearest Neighbors method. The
+function takes the following parameters:</p>
+<ul>
+<li><code>x</code> a numeric vector representing random variable <span
+class="math inline">\(X\)</span>.</li>
+<li><code>y</code> a numeric vector of equal or different size as
+<code>x</code> representing random variable $Y`.</li>
+<li><code>method</code> one of <code>KSG1</code> or <code>KSG2</code>
+for the KSG estimator. The default is <code>KSG1</code>.</li>
+<li><code>k</code> the number of nearest neighbors to consider. The
+default is 5.</li>
+</ul>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">main =</span> <span class="st">&quot;Independent Variables&quot;</span>)</span></code></pre></div>
+<p><img
+src="mut_info_files/figure-html/unnamed-chunk-2-1.png" /><!-- --></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># close to 0 if they are independent</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>mi_discrete_independent <span class="ot">&lt;-</span> <span class="fu">mut_info_discrete</span>(x, y)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">&quot;rmi&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="co"># Code that uses rmi::knn_mi</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  mi_knn_independent <span class="ot">&lt;-</span> <span class="fu">mut_info_knn</span>(x, y, <span class="at">method =</span> <span class="st">&quot;KSG1&quot;</span>, <span class="at">k =</span> <span class="dv">5</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Mutual Information (KNN) for independent variables:&quot;</span>, mi_knn_independent, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;The &#39;rmi&#39; package is not available. Skipping the example.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## Mutual Information (KNN) for independent variables: 0.01440586</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mutual Information (Discrete) for independent variables:&quot;</span>, mi_discrete_independent, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Mutual Information (Discrete) for independent variables: 0.0351483</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(x), <span class="dv">0</span>, <span class="dv">12</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">main =</span> <span class="st">&quot;Dependent Variables&quot;</span>)</span></code></pre></div>
+<p><img
+src="mut_info_files/figure-html/unnamed-chunk-2-2.png" /><!-- --></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># far from 0 if they are not independent</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>mi_discrete_dependent <span class="ot">&lt;-</span> <span class="fu">mut_info_discrete</span>(x, y)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>mi_knn_dependent <span class="ot">&lt;-</span> <span class="fu">mut_info_knn</span>(x, y, <span class="at">method =</span> <span class="st">&quot;KSG2&quot;</span>, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">&quot;rmi&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="co"># Code that uses rmi::knn_mi</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Mutual Information (KNN) for dependent variables:&quot;</span>, mi_knn_dependent, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;The &#39;rmi&#39; package is not available. Skipping the example.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## Mutual Information (KNN) for dependent variables: 2.073279</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mutual Information (Discrete) for dependent variables:&quot;</span>, mi_discrete_dependent, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Mutual Information (Discrete) for dependent variables: 1.553392</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># simulate a sine function with noise</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.1</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">5</span> <span class="sc">*</span> <span class="fu">sin</span>(x <span class="sc">*</span> pi)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>y_with_noise <span class="ot">&lt;-</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(x), <span class="dv">0</span>, <span class="fl">0.5</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="fu">plot</span>(x, y_with_noise, <span class="at">main =</span> <span class="st">&quot;Sine Function with Noise&quot;</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="fu">lines</span>(x, y, <span class="at">col =</span> <span class="dv">2</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co"># add a regression line</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x))</span></code></pre></div>
+<p><img
+src="mut_info_files/figure-html/unnamed-chunk-2-3.png" /><!-- --></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># compute correlation coefficient; for nonlinear functions is close to 0</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>correlation <span class="ot">&lt;-</span> <span class="fu">cor</span>(x, y_with_noise)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Correlation coefficient for sine function with noise:&quot;</span>, correlation, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Correlation coefficient for sine function with noise: -0.001691181</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># mutual information can detect nonlinear dependencies</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>mi_discrete_sine <span class="ot">&lt;-</span> <span class="fu">mut_info_discrete</span>(x, y_with_noise)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>mi_knn_sine <span class="ot">&lt;-</span> <span class="fu">mut_info_knn</span>(x, y_with_noise, <span class="at">method =</span> <span class="st">&quot;KSG2&quot;</span>, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">&quot;rmi&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="co"># Code that uses rmi::knn_mi</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Mutual Information (KNN) for sine function with noise:&quot;</span>, mi_knn_sine, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;The &#39;rmi&#39; package is not available. Skipping the example.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## Mutual Information (KNN) for sine function with noise: 0.3927523</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Mutual Information (Discrete) for sine function with noise:&quot;</span>, mi_discrete_sine, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## Mutual Information (Discrete) for sine function with noise: 0.003534427</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

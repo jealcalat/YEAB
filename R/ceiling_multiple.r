@@ -12,6 +12,9 @@
 #' ceiling_multiple(21, 11) # returns 22
 ceiling_multiple <- function(x, multiple) {
   m <- x %% multiple
+  if (m == 0) {
+    return(x) # Return x directly if it's already an exact multiple
+  }
   residual <- multiple - m
   x + residual
 }

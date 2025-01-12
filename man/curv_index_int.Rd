@@ -4,14 +4,12 @@
 \alias{curv_index_int}
 \title{Curvature index by numerical integration}
 \usage{
-curv_index_int(cr, t)
+curv_index_int(cr, time_in)
 }
 \arguments{
 \item{cr}{numeric, cumulative response}
 
-\item{t}{numeric, time (or the x axis in a cumulative response plot)}
-
-\item{h}{numeric, the height of a rect angule which corresponds to the max cum rate}
+\item{time_in}{numeric, time (or the x axis in a cumulative response plot)}
 }
 \value{
 a numeric value that is the proportion of a rect triangle area minus
@@ -24,7 +22,7 @@ Curvature index by numerical integration
 data("r_times")
 r_times <- r_times[r_times < 60]
 cr <- seq_along(r_times)
-par(las = 1)
+
 plot(r_times, cr, type = "s")
 curv_index_int(cr, r_times)
 segments(

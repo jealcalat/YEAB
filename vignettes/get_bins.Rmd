@@ -1,0 +1,59 @@
+---
+title: "get_bins()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{get_bins()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = FALSE)
+```
+
+```{r echo = FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+The use of digital systems for behavior measurement often provides detailed insights into various dimensions of observed phenomena. However, the resolution of these measurements may vary depending on the hardware and software employed. When analyzing data from time-related experiments, it is frequently essential to organize data points into "bins" of a specified time unit. This allows for flexibility in adjusting the resolution at which the data will be analyzed.
+
+In the case of the proprietary data output format from the MED-PC software suite, time is often recorded with a `time.event` structure. Depending on how the software is set up, time will often be recorded with a tenth of a second resolution, having data points like `436.12, 534,3 756.1` and so on. Consequently, it becomes necessary to group the time information into more manageable data sets.
+
+Here we introduce the `get_bins()` function which allows to "binarize" a numeric vector with a given resolution. 
+
+The `get_bins()` function takes the following parameters:
+
+- `x numeric` the numeric data points vector to be binarized.
+- `x_min` the minimum value for the bin distribution.
+- `x_max` the maximum value of the vector "x" to binarize.
+- `res` the numeric value for the resolution (e.g., 1s).
+
+*It is important to have in mind the time resolution you're working with; for example, if your data is on a tenth of a second resolution and you want to binarize with a 1s resolution,* `res` *should be 10.*
+
+## Example
+
+First let's create a random set of numeric values from 0 to 600 to simulate a 1 minute trial with a tenth of seconds resolution.
+
+```{r}
+set.seed(420)
+sim_time <- runif(35, 0, 600) # Generates 35 random data points between 0 and 600.
+sim_time <- round(sim_time) # Rounds the resulting numbers to work with integers.
+sim_time <- sort(sim_time) # Arrange the data in ascending order.
+
+sim_time
+```
+
+Now we apply the `get_bins()` to binarize the distribution with a 2 seconds resolution.
+
+```{r}
+binarized_data <- get_bins(sim_time, 0, 600, 20) # Note how the resolution value is 20
+
+binarized_data
+```
+
+Now the original time data is represented as their respective 2s time bin.

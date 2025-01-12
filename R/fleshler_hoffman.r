@@ -1,6 +1,6 @@
 #' @title Fleshler & Hoffman (1962) progression
 #' @description This function calculates the values of intervals approximately for
-#' a exponential distribution, but avoiding extremely large values.
+#' an exponential distribution, but avoiding extremely large values.
 #' 
 #' @param N The total number of intervals.
 #' @param VI The value of the Variable Interval
@@ -28,7 +28,7 @@
 #' intervals <- round(fleshler_hoffman(N,iv), 3)
 #' # Plot the intervals and the exponential distribution corresponding to the
 #' # same mean (IV)
-#' hist(intervals, freq = F)
+#' hist(intervals, freq = FALSE)
 #' curve(dexp(x, rate = 1/iv), add = TRUE, col = 'red')
 #' legend('topright', legend = c('F&H', 'Exponential'), lty = 1, col = c('black', 'red'))
 #' @references
@@ -36,6 +36,12 @@
 #' Journal of the Experimental Analysis of Behavior, 5(4), 529-530.
 #'
 fleshler_hoffman <- function(N, VI) {
+  if (!is.numeric(N) || N <= 0 || N != as.integer(N)) {
+    stop("N must be a positive integer")
+  }
+  if (!is.numeric(VI) || VI <= 0) {
+    stop("VI must be a positive number")
+  }
   n <- 1:N
   intervals <- rep(0, N)
 
@@ -66,7 +72,7 @@ fleshler_hoffman <- function(N, VI) {
 # finding the limit of f(n) as n -> N. This is achieved
 # using L'Hopital's rule. The derivation is somewhat obtuse
 # but it yields f(n = N) = -log(1 - p)^(-1) * (1 + log(N)),
-# or equivalently, f(n = N) = E[intervals]) * (1 + log(N)),
+# or equivalently, f(n = N) = (E[intervals]) * (1 + log(N)),
 # where E[intervals]) is the value of the IV.
 
 f_and_h <- function(N, n, iv_val) {

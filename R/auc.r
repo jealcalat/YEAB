@@ -14,6 +14,14 @@
 
 # Function to calculate AUC using trapezoid method
 trapezoid_auc <- function(x, y) {
+  if (length(x) == 0 || length(y) == 0) {
+    stop("Input vectors 'x' and 'y' must have at least two elements.")
+  }
+  
+  if (length(unique(y)) == 1) {
+    return(0)
+  }
+  
   dx <- diff(x)
   y_avg <- (y[-1] + y[-length(y)]) / 2
   auc <- sum(dx * y_avg)

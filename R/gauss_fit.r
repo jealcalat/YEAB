@@ -1,7 +1,7 @@
 #' Gaussian + ramp fit with LM algorithm
 #'
-#' @param respuestas numeric, vector of response or response rate
-#' @param t numeric, time bins
+#' @param responses numeric, vector of response or response rate
+#' @param time_vec numeric, time bins
 #' @param par a list of parameters for the gaussian + linear;
 #'   see Buhusi, C. V., Perera, D., & Meck, W. H. (2005) for an explanation
 #' @param max.iter numeric, max number of iterations
@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' # Function to create synthetic data
-#' g_plus_lin <- function(par, tiempo) {
-#'   par$a * exp(-0.5 * ((tiempo - par$t0) / par$b)**2) + par$c * (tiempo - par$t0) + par$d
+#' g_plus_lin <- function(par, time) {
+#'   par$a * exp(-0.5 * ((time - par$t0) / par$b)**2) + par$c * (time - par$t0) + par$d
 #' }
 #' # real params
 #' pars <- list(a = 20, t0 = 20, b = 10, c = 0.2, d = 1)
@@ -27,7 +27,7 @@
 #' # r(t) sampled with noise
 #' y_data <- g_plus_lin(par = pars, ti_data) + rnorm(length(ti_data), 0, sd = 2)
 #' # param estimation
-#' par_est <- gaussian_fit(respuestas = y_data, t = ti_data, par = pars, max.iter = 10500)
+#' par_est <- gaussian_fit(responses = y_data, t = ti_data, par = pars, max.iter = 10500)
 #' par_est
 #' # fitted curve
 #' y_hat <- g_plus_lin(par_est |> as.list(), ti)
@@ -64,8 +64,8 @@
 #'   pt.cex = 0.9,
 #'   cex = 0.6
 #' )
-gaussian_fit <- function(respuestas,
-                         tiempo,
+gaussian_fit <- function(responses,
+                         time_vec,
                          par = list(
                            a = 0.1,
                            d = 0.1,
@@ -74,21 +74,21 @@ gaussian_fit <- function(respuestas,
                            c = 1
                          ),
                          max.iter = 500) {
-  g_plus_lin <- function(par, tiempo) {
-    par$a * exp(-0.5 * ((tiempo - par$t0) / par$b)**2) + par$c * (tiempo - par$t0) + par$d
+  g_plus_lin <- function(par, time_vec) {
+    par$a * exp(-0.5 * ((time_vec - par$t0) / par$b)**2) + par$c * (time_vec - par$t0) + par$d
   }
 
   # objective function observed-predicted
-  res_fun <- function(respuestas, par, tiempo) {
-    respuestas - g_plus_lin(par, tiempo)
+  res_fun <- function(responses, par, time_vec) {
+    responses - g_plus_lin(par, time_vec)
   }
 
   # Ajuste usando Levenberg–Marquardt
   nlm_F <- nls.lm(
     par = par,
     fn = res_fun,
-    respuestas = respuestas,
-    tiempo = tiempo,
+    responses = responses,
+    time_vec = time_vec,
     control = nls.lm.control(maxiter = max.iter)
   )
   coef(nlm_F)

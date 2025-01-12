@@ -18,5 +18,15 @@ A sample with distribution close to x
 Sample from a density estimate
 }
 \examples{
-TODO
+
+x <- rnorm(1000)
+y <- sample_from_density(x, 1000)
+
+hist(x,
+  breaks = 30,
+  freq = FALSE,
+  col = "grey",
+  main = "Original data"
+)
+
 }

@@ -8,7 +8,7 @@
 #   Author: Emmanuel Alcala
 
 # Inputs:
-#   dframe: a dataframe of m rows x 2 columns, where columns corresponds
+#   data_df: a dataframe of m rows x 2 columns, where columns corresponds
 #           to time and events IDs, in that order.
 #   ev0: event ID start (where the event we want to extract begins)
 #   ev1: event ID stop. This event won't be returned, so keep in mind that
@@ -22,12 +22,12 @@
 #   dftmp: data frame with j x 4 columns of time, events, cum_id and evname
 
 #' @title Event extractor
-#' 
+#'
 #' @description  A function to slice data based on start and stop events. This function
 #'   should be used after read_med.r, which outputs a csv of 2 columns: time and
 #'   events (in that order). Its use is exemplified at the end of the function.
 #'
-#' @param dframe data frame with events ev0 and ev1 (e.g., start of trial and reinforcement delivery)
+#' @param data_df data frame with events ev0 and ev1 (e.g., start of trial and reinforcement delivery)
 #' @param ev0 event ID start (where the event we want to extract begins)
 #' @param ev1 event ID stop. This event won't be returned, so keep in mind that
 #' @param evname a string for the event name, for identification purposes. For example
@@ -38,24 +38,45 @@
 #' @export
 #' @details Works by trials
 #' @examples
-#' If we have a component starting with 5 and ending with 2 and a dataframe "df"
-#' # we can extract the data of component "comp52" following the next steps:
-#' # 0 - From the output of read_med.R function, load the csv file and assign to df
+#' # If we have a component starting with 5 and ending with 3, 
+#' # say a Fixed Interval 15s and a dataframe of events from the read_med() function,
+#' # we can extract the data of component "FI15" following the next steps:
+#' # 0 - From the output of read_med.R function, load the extracted data and assign it to df
 #' # 1 - source the event_extractor.R function
 #' # 2 - use it with the appropiate arguments as follows
-#' component52df <- event_extractor(
-#'   dframe = df, # enter the data as the 1st arg
-#'   ev0 = 5, ev1 = 2, # enter start and stop
-#'   evname = "comp52"
-#' ) # enter the event's name
-#'
-event_extractor <- function(dframe, ev0, ev1, evname) {
+#' 
+#' # read raw data from MED
+#' data("fi60_raw_from_med")
+#' # see first 10 lines
+#' head(fi60_raw_from_med, 10)
+#' # create a temporary file to avoid non-staged installation warning
+#' temp_file <- tempfile(fileext = ".txt")
+#' # write the data to the temporary file
+#' writeLines(fi60_raw_from_med, temp_file)
+#' # Process the file using read_med
+#' example_processed <- read_med(
+#'   fname = temp_file, save_file = FALSE,
+#'   col_r = "C:", out = TRUE,
+#'   col_names = c("time", "event"), num_col = 6, time_dot_event = TRUE
+#' )
+#' 
+#' # Extract specific events (FI15 in this case)
+#' extracted_FI15 <- event_extractor(
+#'   data_df = example_processed,
+#'   ev0 = 5, ev1 = 3,
+#'   evname = "FI15"
+#' )
+#' 
+#' # Display the first rows of the extracted data
+#' head(extracted_FI15, 30)
+#' 
+event_extractor <- function(data_df, ev0, ev1, evname) {
   evs <- c(ev0, ev1)
 
-  # Boolean variable where there is either a ev0 or ev1
-  mark.v <- ifelse(dframe[, 2] %in% evs, 1, 0)
+  # Boolean variable where there is either an ev0 or ev1
+  mark.v <- ifelse(data_df[, 2] %in% evs, 1, 0)
   # Make a cumulative sum of events
-  dframe$cum_id <- cumsum(mark.v)
+  data_df$cum_id <- cumsum(mark.v)
   # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
   ## Slice the event based on cumsum of start and end. For an alternative, see
   ## 'alternative slicing' at the end of the script.
@@ -68,40 +89,15 @@ event_extractor <- function(dframe, ev0, ev1, evname) {
 
   # The operation x %% 2 == 1 evaluates if x/2 has a remainder of 1, or if is
   # an exact multiple of 2 (remainder of 0). This will make a boolean variable
-  # that we'll use to slice data in the form dframe[TRUE, ]
+  # that we'll use to slice data in the form data_df[TRUE, ]
 
   # 1
-  event_remover <- dframe$cum_id %% 2 == 1
+  event_remover <- data_df$cum_id %% 2 == 1
   # 2
-  dftmp <- dframe[event_remover, ]
+  dftmp <- data_df[event_remover, ]
 
-  dftmp[, 4] <- evname
+  # dftmp[, 4] <- evname
+  dftmp$evname <- evname
   # return dftmp
   dftmp
 }
-
-# How to use ----
-# If we have a component starting with 5 and ending with 2 and a dataframe "df"
-# we can extract the data of component "comp52" following the next steps:
-
-# 0 - From the output of read_med.R function, load the csv file and assign to df
-# 1 - source the event_extractor.R function
-# 2 - use it with the appropiate arguments as follows
-# component52df <- event_extractor(dframe = df, # enter the data as the 1st arg
-#                                  ev0 = 5, ev1 = 2, # enter start and stop
-#                                  evname = "comp52") # enter the event's name
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-# alternative slicing ----
-# The code below can replace # 1 and # 2 above, but I don't see any reason beyond
-# making the code more readable.
-
-# slicingvec <- which(dframe$evento %in% evs)
-# slicingvec <- matrix(slicingvec, ncol = 2, byrow = T)
-#
-# dftmp <- apply(
-#   slicingvec, 1, function(x){
-#   dframe[x[1]:(x[2] - 1), ]
-# })
-#
-# dftmp <- do.call(rbind, dftmp)

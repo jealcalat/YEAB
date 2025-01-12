@@ -16,7 +16,7 @@ A vector of calculated values for the intervals.
 }
 \description{
 This function calculates the values of intervals approximately for
-a exponential distribution, but avoiding extremely large values.
+an exponential distribution, but avoiding extremely large values.
 }
 \details{
 This function calculates the values of intervals approximately for
@@ -39,7 +39,7 @@ iv <- 90
 intervals <- round(fleshler_hoffman(N,iv), 3)
 # Plot the intervals and the exponential distribution corresponding to the
 # same mean (IV)
-hist(intervals, freq = F)
+hist(intervals, freq = FALSE)
 curve(dexp(x, rate = 1/iv), add = TRUE, col = 'red')
 legend('topright', legend = c('F&H', 'Exponential'), lty = 1, col = c('black', 'red'))
 }

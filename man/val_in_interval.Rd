@@ -7,8 +7,31 @@
 val_in_interval(df, lowLim, upLim, true.val)
 }
 \arguments{
-\item{true.val}{}
+\item{df}{A data frame containing the intervals to be evaluated. Each row should
+correspond to an interval with lower and upper limits.}
+
+\item{lowLim}{the column index or name in the data frame \code{df}
+corresponding to the lower limit of the interval.}
+
+\item{upLim}{the column index or name in the data frame \code{df}
+corresponding to the upper limit of the interval.}
+
+\item{true.val}{the true value to be checked if it falls within
+the interval defined by \code{lowLim} and \code{upLim}.}
+}
+\value{
+A numeric vector of n elements with an integer value
+for each interval: 0 if the value is below the interval,
+1 if it is inside the interval (with a rightmost open limit),
+and 2 if it is above the interval.
 }
 \description{
 True value in interval
+}
+\examples{
+# Example data frame with intervals
+df <- data.frame(lower = c(1, 5, 10), upper = c(3, 8, 15))
+
+# Check if the value 6 is within any of the intervals
+val_in_interval(df, "lower", "upper", 6)
 }

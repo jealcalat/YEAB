@@ -2,8 +2,7 @@
 % Please edit documentation in R/bp_fi.r
 \name{exhaustive_sbp}
 \alias{exhaustive_sbp}
-\title{Single breakpoint algorithm, the exhaustive version as the one used in
-Guilhardi & Church 2004}
+\title{Single breakpoint algorithm, the exhaustive version as the one used in Guilhardi & Church 2004}
 \usage{
 exhaustive_sbp(r_times, trial_duration)
 }
@@ -11,10 +10,6 @@ exhaustive_sbp(r_times, trial_duration)
 \item{r_times}{numeric, the times at which a response was emitted in a trial}
 
 \item{trial_duration}{numeric, the duration of the IF interval}
-
-\item{optim_method}{character, the optimization method to use}
-
-\item{params}{numeric, initial values for the parameter \code{bp}}
 }
 \value{
 A data frame of 3 columns
@@ -25,8 +20,7 @@ A data frame of 3 columns
 \code{d2} a numeric value of the duration of the second state
 }
 \description{
-Single breakpoint algorithm, the exhaustive version as the one used in
-Guilhardi & Church 2004
+Single breakpoint algorithm, the exhaustive version as the one used in Guilhardi & Church 2004
 }
 \details{
 This algorithm performs an extensive search of every combination (t1, t2)
@@ -36,7 +30,7 @@ where t1 starts in the first response through (length(r_times) - 1)
 data("r_times")
 r_times <- r_times[r_times < 60]
 single_bp <- exhaustive_sbp(r_times, 60)
-par(las = 1)
+
 plot(r_times, seq_along(r_times),
   xlim = c(0, max(r_times)),
   main = "Cummulative Record",

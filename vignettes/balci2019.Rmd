@@ -1,0 +1,72 @@
+---
+title: "balci2019()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{balci2019()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r echo = FALSE}
+library(YEAB)
+```
+
+Interval timing tasks play a crucial role in understanding temporal processing mechanisms of a wide variety of organisms. Peak procedure trials are a common method used in experimental behavior analysis to study timing behavior. The analysis of single-trials in the peak procedure was introduced by @church1994 to test some predictions of the Scalar Expectancy Theory (SET) about the variability of decision thresholds in interval timing.
+
+@gur2019 introduced a comprehensive approach to dissecting the dynamics of response rates in such tasks. The key parameters of single-trial analysis include:
+
+- `start` time, which denotes response onset post-stimulus presentation and correspond to the point at which the data first exceeds 70% of the maximum response rate. 
+- `stop` time, which marks task disengagement, corresponding to the time at which response rate first fell below 70%. 
+- `width` or `spread`, quantifies duration between start and stop, indicating temporal response dispersion.
+
+>*Note that these values are calculated using the moving average of the normalized response rates.*
+
+The `balci2019()` function implements an individual peak procedure trial analyisis using moving average. Given a pair of time bins and normalized response rate vectors, the function returns a two item list with a numeric vector including `start` and `stop` times, `spread` and `argmax` values, the latter indicating the bin at which response rate is at its maximum, and a numeric vector for the `mov_av` (moving average) values for each time bin.
+
+The `balci2019()` function takes the following parameters:
+
+- `rate_norm` a numeric vector with the normalized response rate data points.
+- `bins` a numeric vector with the corresponding time bins for each response rate data point.
+
+## Example
+
+First let's load a data sample of response times:
+
+```{r}
+data("r_times")
+
+head(r_times, n = 30)
+```
+
+Now we will use the `get_bins()` function included in this package (see `get_bins.Rmd` for further details) to convert the raw data points into time bins and then create a frequency table with the `f_table` function, also included in this package (see `f_table.Rmd` for further details):
+
+```{r}
+bins <- get_bins(r_times, 0, 180, 2) # Binarize r_times to create a response rate distribution of 2 sec. bins.
+
+bin_res <- 6
+response_rate <- f_table(bins, 0, 180, bin_res)
+res_rate_norm <- response_rate$prop / max(response_rate$prop) # Normalize the response rate values.
+bins <- response_rate$bins # Get the time bins vector.
+```
+
+Finally let's use the `balci2019` function to extract the `start`,`stop`, `width` and `argmax` values, as well as the moving average and plot them respectively.
+```{r}
+balci_ind <- balci2019(res_rate_norm, bins)
+
+balci_ind$params
+```
+
+```{r echo = FALSE}
+plot(bins, res_rate_norm, xlab = "6 sec. Bins", ylab = "Normalized Response Rate")
+lines(bins, balci_ind$mov_av, col = "blue", lwd = 2)
+abline(v = balci_ind$params[c(1, 2, 4)], lwd = c(1, 1, 2), col = c(1, 1, "red4"))
+```
+
+## References
+

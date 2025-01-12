@@ -7,18 +7,23 @@
 exp_fit(value, delay, initial_guess, max_iter = 1e+05, scale_offset = 0)
 }
 \arguments{
-\item{value}{A numeric vector of the subjective values (indifference points)}
+\item{value}{A numeric vector of the subjective values (indifference points).}
 
-\item{delay}{A numeric vector of the delays used}
+\item{delay}{A numeric vector of the delays used in the experiment.}
 
-\item{initial_guess}{A numeric value providing an initial start for k}
+\item{initial_guess}{A numeric value providing an initial estimate for the parameter \code{k}.}
+
+\item{max_iter}{An integer specifying the maximum number of iterations for the nls fitting algorithm.
+Default is 1e5.}
+
+\item{scale_offset}{A numeric value for the scaling offset used in nls fitting control. Default is 0.}
 }
 \value{
-An object of class nls
+An object of class \code{nls} containing the fitted model.
 }
 \description{
-Exponential fit with nls
+This function performs an exponential fit using non-linear least squares (nls).
 }
 \examples{
-See the examples of ?hyp_fit
+# See the examples of hyp_fit
 }

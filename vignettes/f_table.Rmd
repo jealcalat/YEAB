@@ -1,0 +1,69 @@
+---
+title: "f_table()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{f_table()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = FALSE)
+```
+
+```{r echo = FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+After getting a vector of response events sorted by bins from a raw time vector, it is often necessary to create frequency tables in order to analyze the response distribution for a given experimental trial or session. Here we introduce a function to do so. The function takes a vector of 'binarized' responses as input and outputs a data frame with 3 columns:
+
+- `bins` which is the bin index for every data point.
+- `freq` the frequency of each bin.
+- `prop` the frequency expressed as a proportion of the total responses.
+
+The `f_table()` takes the following parameters:
+
+- `x` the numeric vector of binned time data.
+- `min_x` the minimum value of the binned distribution.
+- `max_x` the maximum value of the binned distribution.
+- `bin_res` the bin resolution for 
+
+This function includes zero-frequency bins in the given interval.
+
+## Example 
+
+First let's load a data sample of response times:
+
+```{r}
+data("r_times")
+
+r_times
+```
+
+Now we will use the `get_bins()` function included in this package (see `get_bins.Rmd` for further details) to convert the raw data points into time bins and then create the frequency table with `f_table`:
+
+```{r}
+bin_res <- 10 # Lower values will create a higher resolution distribution and vice-versa.
+min_x <- 0 # We use 0 as a starting point in order to get a distribution for the complete duration of the trail.
+max_x <- 180 # In this specific example the total trail duration was 3 minutes.
+binarized_data <- get_bins(r_times, min_x, max_x, bin_res)
+data_ftable <- f_table(binarized_data, min_x, max_x, bin_res)
+
+data_ftable
+```
+
+Finally let's plot the data to visualize the resulting structure:
+
+```{r, echo = FALSE}
+plot(data_ftable$bins, data_ftable$prop,
+  xlab = "Time bins",
+  ylab = "Response proportion",
+  pch = 21,
+  bg = "black"
+)
+```

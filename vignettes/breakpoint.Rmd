@@ -1,0 +1,89 @@
+---
+title: "breakpoint()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{breakpoint()} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+Single-trial analysis for Fixed Interval (FI) trials often involve looking for optimal breakpoint of the response scallop, which  represents the point in time when the response rates begin to increase systematically in anticipation of the upcoming reinforcement.
+
+As described by @guilhardi2004, the breakpoint, is the time of the response scallop that maximizes the expression in the equation: $$t_1 = \max (d_1|r_1 - r| + d_2|r_2-r|)$$ 
+where $d_1$ is the duration prior to the transition, $d_2$ is the duration following the transition, $r_1$ is the response rate prior to the transition, $r_2$ is the rate following the transition, and $r$ is the overall response rate during the cycle.
+
+Thus, the time of transition ($t_1$) is the time of the response that maximizes the differences between the absolute differences in initial and final response rates from the mean rate, with each weighted by its duration.
+
+The `bp_opt()` function implements an optimized search of the breakpoint through the `optim()` built-in R function returning a data frame with the following columns:
+
+- `bp` the breakpoint.
+- `r1` the response rate before the breakpoint.
+- `r2` the response rate after the breakpoint.
+- `d1` the duration of the first state.
+- `d2` the duration of the second state.
+
+The function takes the following parameters:
+
+- `response_times` a numerical vector of raw response times.
+- `trial_duration` numeric value for the duration of the trial.
+
+Alternatively, we also implemented the exhaustive search method with the `exhaustive_sbp` which takes the same arguments and return the same data structure. Depending on the amount of data points, we suggest using the `bp_opt` method for larger data sets.
+
+## Example
+
+First let's load a data sample of response times:
+
+```{r}
+data("r_times")
+r_times <- r_times[r_times < 60] # This example is a Peak trial, so we keep only the responses up to the FI value of 60s.
+
+head(r_times, n = 30)
+```
+
+Now we'll use both methods to calculate the breakpoint for comparison purposes:
+
+```{r}
+bp_from_opt <- bp_opt(r_times, 60)
+
+print(bp_from_opt)
+
+bp_from_exhaus <- exhaustive_sbp(r_times, 60)
+
+print(bp_from_exhaus)
+```
+
+*Note: both methods get similar results, however, if working with big data sets we recommend using the optimized method.*
+
+Finally let's visualize the resulting breakpoint in the context of the trial:
+
+```{r echo= FALSE}
+plot(r_times, seq_along(r_times),
+  xlim = c(min(r_times), max(r_times)),
+  xlab = "Time (s)",
+  ylab = "Cummulative Response",
+  col = 2, type = "l", lwd = 2,
+)
+abline(v = bp_from_opt$bp, lty = 3, lwd = 2)
+legend(
+  "topleft",
+  legend = c("Breakpoint", "Response"),
+  lty = c(3, 1), lwd = 2,
+  col = c("black", "red"),
+  cex = 1, bty = "n"
+)
+```
+
+## References

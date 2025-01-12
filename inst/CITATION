@@ -1,0 +1,19 @@
+# inst/CITATION
+citHeader("To cite the YEAB package in publications, please use:")
+
+bibentry(
+  title        = "YEAB: YEAB Ease the Analysis of Behavior",
+  author       = c(
+    person("Emmanuel", "Alcalá"),
+    person("Pablo", "Saavedra"),
+    person("Frida", "García-Rangel"),
+    person("Rodrigo", "Sosa"),
+    person("Jonathan", "Buriticá")
+  ),
+  year         = "2023",
+  note         = "R package version 1.0.4",
+  url          = "https://doi.org/10.31234/osf.io/8aq2j",
+  bibtype      = "Manual"
+)
+
+citFooter("Please use the canonical form https://doi.org/10.31234/osf.io/8aq2j to link to this page.")

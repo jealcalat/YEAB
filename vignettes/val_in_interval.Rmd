@@ -1,0 +1,47 @@
+---
+title: "val_in_interval()"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 5
+    fig_height: 4
+    self_contained: false
+vignette: |
+  %\VignetteIndexEntry{read_med() vignette} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  \usepackage[utf8]{inputenc}
+---
+
+```{r echo = FALSE, warning=FALSE}
+library(YEAB)
+```
+
+## Introduction
+
+Here we implement a function to evaluate if a given value falls within a specific interval. The $n$ intervals should be input in a data frame structure and the value as a numeric variable. The function returns a numeric vector of $n$ elements with an integer value for each interval of either $0$ if the value is below the interval, $1$ if it is inside it (with a rightmost open limit) and $2$ if it is above the interval. 
+
+The `val_in_interval()` function takes the following parameters:
+
+- `df` A data frame containing the intervals to be evaluated.
+- `lowLim` the column index or name in the data frame `df` corresponding to the lower limit of the interval.
+- `upLim` the column index or name in the data frame `df` corresponding to the upper limit of the interval.
+- `true.val` the true value to be checked if it falls within the interval defined by `lowLim` and `upLim`.
+
+## Example
+
+First let's define a data frame with the intervals 1-4, 5-9, 10-15 and 17-20:
+```{r}
+intervals <- data.frame(lowLim = c(1, 5, 10, 17), upLim = c(4, 9, 15, 20)) # Creates a data frame with three intervals: 1 - 4, 5 - 9, 10 - 15 and 17 - 20.
+
+intervals
+```
+
+Lets say we want to find in which interval the value $11$ falls in:
+```{r}
+true.val <- 11
+
+index <- val_in_interval(intervals, "lowLim", "upLim", true.val)
+
+index
+```
+
+Here we can see that the value falls in the third interval (10 - 15) marked with a `1` in the output vector.
